@@ -123,7 +123,7 @@ export default function MealOrdering() {
                 return (
                   <article className={`dish-card${d.soldOut ? ' is-out' : ''}`} key={d.id}>
                     <div className="dish-thumb" style={{ background: d.tint }} aria-hidden="true">
-                      <span className="dish-thumb-glyph">{d.name.slice(0, 1)}</span>
+                      <img src={d.img} alt="" />
                       {d.soldOut && <span className="dish-out">售罄</span>}
                       {scarce && <span className="dish-scarce">仅剩 {d.left} 份</span>}
                     </div>
@@ -221,7 +221,7 @@ export default function MealOrdering() {
                     {cartItems.map((it) => (
                       <div className="cart-item" key={it.dish.id}>
                         <span className="cart-thumb" style={{ background: it.dish.tint }}>
-                          {it.dish.name.slice(0, 1)}
+                          <img src={it.dish.img} alt="" />
                         </span>
                         <div className="cart-item-main">
                           <div className="cart-item-name">{it.dish.name}</div>
