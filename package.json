@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc -b && node --max-old-space-size=3072 scripts/build.mjs",
     "preview": "vite preview",
+    "deploy": "npm run build && npx --yes wrangler@latest deploy",
     "gen:geo": "node scripts/fetch-china-geojson.cjs"
   },
   "dependencies": {
