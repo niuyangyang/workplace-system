@@ -156,13 +156,24 @@
   color: var(--mk-orange);
 }
 
-/* ---- 分类胶囊（横向滚动） ---- */
+/* ---- 分类栏（左侧竖排）+ 菜品区 ---- */
+.meal-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+}
 .meal-cats {
   flex: none;
+  width: 92px;
   display: flex;
-  gap: 8px;
-  padding: 2px 16px 12px;
-  overflow-x: auto;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #f7f0e8;
+  border-right: 1px solid var(--mk-line);
   scrollbar-width: none;
 }
 .meal-cats::-webkit-scrollbar {
@@ -170,34 +181,42 @@
 }
 .meal-cat {
   flex: none;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  border: 1px solid var(--mk-line);
-  background: #fff;
-  border-radius: 999px;
-  padding: 7px 14px;
-  font-size: 13px;
-  color: var(--mk-ink);
+  gap: 7px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 14px 8px 14px 13px;
+  font-size: 12.5px;
+  line-height: 1.25;
+  color: var(--mk-ink-2);
+  text-align: left;
   cursor: pointer;
-  transition: background 0.14s var(--mk-ease), color 0.14s var(--mk-ease), border-color 0.14s var(--mk-ease);
+  transition: background 0.14s var(--mk-ease), color 0.14s var(--mk-ease);
+}
+.meal-cat:hover {
+  color: var(--mk-ink);
 }
 .meal-cat.is-on {
-  background: var(--mk-orange);
-  border-color: var(--mk-orange);
-  color: #fff;
-  font-weight: 600;
+  background: #fffaf6;
+  color: var(--mk-orange);
+  font-weight: 700;
 }
 .meal-cat-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   flex: none;
+}
+.meal-cat.is-on .meal-cat-dot {
+  background: var(--mk-orange);
 }
 
 /* ---- 菜品列表（机内滚动区） ---- */
 .meal-list {
   flex: 1;
+  min-width: 0;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;

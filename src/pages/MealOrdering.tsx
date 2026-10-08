@@ -93,7 +93,9 @@ export default function MealOrdering() {
           </div>
         </header>
 
-            <nav className="meal-cats" aria-label="菜品分类">
+            {/* 左侧分类栏 + 右侧菜品列表 */}
+            <div className="meal-body">
+              <nav className="meal-cats" aria-label="菜品分类">
               {MEAL_CATEGORIES.map((c) => {
                 const on = c.id === cat
                 return (
@@ -104,14 +106,14 @@ export default function MealOrdering() {
                     aria-current={on ? 'true' : undefined}
                     onClick={() => setCat(c.id)}
                   >
-                    <i className="meal-cat-dot" style={{ background: on ? '#fff' : c.dot }} />
+                    <i className="meal-cat-dot" style={on ? undefined : { background: c.dot }} />
                     {c.name}
                   </button>
                 )
               })}
-            </nav>
+              </nav>
 
-            <div className="meal-list" ref={listRef}>
+              <div className="meal-list" ref={listRef}>
               <div className="meal-list-head">
                 {current?.name} · 共 {list.length} 道
               </div>
@@ -181,6 +183,7 @@ export default function MealOrdering() {
                 )
               })}
               <p className="meal-list-end">{MEAL_NOTICE.rule}</p>
+              </div>
             </div>
 
             {/* 机内底部购物车条 */}
