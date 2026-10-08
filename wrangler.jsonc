@@ -1,0 +1,12 @@
+{
+  // Cloudflare Workers 部署配置
+  // 说明：本项目是纯静态单页应用（Vite 构建到 dist/）。
+  // 部署为 Worker 时，public/_redirects 不生效，深链（如 /app/meal）会 404，
+  // 因此必须用 not_found_handling 显式开启 SPA 回退。
+  "name": "workplace-system",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
