@@ -40,12 +40,26 @@ npm run preview  # 本地预览构建产物
 
 ## 部署说明
 
-构建产物为静态站点，已将深链回退一并准备好：
+本项目是单页应用（SPA），所有页面由前端路由接管，静态托管需要额外配置「未知路径回退到 index.html」，否则直接访问或刷新 `/app/xxx` 会 404。
 
-- `404.html`：构建后复制 `dist/index.html` 生成，用于静态托管的兜底
-- `public/_redirects`：Cloudflare Pages / Netlify 的 SPA 重写规则（`/* -> /index.html 200`），保证刷新 `/app/xxx` 等子路由不 404
+| 托管方式 | 深链回退做法 |
+| --- | --- |
+| Cloudflare Workers（当前使用） | 仓库根 `wrangler.jsonc` 中 `assets.not_found_handling: "single-page-application"` |
+| 通用静态托管 | 构建会自动产出 `dist/404.html`（由 `scripts/build.mjs` 复制 index.html 生成） |
+| Cloudflare Pages / Netlify | 二选一：沿用上面的 `404.html`，或自行在 `public/` 下添加 `_redirects`（内容 `/* /index.html 200`） |
 
-以 Cloudflare Pages 为例：连接本仓库后设置
+> ⚠️ 不要直接把 `_redirects` 用于 Workers：Workers 会校验该规则并报 `Infinite loop detected in this rule`（code 100324），**导致部署直接失败**。Workers 请使用 `wrangler.jsonc`。
+
+### Cloudflare Workers 部署
+
+仓库根已提供 `wrangler.jsonc`。两种方式任选：
+
+- **连仓库自动构建**：在 Cloudflare 控制台连接本仓库，构建命令 `npm run build`，部署命令 `npx wrangler deploy`
+- **本地命令行**：`npx wrangler login` 后执行 `npm run deploy`（= 构建 + `wrangler deploy`）
+
+### Cloudflare Pages 部署
+
+连接本仓库后：
 
 | 配置项 | 值 |
 | --- | --- |

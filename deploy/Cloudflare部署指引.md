@@ -18,10 +18,11 @@
 
 首页和图片正常，但深链 404。原因是本项目是单页应用（SPA），所有页面由前端路由接管，而静态托管默认会去找同名文件。
 
-- `public/_redirects` 只在 **Cloudflare Pages / Netlify** 生效
 - 部署成 **Worker** 时，必须在 `wrangler.jsonc` 里声明 `not_found_handling: "single-page-application"`（仓库里已加好）
+- **不要用 `_redirects` 给 Workers 做 SPA 回退**：Workers 会严格校验该规则，报 `Infinite loop detected in this rule`（code 100324），**直接导致 `wrangler deploy` 失败**（已实测踩到，构建日志里是 `Failed: error occurred while running deploy command`）
+- `_redirects`（`/* /index.html 200`）只在 **Cloudflare Pages / Netlify** 上可用。本项目已改用 `wrangler.jsonc`，因此该文件已从仓库移除
 
-**但「控制台上传 dist 目录」这种部署方式不会读取仓库里的 wrangler 配置**，所以配置文件加了也不会生效。需要换成下面两种方式之一。
+**注意**：「控制台上传 dist 目录」这种部署方式不会读取仓库里的 wrangler 配置，所以配置文件加了也不会生效。需要换成下面两种方式之一。
 
 ## 二、两种修法
 
@@ -45,7 +46,7 @@ CLOUDFLARE_API_TOKEN=你的token npm run deploy
 
 ### 方案 B：改用 Cloudflare Pages 连仓库（推荐，以后不用管部署）
 
-Pages 会自动读取 `public/_redirects`，深链开箱可用，而且**每次 push 自动重新部署**。
+Pages 的 SPA 回退：沿用构建产物里的 `404.html` 即可（`scripts/build.mjs` 会自动生成），或按 Pages 文档在 `public/` 下自行添加 `_redirects`。它的优势是**每次 push 自动重新部署**，不用在本地敲命令。
 
 控制台 → Workers & Pages → Create → Pages → Connect to Git → 选 `workplace-system` 仓库：
 

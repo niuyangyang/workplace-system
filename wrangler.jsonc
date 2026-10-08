@@ -1,8 +1,15 @@
 {
   // Cloudflare Workers 部署配置
-  // 说明：本项目是纯静态单页应用（Vite 构建到 dist/）。
-  // 部署为 Worker 时，public/_redirects 不生效，深链（如 /app/meal）会 404，
-  // 因此必须用 not_found_handling 显式开启 SPA 回退。
+  //
+  // 本项目是纯静态单页应用（Vite 构建到 dist/），所有页面由前端路由接管。
+  // Workers 静态资源**必须**用 not_found_handling 做 SPA 回退，否则深链
+  // （如 /app/meal）会返回 404。
+  //
+  // 注意：不要用 public/_redirects 里的 `/* /index.html 200` 来实现 SPA 回退——
+  // Workers 会对该规则做严格校验，报 "Infinite loop detected in this rule"
+  // （code 100324），直接导致 wrangler deploy 失败。
+  //
+  // name 必须与 Cloudflare 上已存在的 Worker 名一致，否则会另外新建一个 Worker。
   "name": "workplace-system",
   "compatibility_date": "2026-10-01",
   "assets": {
