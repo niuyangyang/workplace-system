@@ -29,3 +29,18 @@ try {
   }
   process.exit(1)
 }
+
+// 构建后生成深链回退页：静态托管会把 404.html 当作未知路径的兜底，
+// 使直接访问或刷新 /app/xxx 这类子路由时仍能加载单页应用。
+import { copyFile, access } from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
+
+const distDir = path.resolve(fileURLToPath(new URL('../dist', import.meta.url)))
+try {
+  await access(path.join(distDir, 'index.html'))
+  await copyFile(path.join(distDir, 'index.html'), path.join(distDir, '404.html'))
+  console.log('[build] 已生成 dist/404.html（深链回退页）')
+} catch {
+  console.warn('[build] 未找到 dist/index.html，跳过 404.html 生成')
+}
