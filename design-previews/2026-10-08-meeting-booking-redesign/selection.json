@@ -1,0 +1,14 @@
+{
+  "id": "A",
+  "label": "A: 主检查台 Master-Detail",
+  "name": "主检查台 Master-Detail",
+  "notes": "",
+  "dials": {
+    "variance": 4,
+    "motion": 4,
+    "density": 6
+  },
+  "adjustments": "",
+  "source": "click",
+  "receivedAt": "2026-10-08T06:03:49.742Z"
+}

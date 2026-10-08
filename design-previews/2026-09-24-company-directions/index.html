@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计方向预览 · 星辉科技集团官网（完整页面）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Archivo+Narrow:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== 选择外壳：中性克制，不与 mockup 抢戏 ===== */
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  background:#f2f2f0;color:#181818;-webkit-font-smoothing:antialiased}
+.bar{padding:16px 28px;border-bottom:1px solid #dededa;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;background:#fafaf8}
+.bar strong{font-size:14px;font-weight:650}
+.bar .state{font-size:12px;color:#4a6b52}
+.note{margin:0;padding:12px 28px;font-size:12.5px;line-height:1.6;color:#6b6b66;
+  background:#f2f2f0;border-bottom:1px solid #e4e4e0;max-width:96ch}
+.dials{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:18px;
+  padding:18px 28px;border-bottom:1px solid #dededa;background:#fafaf8}
+.dial{display:grid;gap:7px;font-size:12.5px;color:#3a3a36}
+.dial b{font-weight:600}
+.dial output{font-variant-numeric:tabular-nums;font-weight:700;color:#181818}
+.dial input{width:100%;accent-color:#181818}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;padding:24px 28px}
+.card{background:#fff;border:1.5px solid #e0e0dc;border-radius:12px;overflow:hidden;
+  display:flex;flex-direction:column;min-width:0;transition:border-color 160ms cubic-bezier(.23,1,.32,1)}
+.card:hover{border-color:#b9b9b3}
+.card.selected{border-color:#181818;box-shadow:0 0 0 1px #181818}
+.viewport{max-height:560px;overflow-y:auto;overflow-x:hidden;position:relative;background:#e8e8e4}
+.viewport::-webkit-scrollbar{width:9px}
+.viewport::-webkit-scrollbar-track{background:rgba(0,0,0,.04)}
+.viewport::-webkit-scrollbar-thumb{background:rgba(0,0,0,.22);border-radius:9px}
+.viewport .stamp{position:absolute;right:8px;top:8px;z-index:5;font-size:9.5px;letter-spacing:.4px;
+  padding:2px 7px;border-radius:999px;background:rgb(20 20 20 / 58%);color:#fff;position:sticky;
+  left:100%;display:block;width:max-content;margin:-26px 8px 8px auto}
+.meta{padding:14px 18px 12px;display:grid;gap:6px;width:100%}
+.meta h3{margin:0;font-size:14.5px;font-weight:650;display:flex;align-items:center;gap:8px}
+.meta .badge{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:#181818;color:#fff;letter-spacing:.4px}
+.meta p{margin:0;font-size:12.5px;line-height:1.55;color:#5d5d57;width:100%;max-width:64ch}
+.qmdp-pick-button{width:calc(100% - 36px);min-height:44px;margin:0 18px 16px;
+  border:1.5px solid #181818;background:#fff;color:#181818;border-radius:9px;
+  font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;
+  transition:background 140ms cubic-bezier(.23,1,.32,1),transform 100ms}
+.qmdp-pick-button:hover{background:#181818;color:#fff}
+.qmdp-pick-button:active{transform:scale(.99)}
+.explain{padding:8px 28px 56px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.explain article{background:#fafaf8;border:1px solid #e4e4e0;border-radius:10px;padding:16px 18px}
+.explain h4{margin:0 0 8px;font-size:13px;font-weight:650}
+.explain dl{margin:0;display:grid;grid-template-columns:74px 1fr;gap:5px 10px;font-size:12.5px;line-height:1.6}
+.explain dt{color:#8a8a83}
+.explain dd{margin:0;color:#3a3a36}
+.explain .content-plan{margin-top:8px;padding-top:12px;border-top:1px solid #e4e4e0}
+.explain .content-plan b{font-size:12.5px}
+.explain ol{margin:8px 0 0;padding-left:20px;font-size:12.5px;line-height:1.85;color:#4a4a45}
+.confirm{position:fixed;inset:0;display:none;place-items:center;background:rgb(0 0 0 / 34%);z-index:20}
+.confirm.open{display:grid}
+.dialog{width:min(540px,calc(100vw - 32px));background:#fff;border-radius:13px;padding:22px 24px;
+  box-shadow:0 24px 60px rgb(0 0 0 / 24%)}
+.dialog h2{margin:0 0 8px;font-size:17px}
+.dialog p{margin:0 0 14px;font-size:12.5px;line-height:1.6;color:#5d5d57;font-variant-numeric:tabular-nums}
+.dialog textarea{width:100%;min-height:86px;resize:vertical;border:1.5px solid #dcdcd6;border-radius:8px;
+  padding:10px 12px;font-family:inherit;font-size:13px;line-height:1.6;color:#181818}
+.dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+.dialog button{min-height:40px;padding:0 18px;border-radius:8px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;border:1.5px solid #181818}
+#cancelPick{background:#fff;color:#181818}
+#confirmPick{background:#181818;color:#fff}
+.pickbar{position:fixed;bottom:0;left:0;right:0;padding:13px;background:#181818;color:#fff;
+  text-align:center;font-size:13px;transform:translateY(100%);
+  transition:transform 220ms cubic-bezier(.23,1,.32,1)}
+.pickbar.show{transform:translateY(0)}
+@media (max-width:860px){
+  .grid{grid-template-columns:1fr;padding:16px;gap:16px}
+  .explain{grid-template-columns:1fr;padding:8px 16px 48px}
+  .dials{grid-template-columns:1fr;padding:16px}
+  .bar,.note{padding-left:16px;padding-right:16px}
+  .viewport{max-height:430px}
+}
+
+/* ===== 四套方向主题：同一套 DOM，靠 CSS 轴拉开差异 ===== */
+.page-wrap{--bg:#101216;--ink:#f4f5f7;--ink2:#aeb6c2;--ink3:rgba(240,245,255,.42);
+  --line:rgba(240,245,255,.14);--acc:#8fd8e8;--chip:rgba(240,245,255,.08);
+  --ff:'Sora',-apple-system,"PingFang SC",sans-serif;--mono:'Sora','PingFang SC',sans-serif;
+  --cols:1;--gap:26px;--pad:30px;--fs:13px;--h1:40px;--h2:22px;--lb:.7rem;--row:44px;
+  background:var(--bg);color:var(--ink);font-family:var(--ff);width:100%}
+.page-wrap *{box-sizing:border-box}
+.page-wrap section{padding:var(--pad);border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;gap:calc(var(--gap) * .5)}
+.page-wrap .lb{font-family:var(--mono);font-size:var(--lb);font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink3)}
+.page-wrap h1{margin:0;font-size:var(--h1);font-weight:500;line-height:1.1;letter-spacing:0}
+.page-wrap h2{margin:0;font-size:var(--h2);font-weight:600;line-height:1.3}
+.page-wrap p{margin:0;font-size:var(--fs);line-height:1.75;color:var(--ink2);max-width:44ch}
+.page-wrap .acts{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.page-wrap .btn{display:inline-block;padding:10px 20px;border-radius:32px;
+  border:1px solid var(--acc);background:var(--chip);color:var(--ink);font-size:12.5px;font-weight:500}
+.page-wrap .lnk{font-size:12.5px;color:var(--ink2);text-decoration:underline;text-underline-offset:4px}
+.page-wrap .grid2{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:var(--gap)}
+.page-wrap .kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}
+.page-wrap .kv div{padding-top:9px;border-top:1px solid var(--line)}
+.page-wrap .kv dt{font-size:10.5px;color:var(--ink3);letter-spacing:.05em}
+.page-wrap .kv dd{margin:5px 0 0;font-size:12.5px;font-weight:500;font-variant-numeric:tabular-nums}
+.page-wrap .rows{display:flex;flex-direction:column}
+.page-wrap .row{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:12px;
+  align-items:baseline;padding:11px 0;border-top:1px solid var(--line)}
+.page-wrap .row:last-child{border-bottom:1px solid var(--line)}
+.page-wrap .row .i{width:15px;height:15px;color:var(--ink3)}
+.page-wrap .row .i svg{width:100%;height:100%}
+.page-wrap .row .t{font-size:calc(var(--fs) * 1.02);font-weight:600}
+.page-wrap .row .d{font-size:11.5px;color:var(--ink2);line-height:1.6;grid-column:2 / -1}
+.page-wrap .row .m{font-size:11px;color:var(--ink3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.page-wrap .stack{display:flex;flex-wrap:wrap;gap:7px}
+.page-wrap .stack span{padding:4px 11px;border:1px solid var(--line);border-radius:999px;
+  font-size:11px;color:var(--ink2)}
+.page-wrap .apps{display:grid;grid-template-columns:repeat(var(--acols,4),minmax(0,1fr));gap:14px}
+.page-wrap .app{padding-top:10px;border-top:1px solid var(--line)}
+.page-wrap .app b{display:block;font-size:12.5px;font-weight:600}
+.page-wrap .app em{display:block;margin-top:5px;font-style:normal;font-size:11px;line-height:1.6;color:var(--ink3)}
+.page-wrap .bars{display:flex;flex-direction:column;gap:7px}
+.page-wrap .bar-row{display:grid;grid-template-columns:4.6rem minmax(0,1fr) 1.6rem;
+  align-items:center;gap:8px;font-size:11px;color:var(--ink2)}
+.page-wrap .bar-row .tk{height:6px;background:var(--chip);overflow:hidden}
+.page-wrap .bar-row .tk i{display:block;height:100%;background:var(--acc)}
+.page-wrap .bar-row .v{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+.page-wrap .time{display:flex;flex-direction:column}
+.page-wrap .time div{display:grid;grid-template-columns:4.2rem minmax(0,1fr);gap:12px;
+  padding:10px 0;border-top:1px solid var(--line);font-size:12px}
+.page-wrap .time b{font-variant-numeric:tabular-nums;font-weight:600}
+.page-wrap .time span{color:var(--ink2)}
+.page-wrap .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;
+  padding-top:11px;border-top:1px solid var(--line)}
+.page-wrap .stats i{display:block;font-style:normal;font-size:19px;font-weight:600;
+  font-variant-numeric:tabular-nums}
+.page-wrap .stats em{display:block;margin-top:4px;font-style:normal;font-size:10.5px;color:var(--ink3)}
+.page-wrap .contact-meta{display:flex;flex-wrap:wrap;gap:18px;padding-top:11px;border-top:1px solid var(--line)}
+.page-wrap .contact-meta div{font-size:11.5px;color:var(--ink2)}
+.page-wrap .contact-meta b{display:block;font-size:10.5px;color:var(--ink3);font-weight:400;margin-bottom:4px}
+.page-wrap .hero{min-height:300px;justify-content:center}
+.page-wrap .hero .field{position:relative;height:76px;border-radius:6px;overflow:hidden;
+  background:radial-gradient(120% 160% at 40% 50%,var(--chip),transparent 70%);margin-bottom:6px}
+.page-wrap .hero .field svg{position:absolute;inset:0;width:100%;height:100%}
+.page-wrap .hero .field path{fill:none;stroke:var(--acc);stroke-width:.9;opacity:.75}
+
+/* A 深邃驾驶舱：等宽 / 深冷 / 双栏密集 */
+.dir-A{--bg:#0a0d14;--ink:#eaf6ff;--ink2:#9db6d0;--ink3:rgba(180,215,240,.45);
+  --line:rgba(120,200,235,.18);--acc:#3fd8c8;--chip:rgba(63,216,200,.1);
+  --ff:'JetBrains Mono',ui-monospace,"PingFang SC",monospace;--mono:'JetBrains Mono',monospace;
+  --cols:2;--acols:4;--gap:13px;--pad:18px;--fs:11.5px;--h1:24px;--h2:15px;--lb:.62rem;--row:38px}
+
+/* B 明亮精密：无衬线 / 亮底 / 单栏大留白 */
+.dir-B{--bg:#fbfbf9;--ink:#16181d;--ink2:#5b5f6b;--ink3:#8b8f9a;
+  --line:#e4e5e8;--acc:#1b3a8f;--chip:rgba(27,58,143,.06);
+  --ff:'Space Grotesk',-apple-system,"PingFang SC",sans-serif;--mono:'Space Grotesk',sans-serif;
+  --cols:1;--acols:4;--gap:26px;--pad:34px;--fs:13px;--h1:38px;--h2:20px;--lb:.68rem;--row:48px}
+
+/* C 编辑叙事：窄体 / 暖米 / 三栏报刊 */
+.dir-C{--bg:#f6f2ea;--ink:#241f1b;--ink2:#5c5148;--ink3:#8a7a6c;
+  --line:#ddd5c8;--acc:#b1512a;--chip:rgba(177,81,42,.07);
+  --ff:'Archivo Narrow',-apple-system,"PingFang SC",sans-serif;--mono:'Archivo Narrow',sans-serif;
+  --cols:3;--acols:4;--gap:15px;--pad:20px;--fs:12.5px;--h1:30px;--h2:17px;--lb:.66rem;--row:40px}
+.dir-C .page-wrap section{border-bottom:3px solid var(--ink)}
+.dir-C h2{border-bottom:1px solid var(--line);padding-bottom:7px}
+
+/* D 电影沉浸：展示体 / 深灰 / 单栏沉浸（当前已实现的版本） */
+.dir-D{--bg:#101216;--ink:#f4f5f7;--ink2:#aeb6c2;--ink3:rgba(240,245,255,.42);
+  --line:rgba(240,245,255,.14);--acc:#8fd8e8;--chip:rgba(240,245,255,.08);
+  --ff:'Sora',-apple-system,"PingFang SC",sans-serif;--mono:'Sora',sans-serif;
+  --cols:1;--acols:4;--gap:28px;--pad:36px;--fs:13px;--h1:42px;--h2:22px;--lb:.7rem;--row:46px}
+.dir-D .hero{min-height:380px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <strong>星辉科技集团官网 · 完整页面方向样机</strong>
+  <span class="state" id="state">未选择</span>
+</div>
+<p class="note">四张是同一套内容的四种完整页面效果（每张可上下滚动看完整 8 幕），用于确认视觉方向与内容编排，不是最终页面。选定方向或写下混搭要求后，才进入正式实现。</p>
+
+<div class="dials" aria-label="设计拨盘">
+  <label class="dial"><b>视觉冒险度 <output id="varianceOut" data-qmdp-output="variance">7</output></b>
+    <input id="variance" data-qmdp-dial="variance" type="range" min="1" max="10" value="7"></label>
+  <label class="dial"><b>动效强度 <output id="motionOut" data-qmdp-output="motion">7</output></b>
+    <input id="motion" data-qmdp-dial="motion" type="range" min="1" max="10" value="7"></label>
+  <label class="dial"><b>信息密度 <output id="densityOut" data-qmdp-output="density">5</output></b>
+    <input id="density" data-qmdp-dial="density" type="range" min="1" max="10" value="5"></label>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<section class="explain">
+  <article>
+    <h4>A · 深邃驾驶舱</h4>
+    <dl>
+      <dt>气质</dt><dd>集团作战室，信息优先</dd>
+      <dt>字体</dt><dd>西文等宽 JetBrains Mono + 中文系统栈</dd>
+      <dt>色彩</dt><dd>深蓝黑 #0a0d14 + 单一青色重音</dd>
+      <dt>版式</dt><dd>双栏密集，一屏塞进更多数据</dd>
+      <dt>实装</dt><dd>FlowField 铺满 + ConnectivityGraph 组织网络</dd>
+      <dt>适用</dt><dd>想让访客一屏看全集团资源与运行状态</dd>
+    </dl>
+  </article>
+  <article>
+    <h4>B · 明亮精密 <span class="badge" style="display:inline-block;font-size:10px;padding:2px 7px;border-radius:999px;background:#181818;color:#fff">推荐</span></h4>
+    <dl>
+      <dt>气质</dt><dd>正经企业官网，克制有分量</dd>
+      <dt>字体</dt><dd>西文展示体 Space Grotesk + 中文系统栈</dd>
+      <dt>色彩</dt><dd>近白 #fbfbf9 + 深蓝 #1b3a8f 单重音</dd>
+      <dt>版式</dt><dd>单栏大留白，逐屏推进</dd>
+      <dt>实装</dt><dd>ConnectivityGraph 组织网络 + FlowField 细部</dd>
+      <dt>推荐理由</dt><dd>你要"跟系统有关的丰富内容 + 完整官网"，亮底单栏对图文混排最宽容，信息再多也不会挤；同时明显区别于已被你否决的深色大屏气质</dd>
+    </dl>
+  </article>
+  <article>
+    <h4>C · 编辑叙事</h4>
+    <dl>
+      <dt>气质</dt><dd>集团内参，有阅读节奏</dd>
+      <dt>字体</dt><dd>西文窄体 Archivo Narrow + 中文系统栈</dd>
+      <dt>色彩</dt><dd>暖米 #f6f2ea + 砖红 #b1512a 重音</dd>
+      <dt>版式</dt><dd>三栏报刊 + 粗横线分区，密而有序</dd>
+      <dt>实装</dt><dd>FlowField 作为章节大图</dd>
+      <dt>适用</dt><dd>做成集团介绍、年度叙事、内部刊物式内容</dd>
+    </dl>
+  </article>
+  <article>
+    <h4>D · 电影沉浸（当前版本）</h4>
+    <dl>
+      <dt>气质</dt><dd>品牌影片，第一眼优先</dd>
+      <dt>字体</dt><dd>西文展示体 Sora + 中文系统栈</dd>
+      <dt>色彩</dt><dd>深灰 #101216 + 银白，近乎无彩</dd>
+      <dt>版式</dt><dd>单栏沉浸，超大标题压场</dd>
+      <dt>实装</dt><dd>FlowField 全屏（现已在 /app/company 落地）</dd>
+      <dt>适用</dt><dd>对外品牌页、大屏开场、发布会背景</dd>
+    </dl>
+    <div class="content-plan">
+      <b>四张共用同一条内容主线（8 幕）</b>
+      <ol>
+        <li>Hero · 定位语 + 4 个数字</li>
+        <li>集团概览 · 简介 + 集团名片 + 组织人力分布图</li>
+        <li>业务线 · 4 条业务（图标 + 指标）</li>
+        <li>技术能力 · 4 项能力 + 技术栈标签</li>
+        <li>应用矩阵 · 8 个系统应用</li>
+        <li>集团历程 · 时间轴</li>
+        <li>集团动态 · 4 条动态</li>
+        <li>联系 · 联系方式 + 行动按钮</li>
+      </ol>
+    </div>
+  </article>
+</section>
+
+<template id="tpl">
+  <span class="stamp">方向样机</span>
+
+  <section class="hero">
+    <div class="field">
+      <svg viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden>
+        <path d="M-10 66 C 90 34, 160 78, 250 44 S 420 20, 610 52"/>
+        <path d="M-10 74 C 100 46, 170 86, 260 56 S 430 34, 610 62" opacity=".6"/>
+        <path d="M-10 56 C 80 26, 150 68, 240 36 S 410 12, 610 42" opacity=".4"/>
+      </svg>
+    </div>
+    <span class="lb">XINGHUI TECHNOLOGY GROUP</span>
+    <h1>一座楼，<br>装着整个集团。</h1>
+    <p>16 个一级组织、58 名员工、16 间会议室，在同一个数字总部里运转。</p>
+    <div class="acts"><span class="btn">进入数字总部</span><span class="lnk">浏览平台能力</span></div>
+    <div class="stats">
+      <span><i>2016</i><em>集团成立</em></span>
+      <span><i>58 人</i><em>在职员工</em></span>
+      <span><i>16 个</i><em>一级组织</em></span>
+      <span><i>4 条</i><em>业务线</em></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>集团的脸，和它的骨架</h2>
+    <p>星辉科技集团是一家以企业数字化协同为主业的科技公司。我们把一家集团每天真正要办的事收进同一处入口：谁来管、在哪开会、按哪条制度、看什么数据。</p>
+    <div class="grid2">
+      <dl class="kv">
+        <div><dt>成立时间</dt><dd>2016 年</dd></div>
+        <div><dt>总部地址</dt><dd>上海市闵行区</dd></div>
+        <div><dt>办公载体</dt><dd>星辉科技大厦</dd></div>
+        <div><dt>会议室</dt><dd>16 间</dd></div>
+      </dl>
+      <div class="bars">
+        <span class="lb">一级组织人力分布</span>
+        <div class="bar-row"><span>研发中心</span><span class="tk"><i style="width:100%"></i></span><span class="v">7</span></div>
+        <div class="bar-row"><span>市场中心</span><span class="tk"><i style="width:86%"></i></span><span class="v">6</span></div>
+        <div class="bar-row"><span>产品中心</span><span class="tk"><i style="width:57%"></i></span><span class="v">4</span></div>
+        <div class="bar-row"><span>运营中心</span><span class="tk"><i style="width:57%"></i></span><span class="v">4</span></div>
+        <div class="bar-row"><span>财务中心</span><span class="tk"><i style="width:57%"></i></span><span class="v">4</span></div>
+        <div class="bar-row"><span>客服中心</span><span class="tk"><i style="width:43%"></i></span><span class="v">3</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>四条业务线，一套数字总部</h2>
+    <div class="rows">
+      <div class="row">
+        <span class="i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="12" y="4" width="8" height="6" rx="1"/><rect x="3" y="22" width="8" height="6" rx="1"/><rect x="21" y="22" width="8" height="6" rx="1"/><path d="M16 10v5M7 22v-4h18v4"/></svg></span>
+        <span class="t">组织与人事</span><span class="m">16 组织 · 58 档案</span>
+        <span class="d">组织架构、人员档案、权限与调配收在一棵树上。</span>
+      </div>
+      <div class="row">
+        <span class="i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="6" width="24" height="20" rx="1.6"/><path d="M4 16h24M16 6v20"/></svg></span>
+        <span class="t">智能办公空间</span><span class="m">16 间 · 1 栋楼</span>
+        <span class="d">会议室按周课表排布，楼宇三维可下钻。</span>
+      </div>
+      <div class="row">
+        <span class="i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 4.5h13l5 5v18H7z"/><path d="M20 4.5v5h5"/><path d="M11 15h10M11 19.5h7"/></svg></span>
+        <span class="t">制度与知识</span><span class="m">起草 → 发布</span>
+        <span class="d">制度全流程留痕，文档与知识库集中管理。</span>
+      </div>
+      <div class="row">
+        <span class="i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 27V9M5 27h22"/><path d="M10 27v-7M16 27v-12M22 27v-5"/></svg></span>
+        <span class="t">数据与决策</span><span class="m">4 块看板</span>
+        <span class="d">人员分布、经营看板与三维可视化大屏。</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>撑起总部运转的四件事</h2>
+    <div class="grid2">
+      <dl class="kv">
+        <div><dt>前端体系</dt><dd>React 18 · TypeScript</dd></div>
+        <div><dt>数据中台</dt><dd>统一数据源 · 实时同步</dd></div>
+        <div><dt>三维可视化</dt><dd>WebGL 数据场 · 楼宇三维</dd></div>
+        <div><dt>安全与权限</dt><dd>组织级授权 · 操作留痕</dd></div>
+      </dl>
+    </div>
+    <span class="lb">技术栈</span>
+    <div class="stack">
+      <span>React 18</span><span>TypeScript</span><span>Vite</span><span>WebGL</span><span>Three.js</span>
+      <span>ECharts</span><span>Ant Design</span><span>Spring Boot</span><span>MySQL</span><span>Redis</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>八个应用，覆盖集团日常</h2>
+    <div class="apps">
+      <div class="app"><b>人员组织</b><em>组织架构与人员管理</em></div>
+      <div class="app"><b>制度管理</b><em>制度起草、评审与统一管理</em></div>
+      <div class="app"><b>制度前台</b><em>面向全员的制度公开门户</em></div>
+      <div class="app"><b>会议室预订</b><em>查询并预订空闲会议室</em></div>
+      <div class="app"><b>企业文档中心</b><em>共享文档与知识库</em></div>
+      <div class="app"><b>数据大屏</b><em>员工籍贯分布可视化</em></div>
+      <div class="app"><b>人物画像</b><em>员工建模与多维画像</em></div>
+      <div class="app"><b>楼宇 3D</b><em>办公楼三维与工位查询</em></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>从一间办公室到一座总部</h2>
+    <div class="time">
+      <div><b>2016</b><span>集团成立，在上海设立总部</span></div>
+      <div><b>2019</b><span>协同平台上线，两条业务线合入同一平台</span></div>
+      <div><b>2022</b><span>数字总部建成，16 间会议室接入统一预订</span></div>
+      <div><b>2025</b><span>四线业务成型，全部上线运行</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>集团动态</h2>
+    <div class="time">
+      <div><b>2026-08</b><span>数字总部上线访客管理，登记与离场收进一条流程</span></div>
+      <div><b>2026-05</b><span>会议室预订接入周课表视图，冲突时段自动置灰</span></div>
+      <div><b>2026-02</b><span>企业文档中心开放全员检索，权限按组织树继承</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>想看看数字总部长什么样？</h2>
+    <p>留一个工作日的时间，我们把组织、空间、制度与数据四条线走一遍。</p>
+    <div class="acts"><span class="btn">预约一次演示</span><span class="lnk">021-62888000</span></div>
+    <div class="contact-meta">
+      <div><b>总部地址</b>上海市闵行区星辉科技大厦</div>
+      <div><b>商务合作</b>contact@xinghui.example</div>
+      <div><b>工作时间</b>周一至周五 09:00 - 18:00</div>
+    </div>
+  </section>
+</template>
+
+<div class="confirm" id="confirm" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="dialog">
+    <h2 id="confirmTitle">确认设计方向</h2>
+    <p id="confirmMeta"></p>
+    <textarea id="adjustments" placeholder="可选：写想调整的地方，比如要 B 的配色 + C 的版式，或某一幕想换个内容"></textarea>
+    <div class="row">
+      <button type="button" id="cancelPick">取消</button>
+      <button type="button" id="confirmPick">确认并回传</button>
+    </div>
+  </div>
+</div>
+<div class="pickbar" id="pickbar"></div>
+
+<script>
+  var DIRS = [
+    { id: 'A', name: '深邃驾驶舱', tagline: '等宽字体把集团数据压进双栏，一屏看全组织与运行状态，全屏数据场当底。' },
+    { id: 'B', name: '明亮精密', rec: true, tagline: '亮底大留白配无衬线展示体，单栏逐屏推进，信息再多也不挤，像正经企业官网。' },
+    { id: 'C', name: '编辑叙事', tagline: '报头式粗横线分区加三栏报刊排版，窄体字做出集团内参的阅读节奏。' },
+    { id: 'D', name: '电影沉浸', tagline: '当前落地版本：近乎无彩的深灰底，超大标题压场，全屏 3D 数据流场。' }
+  ];
+
+  var grid = document.getElementById('grid');
+  var tpl = document.getElementById('tpl').innerHTML;
+
+  DIRS.forEach(function (d) {
+    var card = document.createElement('article');
+    card.className = 'card';
+    card.dataset.dir = d.id;
+    card.dataset.label = '选 ' + d.id + '：' + d.name;
+    card.innerHTML =
+      '<div class="viewport"><div class="page-wrap dir-' + d.id + '">' + tpl + '</div></div>' +
+      '<div class="meta"><h3>' + d.id + ' · ' + d.name +
+      (d.rec ? ' <span class="badge">推荐</span>' : '') + '</h3><p>' + d.tagline + '</p></div>' +
+      '<button class="qmdp-pick-button" type="button" data-qmdp-native-handler="true">选择 ' +
+      d.id + ' · ' + d.name + '</button>';
+    grid.appendChild(card);
+  });
+
+  var pending = null;
+  function dials() {
+    return {
+      variance: Number(document.getElementById('variance').value),
+      motion: Number(document.getElementById('motion').value),
+      density: Number(document.getElementById('density').value)
+    };
+  }
+  ['variance', 'motion', 'density'].forEach(function (id) {
+    var input = document.getElementById(id), out = document.getElementById(id + 'Out');
+    input.addEventListener('input', function () {
+      out.value = input.value;
+      out.textContent = input.value;
+    });
+  });
+  function selectionText(p) {
+    var v = p.dials || dials();
+    var advice = p.adjustments ? '；建议：' + p.adjustments : '';
+    return p.label + '；拨盘：视觉冒险度 ' + v.variance + ' / 动效强度 ' + v.motion +
+      ' / 信息密度 ' + v.density + advice;
+  }
+  async function sendSelection(p) {
+    if (location.protocol === 'file:') {
+      if (navigator.clipboard) { try { await navigator.clipboard.writeText(selectionText(p)); } catch (e) {} }
+      return { ok: false, fallback: true };
+    }
+    try {
+      var res = await fetch('/api/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(p)
+      });
+      return await res.json();
+    } catch (e) { return { ok: false, fallback: true }; }
+  }
+  function openConfirm(i) {
+    var card = document.querySelectorAll('.card')[i];
+    if (!card) return;
+    document.querySelectorAll('.card').forEach(function (c, idx) {
+      c.classList.toggle('selected', idx === i);
+    });
+    var id = 'ABCD'[i];
+    var name = card.getAttribute('data-label').replace('选 ' + id + '：', '');
+    pending = { id: id, name: name, label: '选 ' + id + '：' + name };
+    var v = dials();
+    document.getElementById('confirmMeta').textContent =
+      pending.label + ' · 视觉冒险度 ' + v.variance + ' / 动效强度 ' + v.motion + ' / 信息密度 ' + v.density;
+    document.getElementById('confirm').classList.add('open');
+    document.getElementById('adjustments').focus();
+  }
+  async function confirmSelection() {
+    if (!pending) return;
+    var bar = document.getElementById('pickbar');
+    var payload = {
+      id: pending.id, label: pending.label, name: pending.name, notes: '',
+      dials: dials(), adjustments: document.getElementById('adjustments').value.trim()
+    };
+    var result = await sendSelection(payload);
+    bar.textContent = result.ok
+      ? '已选择 ' + pending.label + '，已回传'
+      : '已选择 ' + pending.label + '，当前不会自动回传，请回到对话发送这句话';
+    bar.classList.add('show');
+    document.getElementById('confirm').classList.remove('open');
+    document.getElementById('state').textContent = '已选 ' + pending.id;
+  }
+  document.querySelectorAll('.card').forEach(function (card, i) {
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('.qmdp-pick-button')) return;
+      openConfirm(i);
+    });
+    card.querySelector('.qmdp-pick-button').addEventListener('click', function (e) {
+      e.stopPropagation();
+      openConfirm(i);
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    var i = ['1', '2', '3', '4'].indexOf(e.key);
+    if (i > -1) openConfirm(i);
+  });
+  document.getElementById('cancelPick').onclick = function () {
+    document.getElementById('confirm').classList.remove('open');
+  };
+  document.getElementById('confirmPick').onclick = confirmSelection;
+</script>
+</body>
+</html>

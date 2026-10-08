@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>会议室预订 · 增强设计参考（二 / 三）</title>
+<style>
+  :root{
+    --brand:#3b5bff; --teal:#0FB5A0; --teal-d:#0a9a88;
+    --ink:#1f2433; --sub:#5b647a; --line:#e8ebf2; --bg:#eef1f6;
+    --card:#fff; --ok:#16a34a; --warn:#f59e0b; --bad:#ef4444; --mute:#9aa3b2;
+    --sans:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);padding:28px 22px 60px;line-height:1.5}
+  .top{max-width:1180px;margin:0 auto 18px}
+  .top h1{font-size:22px;font-weight:700;letter-spacing:.5px}
+  .top p{color:var(--sub);font-size:13px;margin-top:6px;max-width:780px}
+  .note{display:inline-block;margin-top:10px;font-size:12px;color:var(--teal-d);background:#eafaf7;
+    border:1px solid #cdeee8;border-radius:999px;padding:4px 12px}
+  .dials{display:flex;gap:18px;flex-wrap:wrap;max-width:1180px;margin:14px auto 22px}
+  .dial{flex:1 1 180px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+  .dial b{font-size:12px;color:var(--sub);font-weight:600}
+  .dial .v{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--teal-d)}
+  .dial input{width:100%;margin-top:6px;accent-color:var(--teal)}
+
+  .grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .dir{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .dir.rec{border:2px solid var(--teal);box-shadow:0 8px 26px rgba(15,181,160,.16)}
+  .dir-h{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .dir-h .name{font-weight:700;font-size:15px}
+  .dir-h .rec-tag{font-size:11px;background:var(--teal);color:#fff;border-radius:999px;padding:2px 9px;font-weight:600}
+  .dir-h .ax{font-size:11px;color:var(--mute)}
+  .dir-b{padding:12px 14px;background:#f7f9fc}
+  .cap{font-size:11px;color:var(--sub);font-weight:600;margin:10px 0 6px;letter-spacing:.4px}
+  .mv{border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+
+  /* ---- 通用 mock 元素 ---- */
+  .nav{height:38px;background:var(--brand);display:flex;align-items:center;padding:0 12px;color:#fff;font-size:12px;font-weight:600;gap:10px}
+  .nav .dot{width:7px;height:7px;border-radius:50%;background:#fff;opacity:.8}
+  .pills{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px}
+  .pill{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--sub);background:#fff}
+  .pill.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-top:1px solid var(--line);font-size:12px}
+  .star{color:var(--mute);font-size:13px}
+  .star.on{color:#f5b301}
+  .chip{font-size:10px;border-radius:6px;padding:1px 6px;font-weight:600}
+  .chip.ok{background:#e7f6ec;color:var(--ok)} .chip.w{background:#fef3e2;color:var(--warn)} .chip.b{background:#fdeaea;color:var(--bad)}
+  .gcard{display:flex;gap:8px;padding:8px 10px;border-top:1px solid var(--line)}
+  .gcover{width:54px;height:40px;border-radius:7px;flex:none}
+  .gmeta{flex:1;min-width:0}
+  .gmeta .t{font-size:12px;font-weight:600}
+  .gmeta .s{font-size:10px;color:var(--sub);margin-top:2px}
+  .gtag{display:inline-block;font-size:9px;background:#eef1f6;color:var(--sub);border-radius:4px;padding:1px 5px;margin-top:3px;margin-right:3px}
+
+  /* 方向 A：画廊 + 左栏空间导航 */
+  .a-body{display:flex}
+  .a-side{width:118px;flex:none;border-right:1px solid var(--line);background:#fafbfd;font-size:11px}
+  .a-side .b{padding:7px 9px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--line)}
+  .a-side .f{padding:5px 9px 5px 18px;color:var(--sub);display:flex;justify-content:space-between}
+  .a-side .f .n{color:var(--mute);font-family:var(--mono);font-size:10px}
+  .a-main{flex:1;min-width:0}
+  .a-rec{background:linear-gradient(90deg,#eafaf7,#fff);border-bottom:1px solid var(--line);padding:7px 10px;font-size:11px;color:var(--teal-d);font-weight:600}
+
+  /* 方向 B：空间优先（楼宇楼层主导） */
+  .b-acc .b{padding:7px 10px;font-weight:600;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+  .b-acc .f{padding:4px 10px 4px 20px;font-size:11px;color:var(--sub)}
+  .b-acc .rm{padding:5px 10px 5px 30px;font-size:11px;display:flex;justify-content:space-between;align-items:center}
+
+  /* 方向 C：意图优先（智能首页） */
+  .c-intent{border-bottom:1px solid var(--line);padding:9px 10px;background:#f3f7ff}
+  .c-bar{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+  .c-bar .fld{background:#fff;border:1px solid var(--line);border-radius:7px;padding:4px 8px;font-size:10px;color:var(--sub);flex:1 1 64px}
+  .c-bar .go{background:var(--teal);color:#fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:600}
+
+  /* 方向 D：双栏工作流 */
+  .d-body{display:flex}
+  .d-left{width:54%;flex:none;border-right:1px solid var(--line)}
+  .d-right{width:46%;flex:none;background:#fafbfd;padding:8px 10px}
+  .d-right .ttl{font-size:12px;font-weight:700;margin-bottom:6px}
+  .d-right .seg{display:flex;align-items:center;gap:5px;padding:5px 0;font-size:11px;border-top:1px solid var(--line)}
+  .d-right .seg .nm{flex:1}
+  .d-right .av{width:18px;height:18px;border-radius:50%;background:var(--brand);color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center}
+
+  /* 预订弹窗 inset（三） */
+  .modal-inset{margin:0 10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px}
+  .modal-inset .mh{font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+  .modal-inset .mh .x{color:var(--mute);font-size:12px}
+  .pick{display:flex;gap:8px}
+  .pick .tree{width:48%;flex:none;border:1px solid var(--line);border-radius:7px;padding:5px 6px;font-size:10px;max-height:96px;overflow:hidden}
+  .pick .tree .dep{font-weight:600;margin:3px 0 1px}
+  .pick .tree .ps{display:flex;align-items:center;gap:4px;color:var(--sub);padding:1px 0}
+  .pick .tree .ps .cb{width:10px;height:10px;border:1px solid var(--line);border-radius:3px;display:inline-block}
+  .pick .tree .ps .cb.on{background:var(--teal);border-color:var(--teal)}
+  .pick .chosen{flex:1;border:1px dashed var(--line);border-radius:7px;padding:5px 6px;font-size:10px;color:var(--sub)}
+  .pick .chosen .ct{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+  .pick .chosen .ct .c{background:#eafaf7;color:var(--teal-d);border-radius:5px;padding:1px 5px}
+  .rsvp{display:flex;gap:5px;margin-top:7px}
+  .rsvp .r{font-size:10px;border-radius:6px;padding:2px 7px;border:1px solid var(--line);color:var(--sub)}
+  .rsvp .r.ok{background:#e7f6ec;color:var(--ok);border-color:#bfe6cc}
+  .rsvp .r.w{background:#fef3e2;color:var(--warn);border-color:#f6dcb4}
+  .att{margin-top:7px;border:1px dashed var(--line);border-radius:7px;padding:7px;text-align:center;font-size:10px;color:var(--mute)}
+  .att .f{display:inline-block;margin-top:4px;background:#eef1f6;color:var(--sub);border-radius:5px;padding:2px 7px}
+
+  .foot{padding:12px 14px;border-top:1px solid var(--line);margin-top:auto}
+  .sel-btn{width:100%;border:none;background:var(--teal);color:#fff;font-weight:700;font-size:13px;border-radius:9px;padding:9px;cursor:pointer;transition:transform .12s}
+  .sel-btn:active{transform:scale(.98)}
+  .dir.rec .sel-btn{background:var(--teal-d)}
+  .legend{max-width:1180px;margin:22px auto 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:12px;color:var(--sub)}
+  .legend h3{font-size:13px;color:var(--ink);margin-bottom:8px}
+  .legend ul{margin:6px 0 0 18px} .legend li{margin:3px 0}
+  .legend b{color:var(--ink)}
+</style>
+</head>
+<body>
+  <div class="top">
+    <h1>会议室预订 · 增强设计参考</h1>
+    <p>把「二 · 找房与筛选」与「三 · 参会人协作」做进系统。下方四个方向都保留顶部 Navbar、房间头部与周课表 Tab 结构，仅改<strong>列表页</strong>与<strong>预订弹窗</strong>。请对照样机选一个方向（或提混搭）。</p>
+    <span class="note">这是设计方向样机，用于选择视觉与交互气质，不是最终 App / 最终页面</span>
+  </div>
+
+  <div class="dials">
+    <div class="dial"><b>视觉冒险度 VARIANCE</b><div class="v">5</div><input type="range" min="1" max="10" value="5" disabled></div>
+    <div class="dial"><b>动效强度 MOTION</b><div class="v">4</div><input type="range" min="1" max="10" value="4" disabled></div>
+    <div class="dial"><b>信息密度 DENSITY</b><div class="v">6</div><input type="range" min="1" max="10" value="6" disabled></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- 方向 A -->
+    <div class="dir rec">
+      <div class="dir-h">
+        <span class="name">A · 延续门户画廊 + 左栏空间导航</span>
+        <span class="rec-tag">推荐</span>
+      </div>
+      <div class="dir-b">
+        <div class="cap">列表页（二 · 收藏 / 空间 / 推荐）</div>
+        <div class="mv">
+          <div class="nav"><span class="dot"></span>会议室预订</div>
+          <div class="a-body">
+            <div class="a-side">
+              <div class="b">主楼 A<span class="n">12</span></div>
+              <div class="f">1F <span class="n">3</span></div>
+              <div class="f">2F <span class="n">4</span></div>
+              <div class="f">3F <span class="n">5</span></div>
+              <div class="b">研究院 B<span class="n">8</span></div>
+              <div class="f">1F <span class="n">2</span></div>
+              <div class="f">2F <span class="n">6</span></div>
+            </div>
+            <div class="a-main">
+              <div class="a-rec">★ 收藏 3 间 · 为你推荐：今天 14:00 主楼A-301（空闲 2h）</div>
+              <div class="pills"><span class="pill on">全部</span><span class="pill">空闲中</span><span class="pill">即将释放</span><span class="pill">使用中</span><span class="pill">维护中</span></div>
+              <div class="gcard"><div class="gcover" style="background:linear-gradient(135deg,#3b5bff,#6f8bff)"></div>
+                <div class="gmeta"><div class="t"><span class="star on">★</span> 主楼A-301 报告厅</div><div class="s">主楼A · 3F · 可容 24 人</div>
+                <span class="gtag">投影</span><span class="gtag">视频</span><span class="chip ok">空闲</span></div></div>
+              <div class="gcard"><div class="gcover" style="background:linear-gradient(135deg,#0FB5A0,#34d3c2)"></div>
+                <div class="gmeta"><div class="t"><span class="star">★</span> 研究院B-205 研讨室</div><div class="s">研究院B · 2F · 可容 10 人</div>
+                <span class="gtag">白板</span><span class="chip w">14:30释放</span></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">预订弹窗（三 · 通讯录选人 / RSVP / 附件）</div>
+        <div class="modal-inset">
+          <div class="mh">预订 · 主楼A-301 <span class="x">✕</span></div>
+          <div class="pick">
+            <div class="tree"><div class="dep">材料学院</div>
+              <div class="ps"><span class="cb on"></span>陈昭</div><div class="ps"><span class="cb"></span>李文博</div>
+              <div class="dep">机械学院</div><div class="ps"><span class="cb"></span>王启明</div></div>
+            <div class="chosen">已选 1 人<div class="ct"><span class="c">陈昭</span></div></div>
+          </div>
+          <div class="rsvp"><span class="r ok">接受 6</span><span class="r w">待定 2</span><span class="r">拒绝 1</span></div>
+          <div class="att">拖入议程 / 纪要 / 物料清单<span class="f">+ 添加附件</span></div>
+        </div>
+      </div>
+      <div class="foot"><button class="sel-btn" onclick="pick('A')">选择 A · 延续门户画廊</button></div>
+    </div>
+
+    <!-- 方向 B -->
+    <div class="dir">
+      <div class="dir-h"><span class="name">B · 空间优先（楼宇楼层主导）</span><span class="ax">布局轴：空间树</span></div>
+      <div class="dir-b">
+        <div class="cap">列表页（二 · 按楼栋/楼层找房）</div>
+        <div class="mv">
+          <div class="nav"><span class="dot"></span>会议室预订</div>
+          <div class="b-acc">
+            <div class="b">主楼 A <span class="chip ok">空闲 5</span></div>
+            <div class="f">1F</div>
+            <div class="rm">A-101 接待室 <span class="chip ok">空闲</span></div>
+            <div class="rm">A-102 洽谈室 <span class="chip b">使用中</span></div>
+            <div class="f">2F</div>
+            <div class="rm">A-201 会议室 <span class="chip w">13:00释放</span></div>
+            <div class="rm">A-202 会议室 <span class="chip ok">空闲</span></div>
+            <div class="b">研究院 B <span class="chip ok">空闲 3</span></div>
+            <div class="f">2F</div>
+            <div class="rm">B-205 研讨室 <span class="star on">★</span> <span class="chip ok">空闲</span></div>
+          </div>
+        </div>
+        <div class="cap">预订弹窗（三 · 同上结构）</div>
+        <div class="modal-inset">
+          <div class="mh">预订 · A-202 <span class="x">✕</span></div>
+          <div class="pick">
+            <div class="tree"><div class="dep">材料学院</div><div class="ps"><span class="cb"></span>陈昭</div><div class="ps"><span class="cb on"></span>李文博</div>
+            <div class="dep">机械学院</div><div class="ps"><span class="cb"></span>王启明</div></div>
+            <div class="chosen">已选 1 人<div class="ct"><span class="c">李文博</span></div></div>
+          </div>
+          <div class="rsvp"><span class="r ok">接受 4</span><span class="r w">待定 1</span><span class="r">拒绝 0</span></div>
+          <div class="att">拖入议程 / 纪要<span class="f">+ 添加附件</span></div>
+        </div>
+      </div>
+      <div class="foot"><button class="sel-btn" onclick="pick('B')">选择 B · 空间优先</button></div>
+    </div>
+
+    <!-- 方向 C -->
+    <div class="dir">
+      <div class="dir-h"><span class="name">C · 意图优先（智能首页）</span><span class="ax">布局轴：意图条</span></div>
+      <div class="dir-b">
+        <div class="cap">列表页（二 · 智能推荐置顶）</div>
+        <div class="mv">
+          <div class="nav"><span class="dot"></span>会议室预订</div>
+          <div class="c-intent">
+            <div style="font-size:11px;font-weight:600;color:var(--ink)">我要订会议室</div>
+            <div class="c-bar">
+              <div class="fld">今天 14:00-15:30</div>
+              <div class="fld">12 人</div>
+              <div class="fld">投影 · 视频</div>
+              <div class="go">智能推荐</div>
+            </div>
+          </div>
+          <div class="a-rec">推荐结果：主楼A-301（匹配度 96%）· 研究院B-205（88%）· 主楼A-202（81%）</div>
+          <div class="gcard"><div class="gcover" style="background:linear-gradient(135deg,#3b5bff,#6f8bff)"></div>
+            <div class="gmeta"><div class="t"><span class="star on">★</span> 主楼A-301 报告厅</div><div class="s">匹配 12 人 / 投影+视频 · 该时段空闲</div>
+            <span class="gtag">推荐</span><span class="chip ok">空闲</span></div></div>
+          <div class="pills"><span class="pill">全部</span><span class="pill on">智能排序</span><span class="pill">距离近</span><span class="pill">空闲优先</span></div>
+        </div>
+        <div class="cap">预订弹窗（三 · 同上结构）</div>
+        <div class="modal-inset">
+          <div class="mh">预订 · 主楼A-301 <span class="x">✕</span></div>
+          <div class="pick">
+            <div class="tree"><div class="dep">材料学院</div><div class="ps"><span class="cb on"></span>陈昭</div><div class="ps"><span class="cb"></span>李文博</div></div>
+            <div class="chosen">已选 1 人<div class="ct"><span class="c">陈昭</span></div></div>
+          </div>
+          <div class="rsvp"><span class="r ok">接受 9</span><span class="r w">待定 3</span><span class="r">拒绝 0</span></div>
+          <div class="att">拖入议程 / 纪要<span class="f">+ 添加附件</span></div>
+        </div>
+      </div>
+      <div class="foot"><button class="sel-btn" onclick="pick('C')">选择 C · 意图优先</button></div>
+    </div>
+
+    <!-- 方向 D -->
+    <div class="dir">
+      <div class="dir-h"><span class="name">D · 双栏工作流（选房+填单同屏）</span><span class="ax">布局轴：分栏</span></div>
+      <div class="dir-b">
+        <div class="cap">列表页 + 右侧常驻预订面板</div>
+        <div class="mv">
+          <div class="nav"><span class="dot"></span>会议室预订</div>
+          <div class="d-body">
+            <div class="d-left">
+              <div class="pills"><span class="pill on">全部</span><span class="pill">空闲中</span><span class="pill">设备</span><span class="pill">楼宇</span></div>
+              <div class="gcard"><div class="gcover" style="background:linear-gradient(135deg,#0FB5A0,#34d3c2)"></div>
+                <div class="gmeta"><div class="t"><span class="star on">★</span> 主楼A-301</div><div class="s">3F · 24人</div><span class="chip ok">空闲</span></div></div>
+              <div class="gcard"><div class="gcover" style="background:linear-gradient(135deg,#6366f1,#8b8cf8)"></div>
+                <div class="gmeta"><div class="t">研究院B-205</div><div class="s">2F · 10人</div><span class="chip w">14:30</span></div></div>
+            </div>
+            <div class="d-right">
+              <div class="ttl">填预订单</div>
+              <div class="seg"><span class="nm">时段 今天 14:00-15:30</span></div>
+              <div class="seg"><span class="nm">主题</span><input style="width:70px;border:1px solid var(--line);border-radius:5px;font-size:10px;padding:2px 5px"></div>
+              <div class="seg"><span class="nm">选人</span><span class="av">陈</span><span class="av" style="background:var(--teal)">李</span></div>
+              <div class="rsvp" style="margin:6px 0"><span class="r ok">接受 6</span><span class="r w">待定 2</span></div>
+              <div class="att" style="margin-top:4px">+ 附件 / 议程</div>
+              <div style="margin-top:8px;background:var(--teal);color:#fff;text-align:center;border-radius:7px;padding:6px;font-size:11px;font-weight:600">提交预订</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><button class="sel-btn" onclick="pick('D')">选择 D · 双栏工作流</button></div>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    <h3>四个方向的差异（遮住颜色也能区分 · 轴级差异）</h3>
+    <ul>
+      <li><b>A 推荐</b>：保留既有卡片画廊，左侧加楼宇/楼层空间导航树（带每层房间数），顶部「收藏 + 为你推荐」条，卡片角标收藏星。最贴合已选方向 C，风险最低。</li>
+      <li><b>B 空间优先</b>：列表由「楼栋→楼层→房间」折叠树主导，房间为紧凑行，收藏星钉在常用项；适合按位置找房的强习惯。</li>
+      <li><b>C 意图优先</b>：顶部一条「我要订会议室」意图栏（时间+人数+设备→智能推荐），推荐结果置顶，下方画廊按匹配度排序；把「智能推荐」做成第一入口。</li>
+      <li><b>D 双栏工作流</b>：左选房右填单同屏，通讯录选人/RSVP/附件内联在右侧常驻面板，取消弹窗跳转；最像高效工具。</li>
+    </ul>
+    <p style="margin-top:8px">三个能力（收藏 / 智能推荐 / 空间导航）在 A/B/C 中以不同权重出现；「三 · 通讯录选人 + RSVP + 附件」在四个方向的预订弹窗里结构一致（部门树勾选 + 接受/待定/拒绝 + 拖拽附件）。</p>
+  </div>
+
+<script>
+  function pick(id){
+    alert('已选方向 '+id+'。请在对话中回复「选 '+id+'」确认，我即进入正式实现（Phase 3）。');
+  }
+</script>
+</body>
+</html>

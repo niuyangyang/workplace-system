@@ -1,0 +1,26 @@
+/* 富文本编辑器（wangEditor）容器样式 */
+.rte-wrap {
+  border: 1px solid #e6e9f0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.rte-wrap .rte-toolbar {
+  border-bottom: 1px solid #eef1f6;
+}
+
+.rte-wrap .rte-editor {
+  overflow-y: auto;
+}
+
+.rte-wrap .w-e-text-container {
+  background: #fff;
+}
+
+/* 弹窗内工具栏下拉面板需要盖过 Modal */
+.w-e-drop-panel,
+.w-e-select-list,
+.w-e-modal {
+  z-index: 3000 !important;
+}

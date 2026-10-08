@@ -1,0 +1,329 @@
+/* ===== 制度前台（门户） ===== */
+.pp-page {
+  min-height: 100vh;
+  background: #f4f6fb;
+}
+
+/* ——— 顶部 banner（全局搜索）：深蓝渐变 ——— */
+.pp-banner {
+  background: linear-gradient(135deg, #0f2456 0%, #1e3a8a 48%, #2b4acb 100%);
+}
+.pp-banner-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 72px 24px 76px;
+  text-align: center;
+}
+.pp-banner-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fff;
+}
+.pp-banner-sub {
+  margin: 12px 0 26px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.78);
+}
+.pp-banner-search {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.pp-banner-search .ant-input-affix-wrapper,
+.pp-banner-search .ant-input {
+  border-radius: 999px;
+  border-color: transparent;
+}
+.pp-banner-search .ant-input-affix-wrapper-lg {
+  padding-left: 18px;
+  height: 48px;
+  box-shadow: 0 8px 24px rgba(4, 12, 42, 0.35);
+}
+.pp-banner-hot {
+  margin-top: 16px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+}
+.pp-banner-hot-label {
+  margin-right: 4px;
+}
+.pp-banner-hot-item {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pp-banner-hot-item:hover {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.65);
+  color: #fff;
+}
+
+/* ——— 主体布局 ——— */
+.pp-body {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* 左侧筛选 */
+.pp-side {
+  flex: 0 0 232px;
+  width: 232px;
+  position: sticky;
+  top: 88px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eaeef5;
+  padding: 16px 16px 20px;
+  box-shadow: 0 1px 4px rgba(15, 31, 86, 0.04);
+}
+.pp-side-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2440;
+}
+.pp-side-head .anticon {
+  color: #3b5bff;
+}
+.pp-side-reset {
+  margin-left: auto;
+  padding: 0;
+}
+.pp-side-divider.ant-divider {
+  margin: 12px 0 14px;
+}
+.pp-facet {
+  margin-bottom: 18px;
+}
+.pp-facet-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+.pp-facet-title .anticon {
+  color: #94a3b8;
+}
+.pp-facet-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pp-facet-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #334155;
+  transition: background 0.15s, color 0.15s;
+}
+.pp-facet-item:hover {
+  background: #f1f5ff;
+  color: #1e3a8a;
+}
+.pp-facet-item.on {
+  background: #eaf0ff;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+.pp-check {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  border: 1.5px solid #cbd5e1;
+  flex: 0 0 auto;
+  position: relative;
+  transition: all 0.15s;
+}
+.pp-facet-item.on .pp-check {
+  background: #3b5bff;
+  border-color: #3b5bff;
+}
+.pp-facet-item.on .pp-check::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.pp-facet-text {
+  flex: 1;
+}
+
+/* 右侧列表 */
+.pp-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.pp-main-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.pp-main-title {
+  margin: 0 !important;
+  color: #1f2440;
+}
+.pp-main-count {
+  font-size: 13px;
+}
+.pp-main-count b {
+  color: #3b5bff;
+}
+.pp-empty {
+  background: #fff;
+  border-radius: 12px;
+  padding: 60px 0;
+  border: 1px solid #eaeef5;
+}
+.pp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pp-pager {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+.pp-item {
+  border-radius: 12px !important;
+  border: 1px solid #eaeef5 !important;
+  box-shadow: 0 1px 4px rgba(15, 31, 86, 0.04);
+}
+.pp-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.pp-item-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.pp-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.pp-item-docno {
+  color: #64748b;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+}
+.pp-item-owner {
+  color: #64748b;
+}
+.pp-item-summary {
+  color: #475569 !important;
+  margin: 0 0 10px !important;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.pp-item-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed #eef1f6;
+  padding-top: 10px;
+}
+.pp-item-date {
+  font-size: 12.5px;
+}
+
+.pp-item-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.pp-item-link:hover .pp-item {
+  border-color: #cfd8ea !important;
+}
+
+/* ——— 版本对比页（独立新页面） ——— */
+.pd-diff-head {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px 32px 16px;
+}
+.pd-diff-titlerow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.pd-diff-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1e3a8a;
+  font-size: 14px;
+  text-decoration: none;
+  flex: 0 0 auto;
+  margin-left: auto; /* 靠右展示 */
+}
+.pd-diff-back:hover {
+  color: #2546a8;
+}
+.pd-diff-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2440;
+}
+.pd-diff-pickers {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.pd-diff-pick-label {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+}
+.pd-diff-arrow {
+  color: #94a3b8;
+}
+.pd-diff-body {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 32px 48px;
+}
+.pd-diff-body .d2h-wrapper {
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.pd-diff-body .d2h-files-diff {
+  width: 100%;
+}

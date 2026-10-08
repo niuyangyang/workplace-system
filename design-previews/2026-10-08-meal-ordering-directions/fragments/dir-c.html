@@ -1,0 +1,300 @@
+<style>
+  .dir-c{
+    width:960px;height:600px;position:relative;overflow:hidden;
+    background:#f4f6fb;color:#1c2333;
+    font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    font-variant-numeric:tabular-nums;
+    display:flex;align-items:center;justify-content:center;gap:32px;
+    box-sizing:border-box;
+  }
+  .dir-c *,.dir-c *::before,.dir-c *::after{box-sizing:border-box;margin:0;padding:0;}
+
+  /* ---------- 舞台标注 ---------- */
+  .dir-c .stage-cap{position:absolute;top:18px;left:28px;font-size:11px;color:#5b647a;opacity:.85;letter-spacing:.02em;}
+  .dir-c .stage-note{position:absolute;right:16px;bottom:10px;font-size:10px;color:rgba(28,35,51,.4);}
+
+  /* ---------- 设备通用 ---------- */
+  .dir-c .pc,.dir-c .phone{background:#ffffff;border:1px solid #e6e9f0;box-shadow:0 10px 28px rgba(28,35,51,.08);}
+
+  /* ---------- PC 窗口 ---------- */
+  .dir-c .pc{width:600px;border-radius:12px;overflow:hidden;}
+  .dir-c .pc-top{height:44px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid #e6e9f0;gap:10px;}
+  .dir-c .dots{display:flex;gap:5px;}
+  .dir-c .dots span{width:8px;height:8px;border-radius:50%;background:#e6e9f0;}
+  .dir-c .pc-title{font-size:12px;font-weight:600;}
+  .dir-c .pc-date{font-size:10.5px;color:#5b647a;}
+  .dir-c .deadline{margin-left:auto;font-size:10.5px;color:#5b647a;}
+  .dir-c .deadline b{color:#3b5bff;font-weight:600;}
+
+  .dir-c .toolbar{height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:#fafbfd;border-bottom:1px solid #eef0f5;}
+  .dir-c .toolbar .t1{font-size:12px;font-weight:600;}
+  .dir-c .toolbar .t1 em{font-style:normal;color:#5b647a;font-weight:400;font-size:11px;margin-left:6px;}
+  .dir-c .toolbar .t2{font-size:10.5px;color:#5b647a;}
+
+  .dir-c .pc-body{display:flex;}
+
+  /* 左分类窄栏 */
+  .dir-c .cats{width:112px;padding:10px 8px;border-right:1px solid #e6e9f0;display:flex;flex-direction:column;gap:2px;}
+  .dir-c .cat{height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;border-radius:8px;font-size:12px;color:#5b647a;}
+  .dir-c .cat .n{font-size:10px;opacity:.75;font-variant-numeric:tabular-nums;}
+  .dir-c .cat.on{background:#eef1ff;color:#3b5bff;font-weight:600;}
+
+  /* 表格化清单 */
+  .dir-c .list{flex:1;display:flex;flex-direction:column;}
+  .dir-c .thead,.dir-c .row{display:flex;align-items:center;padding:0 14px;}
+  .dir-c .thead{height:26px;background:#fafbfd;border-bottom:1px solid #eef0f5;font-size:10.5px;color:#5b647a;}
+  .dir-c .row{height:40px;border-bottom:1px solid #f0f2f7;font-size:12.5px;}
+  .dir-c .row:last-child{border-bottom:none;}
+  .dir-c .row.on{background:#eef1ff;}
+
+  .dir-c .c-ck{width:24px;flex:none;display:flex;align-items:center;}
+  .dir-c .c-thumb{width:36px;flex:none;}
+  .dir-c .c-name{flex:1;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dir-c .c-spec{width:46px;flex:none;font-size:11px;color:#5b647a;}
+  .dir-c .c-price{width:56px;flex:none;text-align:right;font-weight:600;color:#3b5bff;}
+  .dir-c .c-remain{width:50px;flex:none;text-align:right;font-size:11px;color:#5b647a;}
+  .dir-c .c-step{width:88px;flex:none;display:flex;justify-content:flex-end;}
+
+  /* 勾选框：品牌蓝填充白勾 */
+  .dir-c .ck{width:15px;height:15px;border:1.5px solid #c6cddc;border-radius:4px;position:relative;background:#fff;}
+  .dir-c .ck.on{background:#3b5bff;border-color:#3b5bff;}
+  .dir-c .ck.on::after{content:"";position:absolute;left:2.5px;top:3px;width:6.5px;height:3.5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);}
+
+  /* 缩略方块（弱化） */
+  .dir-c .thumb{width:26px;height:26px;border-radius:6px;position:relative;}
+  .dir-c .thumb::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:rgba(28,35,51,.08);}
+  .dir-c .th1{background:#f3e2d9;} .dir-c .th2{background:#f0e6d2;} .dir-c .th3{background:#ece4d4;}
+  .dir-c .th4{background:#f5e3d7;} .dir-c .th5{background:#e4ecdd;} .dir-c .th6{background:#efe9dc;}
+
+  /* 数量 stepper */
+  .dir-c .step{display:inline-flex;align-items:center;height:24px;border:1px solid #e6e9f0;border-radius:6px;background:#fff;}
+  .dir-c .step span{width:20px;height:100%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#5b647a;}
+  .dir-c .step b{width:22px;text-align:center;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .dir-c .row.on .step{border-color:#c9d2ff;}
+  .dir-c .row.on .step b{color:#3b5bff;}
+  .dir-c .row.dim .step{opacity:.45;}
+  .dir-c .step.zero b{color:#a6adbf;font-weight:400;}
+
+  /* 售罄行置灰 */
+  .dir-c .row.off{color:#a6adbf;}
+  .dir-c .row.off .c-name,.dir-c .row.off .c-price,.dir-c .row.off .c-spec,.dir-c .row.off .c-remain{color:#a6adbf;}
+  .dir-c .row.off .ck{border-color:#dfe3ec;background:#fafbfd;}
+  .dir-c .row.off .thumb{opacity:.45;}
+  .dir-c .sold-tag{display:inline-block;margin-left:6px;font-size:10px;color:#a0a7ba;border:1px solid #e6e9f0;border-radius:4px;padding:0 4px;line-height:15px;vertical-align:1px;}
+  .dir-c .none{color:#a6adbf;font-size:12px;}
+
+  /* 底部汇总条 */
+  .dir-c .pc-sum{height:50px;border-top:1px solid #e6e9f0;display:flex;align-items:center;padding:0 14px;gap:10px;background:#fff;}
+  .dir-c .sum-count{font-size:12px;font-weight:600;}
+  .dir-c .sum-div{width:1px;height:14px;background:#e6e9f0;}
+  .dir-c .sum-label{font-size:11px;color:#5b647a;}
+  .dir-c .sum-price{font-size:16px;font-weight:700;color:#3b5bff;font-variant-numeric:tabular-nums;}
+  .dir-c .btn{margin-left:auto;height:34px;padding:0 16px;border:none;border-radius:8px;background:#3b5bff;color:#fff;font-size:12.5px;font-weight:600;font-family:inherit;letter-spacing:.01em;}
+
+  /* ---------- 手机 ---------- */
+  .dir-c .phone{width:260px;height:392px;border-radius:20px;overflow:hidden;position:relative;display:flex;flex-direction:column;}
+  .dir-c .p-status{height:22px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:10px;color:#5b647a;}
+  .dir-c .p-status .sig{display:flex;gap:3px;align-items:center;}
+  .dir-c .p-status .sig i{width:4px;height:4px;border-radius:50%;background:#c6cddc;display:block;}
+  .dir-c .p-head{padding:4px 14px 0;}
+  .dir-c .p-title{font-size:14px;font-weight:700;}
+  .dir-c .p-dead{font-size:9.5px;color:#5b647a;margin-top:3px;line-height:1.5;}
+  .dir-c .p-select{margin:8px 14px;height:30px;border:1px solid #e6e9f0;border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:12px;font-weight:500;}
+  .dir-c .caret{width:6px;height:6px;border-right:1.5px solid #5b647a;border-bottom:1.5px solid #5b647a;transform:rotate(45deg);margin-top:-3px;}
+  .dir-c .p-row{display:flex;align-items:center;height:44px;padding:0 14px;border-top:1px solid #f0f2f7;}
+  .dir-c .p-row.on{background:#eef1ff;}
+  .dir-c .p-row:first-child{border-top:1px solid #eef0f5;}
+  .dir-c .p-thumb{width:30px;height:30px;border-radius:7px;flex:none;position:relative;}
+  .dir-c .p-thumb::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:rgba(28,35,51,.08);}
+  .dir-c .p-mid{flex:1;min-width:0;margin:0 8px;}
+  .dir-c .p-name{font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dir-c .p-sub{font-size:10px;color:#5b647a;margin-top:1px;}
+  .dir-c .p-right{text-align:right;flex:none;}
+  .dir-c .p-price{font-size:12.5px;font-weight:600;color:#3b5bff;}
+  .dir-c .p-step{display:inline-flex;align-items:center;height:20px;border:1px solid #e6e9f0;border-radius:5px;margin-top:3px;background:#fff;}
+  .dir-c .p-step span{width:16px;text-align:center;font-size:10.5px;color:#5b647a;}
+  .dir-c .p-step b{width:16px;text-align:center;font-size:10.5px;font-weight:600;color:#3b5bff;}
+  .dir-c .p-row.dim{color:#a6adbf;}
+  .dir-c .p-row.dim .p-name,.dir-c .p-row.dim .p-price{color:#a6adbf;}
+  .dir-c .p-row.dim .p-thumb{opacity:.45;}
+  .dir-c .p-row.dim .p-step{opacity:.4;}
+  .dir-c .p-sum{position:absolute;left:10px;right:10px;bottom:10px;height:44px;background:#fff;border:1px solid #e6e9f0;border-radius:10px;box-shadow:0 6px 16px rgba(28,35,51,.10);display:flex;align-items:center;padding:0 6px 0 12px;}
+  .dir-c .p-sum .l1{font-size:11.5px;font-weight:600;}
+  .dir-c .p-sum .l2{font-size:9px;color:#5b647a;margin-top:1px;}
+  .dir-c .p-sum .p-num{font-size:14px;font-weight:700;color:#3b5bff;margin-left:8px;font-variant-numeric:tabular-nums;}
+  .dir-c .p-btn{margin-left:auto;height:32px;padding:0 14px;border:none;border-radius:8px;background:#3b5bff;color:#fff;font-size:12px;font-weight:600;font-family:inherit;}
+</style>
+<div class="stage dir-c">
+  <div class="stage-cap">员工订餐系统 · 方向 C「高效订餐单」</div>
+
+  <!-- PC 窗口 -->
+  <div class="pc">
+    <div class="pc-top">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="pc-title">员工订餐系统</div>
+      <div class="pc-date">10月8日 周四</div>
+      <div class="deadline">截止 <b>14:30</b> · 17:30 送达工位 · 月底随餐补结算</div>
+    </div>
+    <div class="toolbar">
+      <div class="t1">午餐套餐<em>共 6 项</em></div>
+      <div class="t2">下单后自动汇总至行政部</div>
+    </div>
+    <div class="pc-body">
+      <div class="cats">
+        <div class="cat on"><span>午餐套餐</span><span class="n">6</span></div>
+        <div class="cat"><span>晚餐套餐</span><span class="n">5</span></div>
+        <div class="cat"><span>加班夜宵</span><span class="n">4</span></div>
+        <div class="cat"><span>饮品小食</span><span class="n">8</span></div>
+      </div>
+      <div class="list">
+        <div class="thead">
+          <div class="c-ck"></div>
+          <div class="c-thumb"></div>
+          <div class="c-name">菜品</div>
+          <div class="c-spec">规格</div>
+          <div class="c-price">价格</div>
+          <div class="c-remain">剩余</div>
+          <div class="c-step">数量</div>
+        </div>
+        <div class="row on">
+          <div class="c-ck"><div class="ck on"></div></div>
+          <div class="c-thumb"><div class="thumb th1"></div></div>
+          <div class="c-name">红烧牛肉饭</div>
+          <div class="c-spec">大份</div>
+          <div class="c-price">¥22</div>
+          <div class="c-remain">剩 12</div>
+          <div class="c-step"><div class="step"><span>−</span><b>2</b><span>+</span></div></div>
+        </div>
+        <div class="row on">
+          <div class="c-ck"><div class="ck on"></div></div>
+          <div class="c-thumb"><div class="thumb th2"></div></div>
+          <div class="c-name">宫保鸡丁饭</div>
+          <div class="c-spec">标准</div>
+          <div class="c-price">¥18</div>
+          <div class="c-remain">剩 8</div>
+          <div class="c-step"><div class="step"><span>−</span><b>1</b><span>+</span></div></div>
+        </div>
+        <div class="row dim">
+          <div class="c-ck"><div class="ck"></div></div>
+          <div class="c-thumb"><div class="thumb th3"></div></div>
+          <div class="c-name">香菇滑鸡饭</div>
+          <div class="c-spec">标准</div>
+          <div class="c-price">¥18</div>
+          <div class="c-remain">剩 15</div>
+          <div class="c-step"><div class="step zero"><span>−</span><b>0</b><span>+</span></div></div>
+        </div>
+        <div class="row off">
+          <div class="c-ck"><div class="ck"></div></div>
+          <div class="c-thumb"><div class="thumb th4"></div></div>
+          <div class="c-name">番茄鸡蛋面<span class="sold-tag">售罄</span></div>
+          <div class="c-spec">标准</div>
+          <div class="c-price">¥14</div>
+          <div class="c-remain">—</div>
+          <div class="c-step"><span class="none">—</span></div>
+        </div>
+        <div class="row dim">
+          <div class="c-ck"><div class="ck"></div></div>
+          <div class="c-thumb"><div class="thumb th5"></div></div>
+          <div class="c-name">蒜蓉西兰花</div>
+          <div class="c-spec">小份</div>
+          <div class="c-price">¥8</div>
+          <div class="c-remain">剩 20</div>
+          <div class="c-step"><div class="step zero"><span>−</span><b>0</b><span>+</span></div></div>
+        </div>
+        <div class="row dim">
+          <div class="c-ck"><div class="ck"></div></div>
+          <div class="c-thumb"><div class="thumb th6"></div></div>
+          <div class="c-name">卤蛋</div>
+          <div class="c-spec">1 个</div>
+          <div class="c-price">¥2</div>
+          <div class="c-remain">剩 30</div>
+          <div class="c-step"><div class="step zero"><span>−</span><b>0</b><span>+</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="pc-sum">
+      <span class="sum-count">已选 6 份</span>
+      <span class="sum-div"></span>
+      <span class="sum-label">合计</span>
+      <span class="sum-price">¥118</span>
+      <button class="btn">提交订餐（行政部统一采购）</button>
+    </div>
+  </div>
+
+  <!-- 手机 -->
+  <div class="phone">
+    <div class="p-status">
+      <span>12:20</span>
+      <span class="sig"><i></i><i></i><i></i></span>
+    </div>
+    <div class="p-head">
+      <div class="p-title">午餐订餐</div>
+      <div class="p-dead">截止 14:30 · 17:30 送达工位 · 月底随餐补结算</div>
+    </div>
+    <div class="p-select"><span>午餐套餐</span><span class="caret"></span></div>
+    <div class="p-row on">
+      <div class="p-thumb th1"></div>
+      <div class="p-mid">
+        <div class="p-name">红烧牛肉饭 · 大份</div>
+        <div class="p-sub">剩 12</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥22</div>
+        <div class="p-step"><span>−</span><b>2</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-row">
+      <div class="p-thumb th2"></div>
+      <div class="p-mid">
+        <div class="p-name">宫保鸡丁饭 · 标准</div>
+        <div class="p-sub">剩 8</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥18</div>
+        <div class="p-step"><span>−</span><b>1</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-row dim">
+      <div class="p-thumb th3"></div>
+      <div class="p-mid">
+        <div class="p-name">香菇滑鸡饭 · 标准</div>
+        <div class="p-sub">剩 15</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥18</div>
+        <div class="p-step"><span>−</span><b>0</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-row dim">
+      <div class="p-thumb th4"></div>
+      <div class="p-mid">
+        <div class="p-name">番茄鸡蛋面<span class="sold-tag">售罄</span></div>
+        <div class="p-sub">今日已订满</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥14</div>
+        <div class="p-step"><span>−</span><b>0</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-row">
+      <div class="p-thumb th5"></div>
+      <div class="p-mid">
+        <div class="p-name">蒜蓉西兰花 · 小份</div>
+        <div class="p-sub">剩 20</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥8</div>
+        <div class="p-step"><span>−</span><b>0</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-sum">
+      <div>
+        <div class="l1">已选 6 份<span class="p-num">¥118</span></div>
+        <div class="l2">行政部统一采购 · 随餐补结算</div>
+      </div>
+      <button class="p-btn">提交订餐</button>
+    </div>
+  </div>
+
+  <div class="stage-note">方向样机 C · 不是最终页面</div>
+</div>

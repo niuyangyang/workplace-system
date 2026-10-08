@@ -1,0 +1,188 @@
+/* ===== 需求管理：PRD 文档（文档视图） ===== */
+.prd-doc-page {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  padding: 4px 2px 40px;
+}
+.prd-doc-toc {
+  position: sticky;
+  top: 96px;
+  flex: 0 0 220px;
+  width: 220px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  padding: 14px 14px 16px;
+  background: #fff;
+  border: 1px solid #eef1f6;
+  border-radius: 10px;
+}
+.prd-toc-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eef1f6;
+}
+.prd-toc-ch { margin-bottom: 6px; }
+.prd-toc-link {
+  display: block;
+  cursor: pointer;
+  color: #5b647a;
+  font-size: 13px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  transition: all .15s;
+}
+.prd-toc-link:hover { color: #3b5bff; background: #f5f7ff; }
+.prd-toc-link.is-active {
+  color: #3b5bff;
+  background: #eef2ff;
+  font-weight: 600;
+}
+.prd-toc-sub { padding-left: 12px; border-left: 2px solid #eef1f6; margin: 2px 0 4px 6px; }
+.prd-toc-sublink { font-size: 12.5px; }
+.prd-print-btn { margin-top: 14px; width: 100%; }
+
+.prd-doc-content { flex: 1; min-width: 0; background: #fff; border: 1px solid #eef1f6; border-radius: 10px; padding: 28px 32px; }
+.prd-doc-head { border-bottom: 2px solid #eef1f6; padding-bottom: 16px; margin-bottom: 8px; }
+.prd-doc-meta { display: flex; flex-wrap: wrap; gap: 10px 22px; color: #5b647a; font-size: 13px; }
+.prd-sec { scroll-margin-top: 96px; }
+.prd-doc-content h3 { margin-top: 28px !important; }
+.prd-doc-content h4 { margin-top: 20px !important; }
+
+.prd-ul { padding-left: 20px; color: #475569; line-height: 1.9; }
+.prd-ul li { margin-bottom: 4px; }
+
+.prd-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 14px;
+  font-size: 13px;
+  color: #475569;
+}
+.prd-table th, .prd-table td {
+  border: 1px solid #e6ebf2;
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.prd-table th { background: #f5f7ff; color: #1f2937; font-weight: 600; }
+.prd-table tr:nth-child(even) td { background: #fafbff; }
+
+.prd-story {
+  background: #f5f7ff;
+  border-left: 3px solid #3b5bff;
+  padding: 8px 14px;
+  margin: 10px 0;
+  border-radius: 0 6px 6px 0;
+  color: #475569;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.prd-story b { color: #3b5bff; }
+
+.prd-flow {
+  background: #0f1729;
+  color: #cbd5e1;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  overflow-x: auto;
+}
+
+/* Mermaid 图表容器 */
+.mmd-wrap {
+  background: #fbfcff;
+  border: 1px solid #eef1f6;
+  border-radius: 10px;
+  padding: 18px 16px;
+  margin: 12px 0 18px;
+  overflow-x: auto;
+  text-align: center;
+}
+.mmd-wrap svg { max-width: 100%; height: auto; }
+.mmd-error { color: #d4380d; font-size: 13px; padding: 12px; }
+.mmd-cap {
+  font-size: 13px;
+  color: #5b647a;
+  margin: 16px 0 0;
+  padding-left: 10px;
+  border-left: 3px solid #3b5bff;
+  line-height: 1.6;
+}
+
+/* ===== 需求管理：功能权限矩阵 ===== */
+.func-perm-card .ant-table-cell {
+  text-align: center;
+}
+.func-perm-card .func-col-menu,
+.func-perm-card .func-col-op {
+  text-align: left;
+}
+.func-menu-name {
+  font-weight: 600;
+  color: #1f2a44;
+}
+.func-check {
+  color: #16a34a;
+  font-size: 16px;
+}
+.func-none {
+  color: #d4d8e3;
+  font-size: 14px;
+}
+.func-perm-tip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  background: #f5f8ff;
+  border: 1px solid #e6ebff;
+  border-radius: 8px;
+}
+.func-perm-tip .func-none {
+  margin-left: 4px;
+}
+
+/* ===== 需求管理：数据权限罗列 ===== */
+.dp-tip {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  background: #f5f8ff;
+  border: 1px solid #e6ebff;
+  border-radius: 8px;
+}
+.dp-tip b {
+  color: #3b5bff;
+}
+.dp-obj {
+  font-weight: 600;
+  color: #1f2a44;
+}
+.dp-scope {
+  color: #3b5bff;
+  background: #eef2ff;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* 打印 / 导出 PDF：隐藏侧栏目录与按钮，正文铺满 */
+@media print {
+  .prd-doc-toc { display: none !important; }
+  .prd-doc-page { display: block; gap: 0; }
+  .prd-doc-content { border: none; padding: 0; max-width: 100%; }
+  .prd-flow { background: #f1f5f9; color: #0f1729; }
+}

@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>员工订餐系统 · 方向预览（PC + H5）</title>
+<style>
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;background:#f4f4f2;color:#1a1a1a}
+  .bar{padding:18px 32px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .bar .tip{color:#6b7280;font-size:13px}
+  .dials{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:12px;padding:18px 32px;border-bottom:1px solid #ddd;background:#fafaf8}
+  .dial{display:grid;gap:6px;font-size:13px}
+  .dial b{font-weight:650}
+  .dial output{font-variant-numeric:tabular-nums;color:#b8471f;font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding:28px 32px}
+  .card{background:#fff;border:2px solid #e2e2e0;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-sizing:border-box}
+  .card.selected{border-color:#1a1a1a}
+  .card-head{display:flex;align-items:baseline;gap:10px;padding:14px 20px 10px;flex-wrap:wrap}
+  .card-head .tag{font-size:12px;color:#6b7280}
+  .card-head .rec{font-size:11px;font-weight:700;color:#92400e;background:#fef3c7;border-radius:999px;padding:2px 10px}
+  .mock{height:300px;overflow:hidden;position:relative;display:grid;place-items:center;background:#e9e9e6}
+  .mock>.stage{width:960px;height:600px;transform:scale(.5);transform-origin:center center;flex:0 0 auto}
+  .meta{padding:14px 20px;display:grid;gap:10px;min-width:0;width:100%;box-sizing:border-box}
+  .meta p{margin:0;color:#4b5563;font-size:13px;line-height:1.55;max-width:64ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;writing-mode:horizontal-tb;white-space:normal;overflow-wrap:break-word;word-break:normal}
+  .qmdp-pick-button{position:relative;z-index:1;width:calc(100% - 40px);min-height:44px;margin:0 20px 18px;border:1.5px solid #1a1a1a;border-radius:10px;background:#1a1a1a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;white-space:normal;writing-mode:horizontal-tb;transition:transform .12s cubic-bezier(.23,1,.32,1),box-shadow .12s}
+  .qmdp-pick-button:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(15,23,42,.16)}
+  .qmdp-pick-button:active{transform:translateY(0) scale(.99)}
+  .notes{padding:8px 32px 40px;display:grid;gap:14px}
+  .note-card{background:#fff;border:1px solid #e2e2e0;border-radius:12px;padding:16px 20px}
+  .note-card h3{margin:0 0 6px;font-size:14px}
+  .note-card p{margin:0;font-size:13px;color:#4b5563;line-height:1.6}
+  .note-card .k{color:#92400e;font-weight:600}
+  @media (max-width:760px){
+    .bar{padding:14px 16px}
+    .dials{grid-template-columns:1fr;padding:14px 16px}
+    .grid{grid-template-columns:1fr;padding:14px 16px;gap:18px}
+    .notes{padding:8px 16px 32px}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <strong>员工订餐系统 · 方向样机（每格左边 PC / 右边 H5）</strong>
+    <span class="tip">设计方向样机，不是最终页面 · 键盘 1-4 选择 · 确认后回传当前工作流</span>
+  </div>
+
+  <div class="dials" data-qmdp-dials aria-label="设计拨盘">
+    <label class="dial"><b>视觉冒险度 <output id="varianceOut" data-qmdp-output="variance">4</output></b><input id="variance" data-qmdp-dial="variance" type="range" min="1" max="10" value="4"></label>
+    <label class="dial"><b>动效强度 <output id="motionOut" data-qmdp-output="motion">4</output></b><input id="motion" data-qmdp-dial="motion" type="range" min="1" max="10" value="4"></label>
+    <label class="dial"><b>信息密度 <output id="densityOut" data-qmdp-output="density">6</output></b><input id="density" data-qmdp-dial="density" type="range" min="1" max="10" value="6"></label>
+  </div>
+
+  <div class="grid">
+    <div class="card" data-name="明档点餐 暖橙双栏">
+      <div class="card-head"><strong>方向 A · 明档点餐</strong><span class="tag">暖橙食欲感 · 经典外卖双栏 · H5/PC 同构</span></div>
+      <div class="mock"><div class="stage">
+<style>
+  .dir-a { box-sizing: border-box; }
+  .dir-a * { box-sizing: border-box; margin: 0; padding: 0; }
+  .dir-a {
+    position: relative;
+    width: 960px; height: 600px;
+    overflow: hidden;
+    background: #fffaf6;
+    color: #2d2018;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    font-style: normal;
+  }
+
+  /* ---------- 舞台标注 ---------- */
+  .dir-a .stage-note {
+    position: absolute; right: 12px; bottom: 8px;
+    font-size: 10px; color: rgba(45, 32, 24, .4);
+    letter-spacing: .5px;
+  }
+
+  /* ---------- 通用元素 ---------- */
+  .dir-a .logo {
+    display: inline-block; width: 20px; height: 20px;
+    border-radius: 6px; vertical-align: -5px; margin-right: 6px;
+    background: linear-gradient(135deg, #ff6b2c, #ffb84d);
+    position: relative;
+  }
+  .dir-a .logo::after {
+    content: ""; position: absolute; left: 6px; top: 6px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255, 255, 255, .85);
+  }
+  .dir-a .clock {
+    display: inline-block; width: 10px; height: 10px;
+    border: 1.5px solid #ff6b2c; border-radius: 50%;
+    position: relative; margin-right: 5px; vertical-align: -1px;
+  }
+  .dir-a .clock::after {
+    content: ""; position: absolute; left: 3px; top: 1px;
+    width: 1.5px; height: 4px; background: #ff6b2c; border-radius: 1px;
+  }
+
+  .dir-a .price {
+    color: #ff6b2c; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .yen { font-size: .72em; font-weight: 600; margin-right: 1px; }
+
+  .dir-a .add {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #ff6b2c; position: relative; flex: none;
+    cursor: pointer;
+  }
+  .dir-a .add::before, .dir-a .add::after {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    background: #fff; border-radius: 1px; transform: translate(-50%, -50%);
+  }
+  .dir-a .add::before { width: 10px; height: 2px; }
+  .dir-a .add::after { width: 2px; height: 10px; }
+
+  .dir-a .thumb {
+    position: relative; flex: none; border-radius: 10px; overflow: hidden;
+  }
+  .dir-a .thumb::before {
+    content: ""; position: absolute; left: 20%; top: 22%;
+    width: 60%; height: 60%; border-radius: 50%;
+    background: rgba(255, 255, 255, .26);
+  }
+  .dir-a .thumb::after {
+    content: ""; position: absolute; left: 55%; top: 52%;
+    width: 26%; height: 26%; border-radius: 50%;
+    background: rgba(255, 255, 255, .34);
+  }
+  .dir-a .img-beef     { background: linear-gradient(135deg, #d4622a, #8f3a12); }
+  .dir-a .img-kp       { background: linear-gradient(135deg, #e89a44, #b5651d); }
+  .dir-a .img-mushroom { background: linear-gradient(135deg, #d3a873, #96703c); }
+  .dir-a .img-noodle   { background: linear-gradient(135deg, #f2b95a, #dd8a2f); }
+  .dir-a .img-egg      { background: linear-gradient(135deg, #f4e0b5, #d9b877); }
+  .dir-a .img-sold     { background: linear-gradient(135deg, #ccc4bb, #a39a90); }
+
+  /* ---------- 分类导航（整块底色高亮，无竖线） ---------- */
+  .dir-a .cat {
+    display: block; padding: 9px 12px; border-radius: 10px;
+    font-size: 13px; color: #9b8a7a; margin-bottom: 6px;
+    white-space: nowrap;
+  }
+  .dir-a .cat.on {
+    background: #ff6b2c; color: #fff; font-weight: 600;
+  }
+
+  /* ---------- 菜品卡 ---------- */
+  .dir-a .dish {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 1px solid #f0e6dc; border-radius: 12px;
+    padding: 7px; margin-bottom: 7px;
+  }
+  .dir-a .info { flex: 1; min-width: 0; }
+  .dir-a .name { font-size: 13px; font-weight: 600; }
+  .dir-a .meta { font-size: 10.5px; color: #9b8a7a; margin-top: 2px;
+    font-variant-numeric: tabular-nums; }
+  .dir-a .row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 3px;
+  }
+
+  .dir-a .dish.sold .thumb::before,
+  .dir-a .dish.sold .thumb::after { background: rgba(255, 255, 255, .45); }
+  .dir-a .dish.sold .name,
+  .dir-a .dish.sold .meta,
+  .dir-a .dish.sold .price { color: #9b8a7a; }
+  .dir-a .dish.sold .price { font-weight: 600; }
+  .dir-a .sold-badge {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: rgba(45, 32, 24, .55); color: #fff;
+    font-size: 10px; text-align: center; padding: 2px 0;
+    letter-spacing: 1px;
+  }
+  .dir-a .add-off { background: #f0e6dc; }
+  .dir-a .add-off::before, .dir-a .add-off::after { background: #b7a897; }
+
+  /* ============ PC 浏览器窗口 ============ */
+  .dir-a .pc {
+    position: absolute; left: 32px; top: 30px;
+    width: 580px; height: 540px;
+    background: #fff; border: 1px solid #f0e6dc; border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(45, 32, 24, .08);
+    overflow: hidden;
+  }
+  .dir-a .browser-top {
+    height: 34px; background: #f6ede4;
+    display: flex; align-items: center; gap: 6px; padding: 0 12px;
+  }
+  .dir-a .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .dir-a .d1 { background: #ff6b2c; }
+  .dir-a .d2 { background: #ffb84d; }
+  .dir-a .d3 { background: #f0e6dc; }
+  .dir-a .url {
+    margin-left: 10px; height: 20px; flex: 1; max-width: 300px;
+    background: #fff; border: 1px solid #f0e6dc; border-radius: 10px;
+    font-size: 10px; color: #9b8a7a; line-height: 18px; padding: 0 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .pc-body { padding: 12px 14px; }
+  .dir-a .app-head {
+    height: 40px; display: flex; align-items: center;
+    justify-content: space-between;
+  }
+  .dir-a .brand { font-size: 14px; font-weight: 700; }
+  .dir-a .head-right { display: flex; align-items: center; gap: 8px; }
+  .dir-a .chip {
+    font-size: 11px; color: #9b8a7a;
+    border: 1px solid #f0e6dc; border-radius: 10px; padding: 3px 9px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .chip b { color: #ff6b2c; font-weight: 700; }
+  .dir-a .submit-btn {
+    background: #ff6b2c; color: #fff; font-size: 12px; font-weight: 600;
+    border-radius: 10px; padding: 6px 12px; white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(255, 107, 44, .3);
+  }
+  .dir-a .notice {
+    margin-top: 8px; height: 26px; border-radius: 8px;
+    background: rgba(255, 184, 77, .16);
+    font-size: 11.5px; color: #9b6a2f; line-height: 26px; padding: 0 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .main { display: flex; gap: 12px; margin-top: 10px; }
+  .dir-a .nav { width: 110px; flex: none; padding-top: 2px; }
+  .dir-a .list { flex: 1; min-width: 0; height: 396px; overflow: hidden; }
+  .dir-a .pc .thumb { width: 50px; height: 50px; }
+
+  /* ============ 手机 ============ */
+  .dir-a .phone {
+    position: absolute; left: 658px; top: 15px;
+    width: 270px; height: 570px;
+    background: #2d2018; border-radius: 38px; padding: 9px;
+    box-shadow: 0 14px 34px rgba(45, 32, 24, .16);
+  }
+  .dir-a .phone::after {
+    content: ""; position: absolute; right: -3px; top: 110px;
+    width: 3px; height: 46px; border-radius: 2px; background: #2d2018;
+  }
+  .dir-a .screen {
+    position: relative; width: 100%; height: 100%;
+    background: #fffaf6; border-radius: 30px; overflow: hidden;
+    padding: 8px 10px;
+  }
+  .dir-a .notch {
+    position: absolute; left: 50%; top: 8px; transform: translateX(-50%);
+    width: 64px; height: 14px; border-radius: 8px; background: #2d2018;
+  }
+  .dir-a .p-head {
+    margin-top: 14px; display: flex; align-items: center;
+    justify-content: space-between;
+  }
+  .dir-a .p-brand { font-size: 13px; font-weight: 700; }
+  .dir-a .p-head .submit-btn { font-size: 11px; padding: 5px 9px; border-radius: 9px; }
+  .dir-a .p-notice {
+    margin-top: 8px; height: 24px; border-radius: 8px;
+    background: rgba(255, 184, 77, .16);
+    font-size: 10.5px; color: #9b6a2f; line-height: 24px; padding: 0 9px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .p-main { display: flex; gap: 9px; margin-top: 8px; }
+  .dir-a .nav-p { width: 76px; flex: none; padding-top: 2px; }
+  .dir-a .nav-p .cat { font-size: 12px; padding: 9px 8px; border-radius: 9px; }
+  .dir-a .p-list { flex: 1; min-width: 0; height: 420px; overflow: hidden; }
+  .dir-a .phone .thumb { width: 44px; height: 44px; border-radius: 9px; }
+  .dir-a .phone .dish { padding: 6px; gap: 8px; border-radius: 11px; }
+  .dir-a .phone .name { font-size: 12px; }
+  .dir-a .phone .meta { font-size: 9.5px; }
+  .dir-a .phone .price { font-size: 13px; }
+  .dir-a .phone .add { width: 20px; height: 20px; }
+  .dir-a .phone .add::before { width: 8px; height: 2px; }
+  .dir-a .phone .add::after { width: 2px; height: 8px; }
+
+  .dir-a .cart-bar {
+    position: absolute; left: 10px; right: 10px; bottom: 12px;
+    height: 42px; border-radius: 21px;
+    background: #2d2018; color: #fff;
+    display: flex; align-items: center; padding: 0 5px 0 12px; gap: 8px;
+    box-shadow: 0 8px 20px rgba(45, 32, 24, .28);
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .cb-badge {
+    width: 20px; height: 20px; border-radius: 50%; flex: none;
+    background: #ff6b2c; color: #fff; font-size: 11px; font-weight: 700;
+    text-align: center; line-height: 20px;
+    border: 2px solid #fffaf6;
+  }
+  .dir-a .cb-text { flex: 1; font-size: 12px; color: #f0e6dc; }
+  .dir-a .cb-text b { color: #ffb84d; }
+  .dir-a .cb-btn {
+    background: #ff6b2c; color: #fff; font-size: 12px; font-weight: 600;
+    border-radius: 17px; padding: 9px 16px; white-space: nowrap;
+  }
+</style>
+<div class="stage dir-a">
+
+  <!-- PC 浏览器窗口 -->
+  <div class="pc">
+    <div class="browser-top">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="url">meal.xinghui-tech.cn</span>
+    </div>
+    <div class="pc-body">
+      <div class="app-head">
+        <span class="brand"><span class="logo"></span>星辉科技 · 员工订餐</span>
+        <span class="head-right">
+          <span class="chip">已选 <b>2</b> 件 · ¥<b>40</b></span>
+          <span class="submit-btn">提交订餐（行政部统一采购）</span>
+        </span>
+      </div>
+      <div class="notice"><span class="clock"></span>14:30 前下单 · 17:30 送达工位</div>
+      <div class="main">
+        <div class="nav">
+          <span class="cat on">午餐套餐</span>
+          <span class="cat">晚餐套餐</span>
+          <span class="cat">加班夜宵</span>
+          <span class="cat">饮品小食</span>
+        </div>
+        <div class="list">
+          <div class="dish">
+            <div class="thumb img-beef"></div>
+            <div class="info">
+              <div class="name">红烧牛肉饭</div>
+              <div class="meta">月销 128 · 剩 15 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>22</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-kp"></div>
+            <div class="info">
+              <div class="name">宫保鸡丁饭</div>
+              <div class="meta">月销 96 · 剩 22 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>18</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-mushroom"></div>
+            <div class="info">
+              <div class="name">香菇滑鸡饭</div>
+              <div class="meta">月销 87 · 剩 30 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>18</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-noodle"></div>
+            <div class="info">
+              <div class="name">番茄鸡蛋面</div>
+              <div class="meta">月销 76 · 剩 26 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>14</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-egg"></div>
+            <div class="info">
+              <div class="name">卤蛋</div>
+              <div class="meta">月销 210 · 剩 50 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>2</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish sold">
+            <div class="thumb img-sold"><span class="sold-badge">已售罄</span></div>
+            <div class="info">
+              <div class="name">冰镇酸梅汤</div>
+              <div class="meta">今日限量 40 份 · 已订完</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>6</span>
+                <span class="add add-off"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 手机 -->
+  <div class="phone">
+    <div class="screen">
+      <span class="notch"></span>
+      <div class="p-head">
+        <span class="p-brand"><span class="logo"></span>星辉科技 · 员工订餐</span>
+        <span class="submit-btn">提交订餐</span>
+      </div>
+      <div class="p-notice"><span class="clock"></span>14:30 前下单 · 17:30 送达工位</div>
+      <div class="p-main">
+        <div class="nav nav-p">
+          <span class="cat on">午餐套餐</span>
+          <span class="cat">晚餐套餐</span>
+          <span class="cat">加班夜宵</span>
+          <span class="cat">饮品小食</span>
+        </div>
+        <div class="p-list">
+          <div class="dish">
+            <div class="thumb img-beef"></div>
+            <div class="info">
+              <div class="name">红烧牛肉饭</div>
+              <div class="meta">月销 128 · 剩 15 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>22</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-kp"></div>
+            <div class="info">
+              <div class="name">宫保鸡丁饭</div>
+              <div class="meta">月销 96 · 剩 22 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>18</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-mushroom"></div>
+            <div class="info">
+              <div class="name">香菇滑鸡饭</div>
+              <div class="meta">月销 87 · 剩 30 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>18</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-noodle"></div>
+            <div class="info">
+              <div class="name">番茄鸡蛋面</div>
+              <div class="meta">月销 76 · 剩 26 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>14</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish sold">
+            <div class="thumb img-sold"><span class="sold-badge">已售罄</span></div>
+            <div class="info">
+              <div class="name">冰镇酸梅汤</div>
+              <div class="meta">今日限量 · 已订完</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>6</span>
+                <span class="add add-off"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cart-bar">
+        <span class="cb-badge">2</span>
+        <span class="cb-text">已选 <b>2</b> 件 · ¥<b>40</b></span>
+        <span class="cb-btn">提交订餐</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage-note">方向样机 A · 不是最终页面</div>
+</div>
+
+      </div></div>
+      <div class="meta"><p>左分类右菜品的经典外卖结构，暖橙价格与按钮带食欲，H5 和 PC 天然同构，用户零学习成本。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 A · 明档点餐 暖橙双栏</button>
+    </div>
+
+    <div class="card" data-name="深夜食堂 暗色夜宵">
+      <div class="card-head"><strong>方向 B · 深夜食堂</strong><span class="tag">暗色暖灯 · 加班夜宵场景 · 金色重音</span></div>
+      <div class="mock"><div class="stage">
+<style>
+/* ===== 方向 B · 深夜食堂（暗色 + 暖金） ===== */
+.dir-b{
+  position:relative;width:960px;height:600px;overflow:hidden;
+  background:#14161c;color:#f0ede6;
+  font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+  font-style:normal;font-variant-numeric:tabular-nums;
+  display:flex;align-items:center;justify-content:center;gap:38px;
+}
+.dir-b *{box-sizing:border-box;margin:0;padding:0;font-style:normal;}
+.dir-b button{appearance:none;-webkit-appearance:none;font-family:inherit;cursor:default;}
+
+/* 夜灯氛围层（<6% 极轻暖渐变） */
+.dir-b .ambient{position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(460px 300px at 28% 0%, rgba(245,179,1,0.05), transparent 70%),
+    radial-gradient(420px 280px at 86% 12%, rgba(255,138,76,0.04), transparent 70%);
+}
+
+/* ===== PC 窗口 mockup ===== */
+.dir-b .pc{position:relative;z-index:1;width:580px;height:556px;background:#1c1f27;border:1px solid #2e3340;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;}
+.dir-b .pc-bar{flex:none;height:34px;display:flex;align-items:center;gap:6px;padding:0 12px;background:#232733;border-bottom:1px solid #2e3340;}
+.dir-b .dot{width:8px;height:8px;border-radius:50%;}
+.dir-b .dot.r{background:#d16a5c;}
+.dir-b .dot.y{background:#d9a353;}
+.dir-b .dot.g{background:#7ea86a;}
+.dir-b .win-title{margin-left:8px;font-size:12px;color:#9aa0ad;}
+.dir-b .pc-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:13px 16px 12px;}
+
+.dir-b .policy{flex:none;display:flex;align-items:center;gap:8px;font-size:12px;color:#9aa0ad;}
+.dir-b .policy i{flex:none;width:6px;height:6px;border-radius:50%;background:#f5b301;}
+.dir-b .policy .hours{margin-left:auto;font-variant-numeric:tabular-nums;}
+
+.dir-b .hint{flex:none;display:flex;align-items:center;gap:8px;background:#232733;border:1px solid #2e3340;border-radius:8px;padding:8px 12px;font-size:12px;}
+.dir-b .hint .t{color:#f0ede6;font-weight:600;font-variant-numeric:tabular-nums;}
+.dir-b .hint .sep{color:#9aa0ad;}
+.dir-b .hint .free{color:#9aa0ad;}
+.dir-b .badge-late{font-size:11px;line-height:1;font-weight:600;color:#ff8a4c;background:rgba(255,138,76,0.10);border:1px solid rgba(255,138,76,0.30);border-radius:4px;padding:3px 6px;}
+
+.dir-b .pills{flex:none;display:flex;gap:8px;}
+.dir-b .pill{font-size:12px;color:#9aa0ad;background:#232733;border:1px solid #2e3340;border-radius:999px;padding:6px 14px;white-space:nowrap;}
+.dir-b .pill.on{background:#f5b301;border-color:#f5b301;color:#14161c;font-weight:600;}
+
+.dir-b .grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:10px;}
+.dir-b .dish{position:relative;background:#232733;border:1px solid #2e3340;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;}
+.dir-b .thumb{flex:none;height:74px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+  background:radial-gradient(90px 58px at 50% 45%, rgba(245,179,1,0.06), transparent 75%),linear-gradient(165deg,#282c38,#1e222d);}
+.dir-b .badge-low{position:absolute;top:0;right:0;background:#f5b301;color:#14161c;font-size:10px;font-weight:700;padding:3px 7px;border-radius:0 9px 0 8px;}
+.dir-b .d-info{flex:1;min-height:0;display:flex;flex-direction:column;gap:3px;padding:8px 10px 10px;}
+.dir-b .d-name{font-size:13px;font-weight:600;color:#f0ede6;}
+.dir-b .d-stock{font-size:11px;color:#9aa0ad;}
+.dir-b .d-stock .hot{color:#f5b301;font-weight:600;}
+.dir-b .d-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;}
+.dir-b .price{font-size:16px;font-weight:700;color:#f5b301;letter-spacing:-0.2px;font-variant-numeric:tabular-nums;}
+.dir-b .plus{width:22px;height:22px;border-radius:50%;border:1px solid rgba(245,179,1,0.60);background:transparent;color:#f5b301;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;}
+
+.dir-b .pc-foot{flex:none;height:46px;display:flex;align-items:center;gap:10px;padding:0 16px;background:#1f222b;border-top:1px solid #2e3340;}
+.dir-b .cart-sum{font-size:12px;color:#9aa0ad;}
+.dir-b .cart-sum b{color:#f0ede6;font-weight:700;}
+.dir-b .cart-sum .gold{color:#f5b301;}
+.dir-b .primary{margin-left:auto;background:#f5b301;color:#14161c;border:none;border-radius:8px;font-size:12.5px;font-weight:700;padding:9px 14px;}
+
+/* ===== 手机 mockup ===== */
+.dir-b .phone{position:relative;z-index:1;width:270px;height:556px;background:#1c1f27;border:1px solid #2e3340;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:10px 12px 12px;}
+.dir-b .notch{flex:none;width:56px;height:4px;border-radius:999px;background:#2e3340;margin:2px auto 0;}
+.dir-b .ph-status{flex:none;display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#9aa0ad;font-variant-numeric:tabular-nums;}
+.dir-b .sig{display:flex;gap:3px;}
+.dir-b .sig i{width:4px;height:4px;border-radius:50%;background:#2e3340;}
+.dir-b .sig i.on{background:#9aa0ad;}
+.dir-b .ph-head{flex:none;}
+.dir-b .ph-title{font-size:15px;font-weight:700;color:#f0ede6;}
+.dir-b .ph-sub{margin-top:3px;font-size:10.5px;line-height:1.4;color:#9aa0ad;}
+.dir-b .hint.sm{padding:7px 10px;font-size:11px;border-radius:7px;gap:6px;}
+.dir-b .hint.sm .badge-late{font-size:10px;padding:2px 5px;}
+.dir-b .pills.ph-pills{overflow:hidden;}
+.dir-b .pills.ph-pills .pill{flex:none;font-size:11px;padding:5px 11px;}
+
+.dir-b .ph-list{flex:1;min-height:0;display:flex;flex-direction:column;gap:7px;}
+.dir-b .row{flex:1;min-height:0;position:relative;display:flex;align-items:center;gap:9px;background:#232733;border:1px solid #2e3340;border-radius:10px;padding:8px;}
+.dir-b .rthumb{flex:none;width:44px;height:44px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;
+  background:radial-gradient(38px 26px at 50% 45%, rgba(245,179,1,0.06), transparent 75%),linear-gradient(165deg,#282c38,#1e222d);}
+.dir-b .r-info{flex:1;min-width:0;}
+.dir-b .r-name{font-size:12.5px;font-weight:600;color:#f0ede6;white-space:nowrap;}
+.dir-b .r-stock{margin-top:2px;font-size:10.5px;color:#9aa0ad;}
+.dir-b .r-right{flex:none;display:flex;align-items:center;gap:8px;}
+.dir-b .price.sm{font-size:13px;}
+.dir-b .plus.sm{width:20px;height:20px;font-size:13px;}
+.dir-b .ph-cart{flex:none;height:46px;display:flex;align-items:center;gap:8px;background:#232733;border:1px solid #2e3340;border-radius:12px;padding:0 6px 0 12px;}
+.dir-b .ph-cart .primary{padding:8px 12px;font-size:12px;border-radius:8px;}
+
+/* ===== 菜品小图（纯 CSS，无 emoji） ===== */
+.dir-b .art{display:block;position:relative;}
+.dir-b .a-noodle{width:30px;height:15px;background:linear-gradient(180deg,#caa257,#8f6b34);border-radius:0 0 30px 30px;}
+.dir-b .a-noodle::before{content:"";position:absolute;left:3px;right:3px;top:-5px;height:4px;border-radius:3px;background:repeating-linear-gradient(90deg,#e3c98d 0 3px,transparent 3px 6px);}
+.dir-b .a-skewer{width:4px;height:26px;border-radius:2px;background:linear-gradient(180deg,#a97e42,#6e5433);transform:rotate(24deg);box-shadow:11px 6px 0 -1px #b98a4a;}
+.dir-b .a-paluda{width:22px;height:24px;background:linear-gradient(180deg,#4a3d29,#33291a);border-radius:4px 4px 8px 8px;}
+.dir-b .a-paluda::before{content:"";position:absolute;left:3px;right:3px;top:4px;height:11px;border-radius:3px;
+  background:radial-gradient(circle at 5px 4px,#ecd9ab 1.6px,transparent 2.2px),radial-gradient(circle at 12px 2px,#c9a86a 1.6px,transparent 2.2px),radial-gradient(circle at 15px 8px,#ecd9ab 1.6px,transparent 2.2px);}
+.dir-b .a-oden{width:38px;height:2px;background:#6e5a3a;border-radius:2px;}
+.dir-b .a-oden::before{content:"";position:absolute;left:5px;top:-4px;width:9px;height:9px;border-radius:50%;background:#d8b877;box-shadow:13px 1px 0 0 #c2a05e;}
+.dir-b .a-oden::after{content:"";position:absolute;right:5px;top:-3px;width:8px;height:8px;border-radius:50%;background:#a98a4e;}
+.dir-b .a-coffee{width:16px;height:26px;border:1px solid rgba(232,220,194,0.35);border-radius:3px 3px 6px 6px;
+  background:linear-gradient(180deg,rgba(232,220,194,0.14),rgba(122,74,40,0.55) 45%,#5b3a20);}
+.dir-b .a-coffee::before{content:"";position:absolute;left:2px;right:2px;top:5px;height:3px;border-radius:2px;background:rgba(232,220,194,0.40);}
+.dir-b .a-rice{width:30px;height:15px;background:linear-gradient(180deg,#e6ddc8 0 40%,#b98a4a 40%);border-radius:0 0 30px 30px;}
+.dir-b .a-rice::before{content:"";position:absolute;left:8px;top:-3px;width:12px;height:6px;border-radius:6px 6px 2px 2px;background:#6b4a2a;}
+
+/* 角落标注 */
+.dir-b .note{position:absolute;right:12px;bottom:10px;z-index:2;font-size:10px;letter-spacing:0.5px;color:rgba(240,237,230,0.4);}
+</style>
+
+<div class="stage dir-b">
+  <div class="ambient"></div>
+
+  <!-- PC 窗口 -->
+  <div class="pc">
+    <div class="pc-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="win-title">员工订餐 · 深夜食堂</span>
+    </div>
+    <div class="pc-body">
+      <div class="policy"><i></i>加班餐由行政部统一采购，月底随餐补结算<span class="hours">今日供餐 21:00 – 23:30</span></div>
+      <div class="hint"><span class="t">22:00 前</span><span class="badge-late">夜宵专档</span><span class="sep">·</span><span class="free">免配送费</span></div>
+      <div class="pills">
+        <span class="pill">全部</span>
+        <span class="pill">晚餐套餐</span>
+        <span class="pill on">加班夜宵</span>
+        <span class="pill">饮品小食</span>
+      </div>
+      <div class="grid">
+        <div class="dish">
+          <div class="thumb"><i class="art a-noodle"></i></div>
+          <div class="d-info">
+            <div class="d-name">小龙虾拌面</div>
+            <div class="d-stock">剩 8 份 · <b class="hot">抢手</b></div>
+            <div class="d-foot"><span class="price">¥28</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <div class="thumb"><i class="art a-skewer"></i></div>
+          <div class="d-info">
+            <div class="d-name">烤串拼盘</div>
+            <div class="d-stock">剩 5 份</div>
+            <div class="d-foot"><span class="price">¥32</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <div class="thumb"><i class="art a-paluda"></i></div>
+          <div class="d-info">
+            <div class="d-name">泡鲁达</div>
+            <div class="d-stock">剩 15 份</div>
+            <div class="d-foot"><span class="price">¥16</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <div class="thumb"><i class="art a-oden"></i></div>
+          <div class="d-info">
+            <div class="d-name">关东煮</div>
+            <div class="d-stock">剩 22 份</div>
+            <div class="d-foot"><span class="price">¥12</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <div class="thumb"><i class="art a-coffee"></i></div>
+          <div class="d-info">
+            <div class="d-name">冰美式</div>
+            <div class="d-stock">剩 30 份</div>
+            <div class="d-foot"><span class="price">¥9</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <span class="badge-low">仅剩 3 份</span>
+          <div class="thumb"><i class="art a-rice"></i></div>
+          <div class="d-info">
+            <div class="d-name">卤肉双拼饭</div>
+            <div class="d-stock">仅剩 3 份 · 库存紧张</div>
+            <div class="d-foot"><span class="price">¥18</span><button class="plus">+</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pc-foot">
+      <span class="cart-sum">已选 <b>3</b> 件 · 合计 <b class="gold">¥60</b></span>
+      <button class="primary">提交订餐（行政部统一采购）</button>
+    </div>
+  </div>
+
+  <!-- 手机 -->
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="ph-status"><span>22:41</span><span class="sig"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+    <div class="ph-head">
+      <div class="ph-title">深夜食堂</div>
+      <div class="ph-sub">加班餐由行政部统一采购，月底随餐补结算</div>
+    </div>
+    <div class="hint sm"><span class="t">22:00 前</span><span class="badge-late">夜宵专档</span><span class="sep">·</span><span class="free">免配送费</span></div>
+    <div class="pills ph-pills">
+      <span class="pill">全部</span>
+      <span class="pill">晚餐套餐</span>
+      <span class="pill on">加班夜宵</span>
+      <span class="pill">饮品小食</span>
+    </div>
+    <div class="ph-list">
+      <div class="row">
+        <div class="rthumb"><i class="art a-noodle"></i></div>
+        <div class="r-info"><div class="r-name">小龙虾拌面</div><div class="r-stock">剩 8 份 · 抢手</div></div>
+        <div class="r-right"><span class="price sm">¥28</span><button class="plus sm">+</button></div>
+      </div>
+      <div class="row">
+        <div class="rthumb"><i class="art a-skewer"></i></div>
+        <div class="r-info"><div class="r-name">烤串拼盘</div><div class="r-stock">剩 5 份</div></div>
+        <div class="r-right"><span class="price sm">¥32</span><button class="plus sm">+</button></div>
+      </div>
+      <div class="row">
+        <div class="rthumb"><i class="art a-paluda"></i></div>
+        <div class="r-info"><div class="r-name">泡鲁达</div><div class="r-stock">剩 15 份</div></div>
+        <div class="r-right"><span class="price sm">¥16</span><button class="plus sm">+</button></div>
+      </div>
+      <div class="row">
+        <div class="rthumb"><i class="art a-oden"></i></div>
+        <div class="r-info"><div class="r-name">关东煮</div><div class="r-stock">剩 22 份</div></div>
+        <div class="r-right"><span class="price sm">¥12</span><button class="plus sm">+</button></div>
+      </div>
+      <div class="row">
+        <div class="rthumb"><i class="art a-coffee"></i></div>
+        <div class="r-info"><div class="r-name">冰美式</div><div class="r-stock">剩 30 份</div></div>
+        <div class="r-right"><span class="price sm">¥9</span><button class="plus sm">+</button></div>
+      </div>
+    </div>
+    <div class="ph-cart">
+      <span class="cart-sum">已选 <b>3</b> 件 · <b class="gold">¥60</b></span>
+      <button class="primary">提交订餐</button>
+    </div>
+  </div>
+
+  <div class="note">方向样机 B · 不是最终页面</div>
+</div>
+
+      </div></div>
+      <div class="meta"><p>专为加班餐设计的深夜食堂气质，暖金价格像深夜亮灯的窗口，夜宵专档与免配送费信息前置。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 B · 深夜食堂 暗色夜宵</button>
+    </div>
+
+    <div class="card" data-name="高效订餐单 品牌蓝">
+      <div class="card-head"><strong>方向 C · 高效订餐单</strong><span class="tag">延续系统品牌蓝 · 表格勾选 · 行政好汇总</span></div>
+      <div class="mock"><div class="stage">
+<style>
+  .dir-c{
+    width:960px;height:600px;position:relative;overflow:hidden;
+    background:#f4f6fb;color:#1c2333;
+    font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    font-variant-numeric:tabular-nums;
+    display:flex;align-items:center;justify-content:center;gap:32px;
+    box-sizing:border-box;
+  }
+  .dir-c *,.dir-c *::before,.dir-c *::after{box-sizing:border-box;margin:0;padding:0;}
+
+  /* ---------- 舞台标注 ---------- */
+  .dir-c .stage-cap{position:absolute;top:18px;left:28px;font-size:11px;color:#5b647a;opacity:.85;letter-spacing:.02em;}
+  .dir-c .stage-note{position:absolute;right:16px;bottom:10px;font-size:10px;color:rgba(28,35,51,.4);}
+
+  /* ---------- 设备通用 ---------- */
+  .dir-c .pc,.dir-c .phone{background:#ffffff;border:1px solid #e6e9f0;box-shadow:0 10px 28px rgba(28,35,51,.08);}
+
+  /* ---------- PC 窗口 ---------- */
+  .dir-c .pc{width:600px;border-radius:12px;overflow:hidden;}
+  .dir-c .pc-top{height:44px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid #e6e9f0;gap:10px;}
+  .dir-c .dots{display:flex;gap:5px;}
+  .dir-c .dots span{width:8px;height:8px;border-radius:50%;background:#e6e9f0;}
+  .dir-c .pc-title{font-size:12px;font-weight:600;}
+  .dir-c .pc-date{font-size:10.5px;color:#5b647a;}
+  .dir-c .deadline{margin-left:auto;font-size:10.5px;color:#5b647a;}
+  .dir-c .deadline b{color:#3b5bff;font-weight:600;}
+
+  .dir-c .toolbar{height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:#fafbfd;border-bottom:1px solid #eef0f5;}
+  .dir-c .toolbar .t1{font-size:12px;font-weight:600;}
+  .dir-c .toolbar .t1 em{font-style:normal;color:#5b647a;font-weight:400;font-size:11px;margin-left:6px;}
+  .dir-c .toolbar .t2{font-size:10.5px;color:#5b647a;}
+
+  .dir-c .pc-body{display:flex;}
+
+  /* 左分类窄栏 */
+  .dir-c .cats{width:112px;padding:10px 8px;border-right:1px solid #e6e9f0;display:flex;flex-direction:column;gap:2px;}
+  .dir-c .cat{height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;border-radius:8px;font-size:12px;color:#5b647a;}
+  .dir-c .cat .n{font-size:10px;opacity:.75;font-variant-numeric:tabular-nums;}
+  .dir-c .cat.on{background:#eef1ff;color:#3b5bff;font-weight:600;}
+
+  /* 表格化清单 */
+  .dir-c .list{flex:1;display:flex;flex-direction:column;}
+  .dir-c .thead,.dir-c .row{display:flex;align-items:center;padding:0 14px;}
+  .dir-c .thead{height:26px;background:#fafbfd;border-bottom:1px solid #eef0f5;font-size:10.5px;color:#5b647a;}
+  .dir-c .row{height:40px;border-bottom:1px solid #f0f2f7;font-size:12.5px;}
+  .dir-c .row:last-child{border-bottom:none;}
+  .dir-c .row.on{background:#eef1ff;}
+
+  .dir-c .c-ck{width:24px;flex:none;display:flex;align-items:center;}
+  .dir-c .c-thumb{width:36px;flex:none;}
+  .dir-c .c-name{flex:1;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dir-c .c-spec{width:46px;flex:none;font-size:11px;color:#5b647a;}
+  .dir-c .c-price{width:56px;flex:none;text-align:right;font-weight:600;color:#3b5bff;}
+  .dir-c .c-remain{width:50px;flex:none;text-align:right;font-size:11px;color:#5b647a;}
+  .dir-c .c-step{width:88px;flex:none;display:flex;justify-content:flex-end;}
+
+  /* 勾选框：品牌蓝填充白勾 */
+  .dir-c .ck{width:15px;height:15px;border:1.5px solid #c6cddc;border-radius:4px;position:relative;background:#fff;}
+  .dir-c .ck.on{background:#3b5bff;border-color:#3b5bff;}
+  .dir-c .ck.on::after{content:"";position:absolute;left:2.5px;top:3px;width:6.5px;height:3.5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);}
+
+  /* 缩略方块（弱化） */
+  .dir-c .thumb{width:26px;height:26px;border-radius:6px;position:relative;}
+  .dir-c .thumb::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:rgba(28,35,51,.08);}
+  .dir-c .th1{background:#f3e2d9;} .dir-c .th2{background:#f0e6d2;} .dir-c .th3{background:#ece4d4;}
+  .dir-c .th4{background:#f5e3d7;} .dir-c .th5{background:#e4ecdd;} .dir-c .th6{background:#efe9dc;}
+
+  /* 数量 stepper */
+  .dir-c .step{display:inline-flex;align-items:center;height:24px;border:1px solid #e6e9f0;border-radius:6px;background:#fff;}
+  .dir-c .step span{width:20px;height:100%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#5b647a;}
+  .dir-c .step b{width:22px;text-align:center;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .dir-c .row.on .step{border-color:#c9d2ff;}
+  .dir-c .row.on .step b{color:#3b5bff;}
+  .dir-c .row.dim .step{opacity:.45;}
+  .dir-c .step.zero b{color:#a6adbf;font-weight:400;}
+
+  /* 售罄行置灰 */
+  .dir-c .row.off{color:#a6adbf;}
+  .dir-c .row.off .c-name,.dir-c .row.off .c-price,.dir-c .row.off .c-spec,.dir-c .row.off .c-remain{color:#a6adbf;}
+  .dir-c .row.off .ck{border-color:#dfe3ec;background:#fafbfd;}
+  .dir-c .row.off .thumb{opacity:.45;}
+  .dir-c .sold-tag{display:inline-block;margin-left:6px;font-size:10px;color:#a0a7ba;border:1px solid #e6e9f0;border-radius:4px;padding:0 4px;line-height:15px;vertical-align:1px;}
+  .dir-c .none{color:#a6adbf;font-size:12px;}
+
+  /* 底部汇总条 */
+  .dir-c .pc-sum{height:50px;border-top:1px solid #e6e9f0;display:flex;align-items:center;padding:0 14px;gap:10px;background:#fff;}
+  .dir-c .sum-count{font-size:12px;font-weight:600;}
+  .dir-c .sum-div{width:1px;height:14px;background:#e6e9f0;}
+  .dir-c .sum-label{font-size:11px;color:#5b647a;}
+  .dir-c .sum-price{font-size:16px;font-weight:700;color:#3b5bff;font-variant-numeric:tabular-nums;}
+  .dir-c .btn{margin-left:auto;height:34px;padding:0 16px;border:none;border-radius:8px;background:#3b5bff;color:#fff;font-size:12.5px;font-weight:600;font-family:inherit;letter-spacing:.01em;}
+
+  /* ---------- 手机 ---------- */
+  .dir-c .phone{width:260px;height:392px;border-radius:20px;overflow:hidden;position:relative;display:flex;flex-direction:column;}
+  .dir-c .p-status{height:22px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:10px;color:#5b647a;}
+  .dir-c .p-status .sig{display:flex;gap:3px;align-items:center;}
+  .dir-c .p-status .sig i{width:4px;height:4px;border-radius:50%;background:#c6cddc;display:block;}
+  .dir-c .p-head{padding:4px 14px 0;}
+  .dir-c .p-title{font-size:14px;font-weight:700;}
+  .dir-c .p-dead{font-size:9.5px;color:#5b647a;margin-top:3px;line-height:1.5;}
+  .dir-c .p-select{margin:8px 14px;height:30px;border:1px solid #e6e9f0;border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:12px;font-weight:500;}
+  .dir-c .caret{width:6px;height:6px;border-right:1.5px solid #5b647a;border-bottom:1.5px solid #5b647a;transform:rotate(45deg);margin-top:-3px;}
+  .dir-c .p-row{display:flex;align-items:center;height:44px;padding:0 14px;border-top:1px solid #f0f2f7;}
+  .dir-c .p-row.on{background:#eef1ff;}
+  .dir-c .p-row:first-child{border-top:1px solid #eef0f5;}
+  .dir-c .p-thumb{width:30px;height:30px;border-radius:7px;flex:none;position:relative;}
+  .dir-c .p-thumb::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:rgba(28,35,51,.08);}
+  .dir-c .p-mid{flex:1;min-width:0;margin:0 8px;}
+  .dir-c .p-name{font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dir-c .p-sub{font-size:10px;color:#5b647a;margin-top:1px;}
+  .dir-c .p-right{text-align:right;flex:none;}
+  .dir-c .p-price{font-size:12.5px;font-weight:600;color:#3b5bff;}
+  .dir-c .p-step{display:inline-flex;align-items:center;height:20px;border:1px solid #e6e9f0;border-radius:5px;margin-top:3px;background:#fff;}
+  .dir-c .p-step span{width:16px;text-align:center;font-size:10.5px;color:#5b647a;}
+  .dir-c .p-step b{width:16px;text-align:center;font-size:10.5px;font-weight:600;color:#3b5bff;}
+  .dir-c .p-row.dim{color:#a6adbf;}
+  .dir-c .p-row.dim .p-name,.dir-c .p-row.dim .p-price{color:#a6adbf;}
+  .dir-c .p-row.dim .p-thumb{opacity:.45;}
+  .dir-c .p-row.dim .p-step{opacity:.4;}
+  .dir-c .p-sum{position:absolute;left:10px;right:10px;bottom:10px;height:44px;background:#fff;border:1px solid #e6e9f0;border-radius:10px;box-shadow:0 6px 16px rgba(28,35,51,.10);display:flex;align-items:center;padding:0 6px 0 12px;}
+  .dir-c .p-sum .l1{font-size:11.5px;font-weight:600;}
+  .dir-c .p-sum .l2{font-size:9px;color:#5b647a;margin-top:1px;}
+  .dir-c .p-sum .p-num{font-size:14px;font-weight:700;color:#3b5bff;margin-left:8px;font-variant-numeric:tabular-nums;}
+  .dir-c .p-btn{margin-left:auto;height:32px;padding:0 14px;border:none;border-radius:8px;background:#3b5bff;color:#fff;font-size:12px;font-weight:600;font-family:inherit;}
+</style>
+<div class="stage dir-c">
+  <div class="stage-cap">员工订餐系统 · 方向 C「高效订餐单」</div>
+
+  <!-- PC 窗口 -->
+  <div class="pc">
+    <div class="pc-top">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="pc-title">员工订餐系统</div>
+      <div class="pc-date">10月8日 周四</div>
+      <div class="deadline">截止 <b>14:30</b> · 17:30 送达工位 · 月底随餐补结算</div>
+    </div>
+    <div class="toolbar">
+      <div class="t1">午餐套餐<em>共 6 项</em></div>
+      <div class="t2">下单后自动汇总至行政部</div>
+    </div>
+    <div class="pc-body">
+      <div class="cats">
+        <div class="cat on"><span>午餐套餐</span><span class="n">6</span></div>
+        <div class="cat"><span>晚餐套餐</span><span class="n">5</span></div>
+        <div class="cat"><span>加班夜宵</span><span class="n">4</span></div>
+        <div class="cat"><span>饮品小食</span><span class="n">8</span></div>
+      </div>
+      <div class="list">
+        <div class="thead">
+          <div class="c-ck"></div>
+          <div class="c-thumb"></div>
+          <div class="c-name">菜品</div>
+          <div class="c-spec">规格</div>
+          <div class="c-price">价格</div>
+          <div class="c-remain">剩余</div>
+          <div class="c-step">数量</div>
+        </div>
+        <div class="row on">
+          <div class="c-ck"><div class="ck on"></div></div>
+          <div class="c-thumb"><div class="thumb th1"></div></div>
+          <div class="c-name">红烧牛肉饭</div>
+          <div class="c-spec">大份</div>
+          <div class="c-price">¥22</div>
+          <div class="c-remain">剩 12</div>
+          <div class="c-step"><div class="step"><span>−</span><b>2</b><span>+</span></div></div>
+        </div>
+        <div class="row on">
+          <div class="c-ck"><div class="ck on"></div></div>
+          <div class="c-thumb"><div class="thumb th2"></div></div>
+          <div class="c-name">宫保鸡丁饭</div>
+          <div class="c-spec">标准</div>
+          <div class="c-price">¥18</div>
+          <div class="c-remain">剩 8</div>
+          <div class="c-step"><div class="step"><span>−</span><b>1</b><span>+</span></div></div>
+        </div>
+        <div class="row dim">
+          <div class="c-ck"><div class="ck"></div></div>
+          <div class="c-thumb"><div class="thumb th3"></div></div>
+          <div class="c-name">香菇滑鸡饭</div>
+          <div class="c-spec">标准</div>
+          <div class="c-price">¥18</div>
+          <div class="c-remain">剩 15</div>
+          <div class="c-step"><div class="step zero"><span>−</span><b>0</b><span>+</span></div></div>
+        </div>
+        <div class="row off">
+          <div class="c-ck"><div class="ck"></div></div>
+          <div class="c-thumb"><div class="thumb th4"></div></div>
+          <div class="c-name">番茄鸡蛋面<span class="sold-tag">售罄</span></div>
+          <div class="c-spec">标准</div>
+          <div class="c-price">¥14</div>
+          <div class="c-remain">—</div>
+          <div class="c-step"><span class="none">—</span></div>
+        </div>
+        <div class="row dim">
+          <div class="c-ck"><div class="ck"></div></div>
+          <div class="c-thumb"><div class="thumb th5"></div></div>
+          <div class="c-name">蒜蓉西兰花</div>
+          <div class="c-spec">小份</div>
+          <div class="c-price">¥8</div>
+          <div class="c-remain">剩 20</div>
+          <div class="c-step"><div class="step zero"><span>−</span><b>0</b><span>+</span></div></div>
+        </div>
+        <div class="row dim">
+          <div class="c-ck"><div class="ck"></div></div>
+          <div class="c-thumb"><div class="thumb th6"></div></div>
+          <div class="c-name">卤蛋</div>
+          <div class="c-spec">1 个</div>
+          <div class="c-price">¥2</div>
+          <div class="c-remain">剩 30</div>
+          <div class="c-step"><div class="step zero"><span>−</span><b>0</b><span>+</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="pc-sum">
+      <span class="sum-count">已选 6 份</span>
+      <span class="sum-div"></span>
+      <span class="sum-label">合计</span>
+      <span class="sum-price">¥118</span>
+      <button class="btn">提交订餐（行政部统一采购）</button>
+    </div>
+  </div>
+
+  <!-- 手机 -->
+  <div class="phone">
+    <div class="p-status">
+      <span>12:20</span>
+      <span class="sig"><i></i><i></i><i></i></span>
+    </div>
+    <div class="p-head">
+      <div class="p-title">午餐订餐</div>
+      <div class="p-dead">截止 14:30 · 17:30 送达工位 · 月底随餐补结算</div>
+    </div>
+    <div class="p-select"><span>午餐套餐</span><span class="caret"></span></div>
+    <div class="p-row on">
+      <div class="p-thumb th1"></div>
+      <div class="p-mid">
+        <div class="p-name">红烧牛肉饭 · 大份</div>
+        <div class="p-sub">剩 12</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥22</div>
+        <div class="p-step"><span>−</span><b>2</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-row">
+      <div class="p-thumb th2"></div>
+      <div class="p-mid">
+        <div class="p-name">宫保鸡丁饭 · 标准</div>
+        <div class="p-sub">剩 8</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥18</div>
+        <div class="p-step"><span>−</span><b>1</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-row dim">
+      <div class="p-thumb th3"></div>
+      <div class="p-mid">
+        <div class="p-name">香菇滑鸡饭 · 标准</div>
+        <div class="p-sub">剩 15</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥18</div>
+        <div class="p-step"><span>−</span><b>0</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-row dim">
+      <div class="p-thumb th4"></div>
+      <div class="p-mid">
+        <div class="p-name">番茄鸡蛋面<span class="sold-tag">售罄</span></div>
+        <div class="p-sub">今日已订满</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥14</div>
+        <div class="p-step"><span>−</span><b>0</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-row">
+      <div class="p-thumb th5"></div>
+      <div class="p-mid">
+        <div class="p-name">蒜蓉西兰花 · 小份</div>
+        <div class="p-sub">剩 20</div>
+      </div>
+      <div class="p-right">
+        <div class="p-price">¥8</div>
+        <div class="p-step"><span>−</span><b>0</b><span>+</span></div>
+      </div>
+    </div>
+    <div class="p-sum">
+      <div>
+        <div class="l1">已选 6 份<span class="p-num">¥118</span></div>
+        <div class="l2">行政部统一采购 · 随餐补结算</div>
+      </div>
+      <button class="p-btn">提交订餐</button>
+    </div>
+  </div>
+
+  <div class="stage-note">方向样机 C · 不是最终页面</div>
+</div>
+
+      </div></div>
+      <div class="meta"><p>与现有系统同一套品牌蓝，表格化快速勾选 + 数量步进，信息密度最高，行政汇总视角最友好。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 C · 高效订餐单 品牌蓝</button>
+    </div>
+
+    <div class="card" data-name="今日菜单 活力大卡" data-rec="1">
+      <div class="card-head"><strong>方向 D · 今日菜单</strong><span class="rec">推荐</span><span class="tag">H5 优先 · 大卡片 · 分类彩色徽标</span></div>
+      <div class="mock"><div class="stage">
+<style>
+.dir-d{
+  position:relative;width:960px;height:600px;overflow:hidden;
+  background:#fbfbfd;color:#17181c;
+  font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Helvetica,Arial,sans-serif;
+  font-size:12px;line-height:1.4;text-align:left;
+}
+.dir-d *,.dir-d *::before,.dir-d *::after{margin:0;padding:0;box-sizing:border-box;font-style:normal;}
+.dir-d .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
+
+/* ---------- 背景点缀 ---------- */
+.dir-d .dd-blob{position:absolute;left:14px;top:60px;width:320px;height:320px;border-radius:50%;background:#f1f1f7;}
+.dir-d .dd-blob2{position:absolute;left:400px;bottom:-90px;width:220px;height:220px;border-radius:50%;background:#f3f0ea;}
+
+/* ---------- 手机 mockup ---------- */
+.dir-d .dd-phone{
+  position:absolute;left:84px;top:20px;width:300px;height:560px;
+  background:#fff;border:8px solid #1d1e24;border-radius:40px;
+  box-shadow:0 14px 34px rgba(23,24,28,.14);overflow:hidden;
+}
+.dir-d .dd-notch{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:82px;height:15px;border-radius:9px;background:#1d1e24;z-index:6;}
+.dir-d .dd-screen{position:absolute;inset:0;background:#fbfbfd;padding:30px 14px 78px;overflow:hidden;}
+.dir-d .dd-status{display:flex;justify-content:space-between;font-size:9px;color:#83878f;margin-bottom:10px;}
+.dir-d .dd-h1{font-size:22px;font-weight:800;letter-spacing:.5px;}
+.dir-d .dd-date{font-size:11px;color:#83878f;margin-top:3px;}
+.dir-d .dd-notice{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:10px;color:#83878f;background:#fff;border-radius:9px;padding:3px 8px;box-shadow:0 4px 16px rgba(23,24,28,.06);}
+.dir-d .dd-notice i{width:5px;height:5px;border-radius:50%;background:#e8543f;flex:none;}
+
+/* 分类胶囊 */
+.dir-d .dd-pills{display:flex;gap:8px;margin-top:13px;overflow:hidden;}
+.dir-d .dd-pill{flex:none;display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 12px;border-radius:15px;background:#fff;border:1px solid #ececef;font-size:11px;color:#17181c;font-weight:500;box-shadow:0 4px 16px rgba(23,24,28,.06);}
+.dir-d .dd-pill i{position:relative;width:7px;height:7px;border-radius:50%;flex:none;}
+.dir-d .dd-pill.c1 i{background:#e8543f;}
+.dir-d .dd-pill.c2 i{background:#1f8a5d;}
+.dir-d .dd-pill.c3 i{background:#a5661f;}
+.dir-d .dd-pill.c4 i{background:#2a7fd4;}
+.dir-d .dd-pill.on{background:#e8543f;border-color:#e8543f;color:#fff;font-weight:600;}
+.dir-d .dd-pill.on i{background:#fff;}
+.dir-d .dd-pill.on i::after{content:"";position:absolute;left:1.5px;top:1.5px;width:4px;height:4px;border-radius:50%;background:#e8543f;}
+
+/* 菜品大卡 */
+.dir-d .dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.dir-d .dd-card{background:#fff;border-radius:16px;box-shadow:0 4px 16px rgba(23,24,28,.06);padding:7px;}
+.dir-d .dd-img{position:relative;height:60px;border-radius:11px;overflow:hidden;}
+.dir-d .dd-img em{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.6);}
+.dir-d .dd-img em::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:rgba(23,24,28,.12);}
+.dir-d .dd-img.beef{background:linear-gradient(135deg,#f7d9c9,#e8b39a);}
+.dir-d .dd-img.chicken{background:linear-gradient(135deg,#fbe3d4,#f0c09a);}
+.dir-d .dd-img.broc{background:linear-gradient(135deg,#ddefdd,#b7d9bc);}
+.dir-d .dd-img.juice{background:linear-gradient(135deg,#fdeacb,#f7c98b);}
+.dir-d .dd-stock{position:absolute;top:5px;left:5px;font-size:8px;font-weight:600;color:#e8543f;background:rgba(255,255,255,.94);border-radius:8px;padding:2px 6px;line-height:1;}
+.dir-d .dd-name{font-size:12px;font-weight:600;margin-top:6px;}
+.dir-d .dd-meta{display:flex;align-items:center;margin-top:5px;}
+.dir-d .dd-price{color:#e8543f;font-size:14px;font-weight:700;}
+.dir-d .dd-sales{flex:1;font-size:9px;color:#83878f;margin-left:5px;}
+.dir-d .dd-add{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;line-height:1;flex:none;}
+.dir-d .dd-add.solid{background:#e8543f;color:#fff;}
+.dir-d .dd-add.out{background:#fff;border:1.5px solid #e8543f;color:#e8543f;}
+
+/* 底部购物车悬浮条 */
+.dir-d .dd-cart{position:absolute;left:10px;right:10px;bottom:10px;height:54px;background:#fff;border-radius:27px;box-shadow:0 8px 24px rgba(23,24,28,.14);display:flex;align-items:center;padding:0 6px 0 8px;z-index:5;}
+.dir-d .dd-bag{position:relative;width:38px;height:38px;border-radius:50%;background:#fdeae6;flex:none;}
+.dir-d .dd-bag i{position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);width:13px;height:11px;background:#e8543f;border-radius:2px 2px 4px 4px;}
+.dir-d .dd-bag i::before{content:"";position:absolute;left:1.8px;top:-5px;width:6.4px;height:6px;border:1.8px solid #e8543f;border-bottom:none;border-radius:6px 6px 0 0;}
+.dir-d .dd-cartinfo{flex:1;margin-left:8px;font-size:11px;font-weight:600;}
+.dir-d .dd-cartinfo b{color:#e8543f;font-weight:700;}
+.dir-d .dd-go{height:38px;padding:0 16px;border-radius:19px;background:#e8543f;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;letter-spacing:1px;}
+
+/* ---------- PC 陪衬窗口 ---------- */
+.dir-d .dd-pc{position:absolute;left:462px;top:74px;width:420px;height:450px;background:#fff;border:1px solid #ececef;border-radius:12px;box-shadow:0 14px 34px rgba(23,24,28,.10);overflow:hidden;}
+.dir-d .dd-chrome{height:28px;background:#f4f4f7;border-bottom:1px solid #ececef;display:flex;align-items:center;gap:5px;padding:0 10px;}
+.dir-d .dd-chrome i{width:7px;height:7px;border-radius:50%;background:#d9d9e0;}
+.dir-d .dd-url{width:190px;height:16px;margin:0 auto;border-radius:8px;background:#fff;border:1px solid #e6e6ec;font-size:8px;color:#83878f;text-align:center;line-height:15px;}
+.dir-d .dd-chrome span{width:26px;flex:none;}
+.dir-d .dd-pcbody{height:420px;background:#fbfbfd;padding:12px 14px;overflow:hidden;}
+.dir-d .dd-banner{height:64px;border-radius:12px;background:#fdeee9;display:flex;align-items:center;padding:0 14px;position:relative;overflow:hidden;}
+.dir-d .dd-banner h3{font-size:13px;font-weight:700;color:#17181c;}
+.dir-d .dd-banner p{font-size:10px;color:#83878f;margin-top:3px;}
+.dir-d .dd-banner i{position:absolute;border-radius:50%;}
+.dir-d .dd-banner i.b1{right:64px;top:-22px;width:74px;height:74px;background:rgba(232,84,63,.14);}
+.dir-d .dd-banner i.b2{right:16px;bottom:-30px;width:88px;height:88px;background:rgba(232,84,63,.20);}
+.dir-d .dd-pclayout{display:flex;gap:12px;margin-top:10px;}
+.dir-d .dd-side{width:92px;flex:none;padding-top:2px;}
+.dir-d .dd-side h4{font-size:12px;font-weight:700;margin-bottom:8px;}
+.dir-d .dd-nav{display:flex;align-items:center;gap:6px;height:28px;padding:0 8px;border-radius:8px;font-size:11px;color:#17181c;margin-bottom:2px;}
+.dir-d .dd-nav i{width:6px;height:6px;border-radius:50%;flex:none;}
+.dir-d .dd-nav.n1 i{background:#e8543f;}
+.dir-d .dd-nav.n2 i{background:#1f8a5d;}
+.dir-d .dd-nav.n3 i{background:#a5661f;}
+.dir-d .dd-nav.n4 i{background:#2a7fd4;}
+.dir-d .dd-nav.on{background:#fdeae6;color:#e8543f;font-weight:600;}
+.dir-d .dd-pcgrid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start;}
+.dir-d .dd-pcard{background:#fff;border-radius:16px;box-shadow:0 4px 16px rgba(23,24,28,.06);padding:8px;}
+.dir-d .dd-pimg{position:relative;height:56px;border-radius:10px;overflow:hidden;}
+.dir-d .dd-pimg em{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.6);}
+.dir-d .dd-pimg em::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:rgba(23,24,28,.12);}
+.dir-d .dd-pimg.beef{background:linear-gradient(135deg,#f7d9c9,#e8b39a);}
+.dir-d .dd-pimg.chicken{background:linear-gradient(135deg,#fbe3d4,#f0c09a);}
+.dir-d .dd-pimg.broc{background:linear-gradient(135deg,#ddefdd,#b7d9bc);}
+.dir-d .dd-pimg.juice{background:linear-gradient(135deg,#fdeacb,#f7c98b);}
+.dir-d .dd-pimg.pork{background:linear-gradient(135deg,#f9dcd4,#e9a9a0);}
+.dir-d .dd-pimg.plum{background:linear-gradient(135deg,#e6dfd6,#c9b8a3);}
+.dir-d .dd-pimg.noodle{background:linear-gradient(135deg,#fbe9d0,#f2cd96);}
+.dir-d .dd-pimg.fish{background:linear-gradient(135deg,#ddeef0,#b5d5da);}
+.dir-d .dd-pimg.coffee{background:linear-gradient(135deg,#e8e0d6,#c2a98a);}
+.dir-d .dd-stock2{position:absolute;top:5px;left:5px;font-size:8px;font-weight:600;color:#e8543f;background:rgba(255,255,255,.94);border-radius:8px;padding:2px 6px;line-height:1;}
+.dir-d .dd-pname{font-size:11px;font-weight:600;margin-top:6px;white-space:nowrap;overflow:hidden;}
+.dir-d .dd-pmeta{display:flex;align-items:center;margin-top:5px;}
+.dir-d .dd-pprice{color:#e8543f;font-size:12px;font-weight:700;}
+.dir-d .dd-psales{flex:1;font-size:8px;color:#83878f;margin-left:4px;}
+.dir-d .dd-padd{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;line-height:1;flex:none;}
+.dir-d .dd-padd.solid{background:#e8543f;color:#fff;}
+.dir-d .dd-padd.out{background:#fff;border:1.5px solid #e8543f;color:#e8543f;}
+
+/* 角标 */
+.dir-d .dd-note{position:absolute;right:10px;bottom:8px;font-size:10px;color:rgba(23,24,28,.4);letter-spacing:.5px;}
+</style>
+
+<div class="stage dir-d">
+  <!-- 背景点缀 -->
+  <div class="dd-blob"></div>
+  <div class="dd-blob2"></div>
+
+  <!-- ============ 手机（主角） ============ -->
+  <div class="dd-phone">
+    <div class="dd-notch"></div>
+    <div class="dd-screen">
+      <div class="dd-status num"><span>9:41</span><span>LTE · 86%</span></div>
+      <div class="dd-h1">今天吃什么？</div>
+      <div class="dd-date num">10 月 8 日 周四</div>
+      <div class="dd-notice"><i></i><span class="num">14:30 前下单 · 17:30 送达工位</span></div>
+
+      <!-- 分类胶囊 -->
+      <div class="dd-pills">
+        <span class="dd-pill c1 on"><i></i>午餐套餐</span>
+        <span class="dd-pill c2"><i></i>晚餐</span>
+        <span class="dd-pill c3"><i></i>夜宵</span>
+        <span class="dd-pill c4"><i></i>饮品</span>
+      </div>
+
+      <!-- 菜品大卡 -->
+      <div class="dd-grid">
+        <div class="dd-card">
+          <div class="dd-img beef"><em></em><span class="dd-stock num">剩 15 份</span></div>
+          <div class="dd-name">红烧牛肉饭</div>
+          <div class="dd-meta"><span class="dd-price num">¥22</span><span class="dd-sales num">月销 128</span><span class="dd-add solid">+</span></div>
+        </div>
+        <div class="dd-card">
+          <div class="dd-img chicken"><em></em></div>
+          <div class="dd-name">宫保鸡丁饭</div>
+          <div class="dd-meta"><span class="dd-price num">¥18</span><span class="dd-sales num">月销 96</span><span class="dd-add out">+</span></div>
+        </div>
+        <div class="dd-card">
+          <div class="dd-img broc"><em></em></div>
+          <div class="dd-name">蒜蓉西兰花</div>
+          <div class="dd-meta"><span class="dd-price num">¥8</span><span class="dd-sales num">月销 64</span><span class="dd-add out">+</span></div>
+        </div>
+        <div class="dd-card">
+          <div class="dd-img juice"><em></em></div>
+          <div class="dd-name">鲜榨橙汁</div>
+          <div class="dd-meta"><span class="dd-price num">¥12</span><span class="dd-sales num">月销 88</span><span class="dd-add solid">+</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部购物车悬浮条 -->
+    <div class="dd-cart">
+      <span class="dd-bag"><i></i></span>
+      <span class="dd-cartinfo num">已选 2 件 · <b>¥40</b></span>
+      <span class="dd-go">去提交</span>
+    </div>
+  </div>
+
+  <!-- ============ PC 陪衬窗口（同一设计的桌面版） ============ -->
+  <div class="dd-pc">
+    <div class="dd-chrome">
+      <i></i><i></i><i></i>
+      <div class="dd-url num">meal.company.com/today</div>
+      <span></span>
+    </div>
+    <div class="dd-pcbody">
+      <!-- 顶部横幅 -->
+      <div class="dd-banner">
+        <div>
+          <h3>午餐时段供应中</h3>
+          <p class="num">14:30 前下单 · 17:30 送达工位</p>
+        </div>
+        <i class="b1"></i><i class="b2"></i>
+      </div>
+
+      <div class="dd-pclayout">
+        <!-- 左侧分类列表 -->
+        <div class="dd-side">
+          <h4>今日菜单</h4>
+          <div class="dd-nav n1 on"><i></i>午餐套餐</div>
+          <div class="dd-nav n2"><i></i>晚餐</div>
+          <div class="dd-nav n3"><i></i>夜宵</div>
+          <div class="dd-nav n4"><i></i>饮品</div>
+        </div>
+
+        <!-- 3 列菜品大卡 -->
+        <div class="dd-pcgrid">
+          <div class="dd-pcard">
+            <div class="dd-pimg beef"><em></em><span class="dd-stock2 num">剩 15 份</span></div>
+            <div class="dd-pname">红烧牛肉饭</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥22</span><span class="dd-psales num">月销 128</span><span class="dd-padd solid">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg chicken"><em></em></div>
+            <div class="dd-pname">宫保鸡丁饭</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥18</span><span class="dd-psales num">月销 96</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg broc"><em></em></div>
+            <div class="dd-pname">蒜蓉西兰花</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥8</span><span class="dd-psales num">月销 64</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg juice"><em></em></div>
+            <div class="dd-pname">鲜榨橙汁</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥12</span><span class="dd-psales num">月销 88</span><span class="dd-padd solid">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg pork"><em></em></div>
+            <div class="dd-pname">糖醋里脊饭</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥20</span><span class="dd-psales num">月销 72</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg plum"><em></em></div>
+            <div class="dd-pname">桂花酸梅汤</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥9</span><span class="dd-psales num">月销 54</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg noodle"><em></em></div>
+            <div class="dd-pname">番茄鸡蛋面</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥14</span><span class="dd-psales num">月销 110</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg fish"><em></em></div>
+            <div class="dd-pname">清蒸鲈鱼饭</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥26</span><span class="dd-psales num">月销 41</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg coffee"><em></em></div>
+            <div class="dd-pname">冰美式</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥15</span><span class="dd-psales num">月销 133</span><span class="dd-padd solid">+</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 角标 -->
+  <div class="dd-note">方向样机 D · 不是最终页面</div>
+</div>
+
+      </div></div>
+      <div class="meta"><p>手机是主角的大卡片设计，「今天吃什么」的情绪化开场，分类彩色徽标活泼但不花，PC 是同一设计的宽版。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 D · 今日菜单 活力大卡</button>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note-card"><h3>A · 明档点餐 暖橙双栏</h3><p>气质：大众外卖的熟悉感。色彩：暖白 + 食欲橙 #ff6b2c。<span class="k">适合</span>：想让所有人打开就会用，零教育成本。</p></div>
+    <div class="note-card"><h3>B · 深夜食堂 暗色夜宵</h3><p>气质：加班场景的暖灯陪伴感。色彩：深灰蓝底 + 暖金 #f5b301。<span class="k">适合</span>：夜宵是核心场景、想要记忆点强的氛围；白天看稍暗。</p></div>
+    <div class="note-card"><h3>C · 高效订餐单 品牌蓝</h3><p>气质：企业工具的克制高效。色彩：延续门户品牌蓝 #3b5bff。<span class="k">适合</span>：订餐本质是「快速勾选交给行政」，与系统其他应用观感最统一。</p></div>
+    <div class="note-card"><h3>D · 今日菜单 活力大卡（推荐）</h3><p>气质：轻快友好、有食欲又不吵。色彩：白底大卡 + 低饱和分类色 + 单一红重音。<span class="k">推荐理由</span>：订餐天然是手机场景，H5 优先最贴合真实使用；大卡带图信息清楚，分类彩色徽标同时解决「分类查看」的扫读效率；PC 宽版共享同一设计 token，双端一致最好做。<span class="k">可混搭</span>：也可以「D 的卡片 + C 的品牌蓝」，在建议框写一句即可。</p></div>
+  </div>
+
+<script>
+  ['variance','motion','density'].forEach(function(id){
+    var input = document.getElementById(id), out = document.getElementById(id + 'Out');
+    input.addEventListener('input', function(){ out.value = input.value; out.textContent = input.value; });
+  });
+</script>
+</body>
+</html>

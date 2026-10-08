@@ -1,0 +1,417 @@
+<style>
+  .dir-a { box-sizing: border-box; }
+  .dir-a * { box-sizing: border-box; margin: 0; padding: 0; }
+  .dir-a {
+    position: relative;
+    width: 960px; height: 600px;
+    overflow: hidden;
+    background: #fffaf6;
+    color: #2d2018;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    font-style: normal;
+  }
+
+  /* ---------- 舞台标注 ---------- */
+  .dir-a .stage-note {
+    position: absolute; right: 12px; bottom: 8px;
+    font-size: 10px; color: rgba(45, 32, 24, .4);
+    letter-spacing: .5px;
+  }
+
+  /* ---------- 通用元素 ---------- */
+  .dir-a .logo {
+    display: inline-block; width: 20px; height: 20px;
+    border-radius: 6px; vertical-align: -5px; margin-right: 6px;
+    background: linear-gradient(135deg, #ff6b2c, #ffb84d);
+    position: relative;
+  }
+  .dir-a .logo::after {
+    content: ""; position: absolute; left: 6px; top: 6px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255, 255, 255, .85);
+  }
+  .dir-a .clock {
+    display: inline-block; width: 10px; height: 10px;
+    border: 1.5px solid #ff6b2c; border-radius: 50%;
+    position: relative; margin-right: 5px; vertical-align: -1px;
+  }
+  .dir-a .clock::after {
+    content: ""; position: absolute; left: 3px; top: 1px;
+    width: 1.5px; height: 4px; background: #ff6b2c; border-radius: 1px;
+  }
+
+  .dir-a .price {
+    color: #ff6b2c; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .yen { font-size: .72em; font-weight: 600; margin-right: 1px; }
+
+  .dir-a .add {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #ff6b2c; position: relative; flex: none;
+    cursor: pointer;
+  }
+  .dir-a .add::before, .dir-a .add::after {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    background: #fff; border-radius: 1px; transform: translate(-50%, -50%);
+  }
+  .dir-a .add::before { width: 10px; height: 2px; }
+  .dir-a .add::after { width: 2px; height: 10px; }
+
+  .dir-a .thumb {
+    position: relative; flex: none; border-radius: 10px; overflow: hidden;
+  }
+  .dir-a .thumb::before {
+    content: ""; position: absolute; left: 20%; top: 22%;
+    width: 60%; height: 60%; border-radius: 50%;
+    background: rgba(255, 255, 255, .26);
+  }
+  .dir-a .thumb::after {
+    content: ""; position: absolute; left: 55%; top: 52%;
+    width: 26%; height: 26%; border-radius: 50%;
+    background: rgba(255, 255, 255, .34);
+  }
+  .dir-a .img-beef     { background: linear-gradient(135deg, #d4622a, #8f3a12); }
+  .dir-a .img-kp       { background: linear-gradient(135deg, #e89a44, #b5651d); }
+  .dir-a .img-mushroom { background: linear-gradient(135deg, #d3a873, #96703c); }
+  .dir-a .img-noodle   { background: linear-gradient(135deg, #f2b95a, #dd8a2f); }
+  .dir-a .img-egg      { background: linear-gradient(135deg, #f4e0b5, #d9b877); }
+  .dir-a .img-sold     { background: linear-gradient(135deg, #ccc4bb, #a39a90); }
+
+  /* ---------- 分类导航（整块底色高亮，无竖线） ---------- */
+  .dir-a .cat {
+    display: block; padding: 9px 12px; border-radius: 10px;
+    font-size: 13px; color: #9b8a7a; margin-bottom: 6px;
+    white-space: nowrap;
+  }
+  .dir-a .cat.on {
+    background: #ff6b2c; color: #fff; font-weight: 600;
+  }
+
+  /* ---------- 菜品卡 ---------- */
+  .dir-a .dish {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 1px solid #f0e6dc; border-radius: 12px;
+    padding: 7px; margin-bottom: 7px;
+  }
+  .dir-a .info { flex: 1; min-width: 0; }
+  .dir-a .name { font-size: 13px; font-weight: 600; }
+  .dir-a .meta { font-size: 10.5px; color: #9b8a7a; margin-top: 2px;
+    font-variant-numeric: tabular-nums; }
+  .dir-a .row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 3px;
+  }
+
+  .dir-a .dish.sold .thumb::before,
+  .dir-a .dish.sold .thumb::after { background: rgba(255, 255, 255, .45); }
+  .dir-a .dish.sold .name,
+  .dir-a .dish.sold .meta,
+  .dir-a .dish.sold .price { color: #9b8a7a; }
+  .dir-a .dish.sold .price { font-weight: 600; }
+  .dir-a .sold-badge {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: rgba(45, 32, 24, .55); color: #fff;
+    font-size: 10px; text-align: center; padding: 2px 0;
+    letter-spacing: 1px;
+  }
+  .dir-a .add-off { background: #f0e6dc; }
+  .dir-a .add-off::before, .dir-a .add-off::after { background: #b7a897; }
+
+  /* ============ PC 浏览器窗口 ============ */
+  .dir-a .pc {
+    position: absolute; left: 32px; top: 30px;
+    width: 580px; height: 540px;
+    background: #fff; border: 1px solid #f0e6dc; border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(45, 32, 24, .08);
+    overflow: hidden;
+  }
+  .dir-a .browser-top {
+    height: 34px; background: #f6ede4;
+    display: flex; align-items: center; gap: 6px; padding: 0 12px;
+  }
+  .dir-a .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .dir-a .d1 { background: #ff6b2c; }
+  .dir-a .d2 { background: #ffb84d; }
+  .dir-a .d3 { background: #f0e6dc; }
+  .dir-a .url {
+    margin-left: 10px; height: 20px; flex: 1; max-width: 300px;
+    background: #fff; border: 1px solid #f0e6dc; border-radius: 10px;
+    font-size: 10px; color: #9b8a7a; line-height: 18px; padding: 0 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .pc-body { padding: 12px 14px; }
+  .dir-a .app-head {
+    height: 40px; display: flex; align-items: center;
+    justify-content: space-between;
+  }
+  .dir-a .brand { font-size: 14px; font-weight: 700; }
+  .dir-a .head-right { display: flex; align-items: center; gap: 8px; }
+  .dir-a .chip {
+    font-size: 11px; color: #9b8a7a;
+    border: 1px solid #f0e6dc; border-radius: 10px; padding: 3px 9px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .chip b { color: #ff6b2c; font-weight: 700; }
+  .dir-a .submit-btn {
+    background: #ff6b2c; color: #fff; font-size: 12px; font-weight: 600;
+    border-radius: 10px; padding: 6px 12px; white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(255, 107, 44, .3);
+  }
+  .dir-a .notice {
+    margin-top: 8px; height: 26px; border-radius: 8px;
+    background: rgba(255, 184, 77, .16);
+    font-size: 11.5px; color: #9b6a2f; line-height: 26px; padding: 0 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .main { display: flex; gap: 12px; margin-top: 10px; }
+  .dir-a .nav { width: 110px; flex: none; padding-top: 2px; }
+  .dir-a .list { flex: 1; min-width: 0; height: 396px; overflow: hidden; }
+  .dir-a .pc .thumb { width: 50px; height: 50px; }
+
+  /* ============ 手机 ============ */
+  .dir-a .phone {
+    position: absolute; left: 658px; top: 15px;
+    width: 270px; height: 570px;
+    background: #2d2018; border-radius: 38px; padding: 9px;
+    box-shadow: 0 14px 34px rgba(45, 32, 24, .16);
+  }
+  .dir-a .phone::after {
+    content: ""; position: absolute; right: -3px; top: 110px;
+    width: 3px; height: 46px; border-radius: 2px; background: #2d2018;
+  }
+  .dir-a .screen {
+    position: relative; width: 100%; height: 100%;
+    background: #fffaf6; border-radius: 30px; overflow: hidden;
+    padding: 8px 10px;
+  }
+  .dir-a .notch {
+    position: absolute; left: 50%; top: 8px; transform: translateX(-50%);
+    width: 64px; height: 14px; border-radius: 8px; background: #2d2018;
+  }
+  .dir-a .p-head {
+    margin-top: 14px; display: flex; align-items: center;
+    justify-content: space-between;
+  }
+  .dir-a .p-brand { font-size: 13px; font-weight: 700; }
+  .dir-a .p-head .submit-btn { font-size: 11px; padding: 5px 9px; border-radius: 9px; }
+  .dir-a .p-notice {
+    margin-top: 8px; height: 24px; border-radius: 8px;
+    background: rgba(255, 184, 77, .16);
+    font-size: 10.5px; color: #9b6a2f; line-height: 24px; padding: 0 9px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .p-main { display: flex; gap: 9px; margin-top: 8px; }
+  .dir-a .nav-p { width: 76px; flex: none; padding-top: 2px; }
+  .dir-a .nav-p .cat { font-size: 12px; padding: 9px 8px; border-radius: 9px; }
+  .dir-a .p-list { flex: 1; min-width: 0; height: 420px; overflow: hidden; }
+  .dir-a .phone .thumb { width: 44px; height: 44px; border-radius: 9px; }
+  .dir-a .phone .dish { padding: 6px; gap: 8px; border-radius: 11px; }
+  .dir-a .phone .name { font-size: 12px; }
+  .dir-a .phone .meta { font-size: 9.5px; }
+  .dir-a .phone .price { font-size: 13px; }
+  .dir-a .phone .add { width: 20px; height: 20px; }
+  .dir-a .phone .add::before { width: 8px; height: 2px; }
+  .dir-a .phone .add::after { width: 2px; height: 8px; }
+
+  .dir-a .cart-bar {
+    position: absolute; left: 10px; right: 10px; bottom: 12px;
+    height: 42px; border-radius: 21px;
+    background: #2d2018; color: #fff;
+    display: flex; align-items: center; padding: 0 5px 0 12px; gap: 8px;
+    box-shadow: 0 8px 20px rgba(45, 32, 24, .28);
+    font-variant-numeric: tabular-nums;
+  }
+  .dir-a .cb-badge {
+    width: 20px; height: 20px; border-radius: 50%; flex: none;
+    background: #ff6b2c; color: #fff; font-size: 11px; font-weight: 700;
+    text-align: center; line-height: 20px;
+    border: 2px solid #fffaf6;
+  }
+  .dir-a .cb-text { flex: 1; font-size: 12px; color: #f0e6dc; }
+  .dir-a .cb-text b { color: #ffb84d; }
+  .dir-a .cb-btn {
+    background: #ff6b2c; color: #fff; font-size: 12px; font-weight: 600;
+    border-radius: 17px; padding: 9px 16px; white-space: nowrap;
+  }
+</style>
+<div class="stage dir-a">
+
+  <!-- PC 浏览器窗口 -->
+  <div class="pc">
+    <div class="browser-top">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="url">meal.xinghui-tech.cn</span>
+    </div>
+    <div class="pc-body">
+      <div class="app-head">
+        <span class="brand"><span class="logo"></span>星辉科技 · 员工订餐</span>
+        <span class="head-right">
+          <span class="chip">已选 <b>2</b> 件 · ¥<b>40</b></span>
+          <span class="submit-btn">提交订餐（行政部统一采购）</span>
+        </span>
+      </div>
+      <div class="notice"><span class="clock"></span>14:30 前下单 · 17:30 送达工位</div>
+      <div class="main">
+        <div class="nav">
+          <span class="cat on">午餐套餐</span>
+          <span class="cat">晚餐套餐</span>
+          <span class="cat">加班夜宵</span>
+          <span class="cat">饮品小食</span>
+        </div>
+        <div class="list">
+          <div class="dish">
+            <div class="thumb img-beef"></div>
+            <div class="info">
+              <div class="name">红烧牛肉饭</div>
+              <div class="meta">月销 128 · 剩 15 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>22</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-kp"></div>
+            <div class="info">
+              <div class="name">宫保鸡丁饭</div>
+              <div class="meta">月销 96 · 剩 22 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>18</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-mushroom"></div>
+            <div class="info">
+              <div class="name">香菇滑鸡饭</div>
+              <div class="meta">月销 87 · 剩 30 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>18</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-noodle"></div>
+            <div class="info">
+              <div class="name">番茄鸡蛋面</div>
+              <div class="meta">月销 76 · 剩 26 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>14</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-egg"></div>
+            <div class="info">
+              <div class="name">卤蛋</div>
+              <div class="meta">月销 210 · 剩 50 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>2</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish sold">
+            <div class="thumb img-sold"><span class="sold-badge">已售罄</span></div>
+            <div class="info">
+              <div class="name">冰镇酸梅汤</div>
+              <div class="meta">今日限量 40 份 · 已订完</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>6</span>
+                <span class="add add-off"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 手机 -->
+  <div class="phone">
+    <div class="screen">
+      <span class="notch"></span>
+      <div class="p-head">
+        <span class="p-brand"><span class="logo"></span>星辉科技 · 员工订餐</span>
+        <span class="submit-btn">提交订餐</span>
+      </div>
+      <div class="p-notice"><span class="clock"></span>14:30 前下单 · 17:30 送达工位</div>
+      <div class="p-main">
+        <div class="nav nav-p">
+          <span class="cat on">午餐套餐</span>
+          <span class="cat">晚餐套餐</span>
+          <span class="cat">加班夜宵</span>
+          <span class="cat">饮品小食</span>
+        </div>
+        <div class="p-list">
+          <div class="dish">
+            <div class="thumb img-beef"></div>
+            <div class="info">
+              <div class="name">红烧牛肉饭</div>
+              <div class="meta">月销 128 · 剩 15 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>22</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-kp"></div>
+            <div class="info">
+              <div class="name">宫保鸡丁饭</div>
+              <div class="meta">月销 96 · 剩 22 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>18</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-mushroom"></div>
+            <div class="info">
+              <div class="name">香菇滑鸡饭</div>
+              <div class="meta">月销 87 · 剩 30 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>18</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="thumb img-noodle"></div>
+            <div class="info">
+              <div class="name">番茄鸡蛋面</div>
+              <div class="meta">月销 76 · 剩 26 份</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>14</span>
+                <span class="add"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dish sold">
+            <div class="thumb img-sold"><span class="sold-badge">已售罄</span></div>
+            <div class="info">
+              <div class="name">冰镇酸梅汤</div>
+              <div class="meta">今日限量 · 已订完</div>
+              <div class="row">
+                <span class="price"><span class="yen">¥</span>6</span>
+                <span class="add add-off"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cart-bar">
+        <span class="cb-badge">2</span>
+        <span class="cb-text">已选 <b>2</b> 件 · ¥<b>40</b></span>
+        <span class="cb-btn">提交订餐</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage-note">方向样机 A · 不是最终页面</div>
+</div>

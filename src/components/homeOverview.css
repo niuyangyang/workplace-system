@@ -1,0 +1,26 @@
+/* ===== 首页：待办事项 / 通知公告两张卡片 =====
+   卡片本体完全依赖 antd Card + List 默认样式（与 sjtu-admin 门户一致），
+   这里只负责外层容器对齐，以及把本项目被 ConfigProvider 改小的圆角还原。 */
+
+.home-overview {
+  width: 100%;
+  max-width: 1388px;
+  margin: 0 auto;
+  padding: 28px 24px 0;
+}
+
+/* 源项目同名规则：两栏之间留出与 Banner 的间距 */
+.portal-cols {
+  margin-top: 16px;
+}
+
+/* 本项目 ConfigProvider 把 borderRadius 设为 5，源项目为 antd 默认 8，这里还原 */
+.home-overview .ant-card {
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .home-overview {
+    padding: 20px 20px 0;
+  }
+}

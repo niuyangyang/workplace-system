@@ -1,0 +1,266 @@
+<style>
+.dir-a{
+  width:960px;height:600px;box-sizing:border-box;overflow:hidden;position:relative;
+  background:#f6f7f9;color:#1c2333;
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:12px;line-height:1.5;
+  display:flex;flex-direction:column;
+}
+.dir-a *{box-sizing:border-box;margin:0;padding:0;}
+.dir-a .num{font-variant-numeric:tabular-nums;}
+
+/* 顶部房间条 */
+.dir-a .topbar{
+  height:48px;flex:0 0 48px;background:#ffffff;border-bottom:1px solid #e6e9f0;
+  display:flex;align-items:center;gap:10px;padding:0 16px;
+}
+.dir-a .back{color:#5b647a;text-decoration:none;font-size:12px;transition:color .15s;}
+.dir-a .back:hover{color:#0FB5A0;}
+.dir-a .divider{width:1px;height:16px;background:#e6e9f0;}
+.dir-a .room-name{font-size:14px;font-weight:600;}
+.dir-a .room-meta{color:#5b647a;font-size:11px;}
+.dir-a .tag{
+  background:#f2f4f8;border:1px solid #e6e9f0;border-radius:3px;
+  color:#5b647a;font-size:10px;padding:1px 6px;
+}
+.dir-a .badge{
+  margin-left:auto;background:#fff4e8;border:1px solid #f0c894;color:#b06a12;
+  border-radius:10px;font-size:10px;padding:2px 8px;font-weight:600;
+}
+
+/* 主区 */
+.dir-a .main{flex:1;display:flex;gap:10px;padding:8px 10px 6px;min-height:0;}
+
+/* 左侧时间轴 */
+.dir-a .timeline-card{
+  flex:0 0 62%;background:#ffffff;border:1px solid #e6e9f0;border-radius:8px;
+  padding:8px 10px 6px;display:flex;flex-direction:column;min-height:0;
+}
+.dir-a .grid{
+  display:grid;
+  grid-template-columns:42px repeat(5,1fr);
+  grid-template-rows:22px repeat(22,22px);
+}
+.dir-a .dayhead{
+  font-size:11px;font-weight:600;color:#5b647a;text-align:center;
+  border-bottom:1px solid #e6e9f0;line-height:22px;
+}
+.dir-a .dayhead.today{color:#0FB5A0;}
+.dir-a .tlabel{
+  grid-column:1;font-size:10px;color:#8b93a5;text-align:right;padding-right:6px;
+  line-height:14px;font-variant-numeric:tabular-nums;
+}
+.dir-a .daycol{
+  border-left:1px solid #edf0f4;
+  background:
+    repeating-linear-gradient(to bottom,transparent 0 43px,#e6e9f0 43px 44px),
+    repeating-linear-gradient(to bottom,transparent 0 21px,#f0f2f6 21px 22px);
+}
+.dir-a .daycol.today{background-color:#fbfdfd;}
+.dir-a .evt{
+  z-index:2;margin:1px 3px;border-radius:4px;background:#eef2f7;color:#8b93a5;
+  padding:3px 6px;overflow:hidden;cursor:default;transition:background .15s;
+  display:flex;flex-direction:column;justify-content:center;gap:1px;
+}
+.dir-a .evt .t{font-size:9px;font-variant-numeric:tabular-nums;}
+.dir-a .evt .n{font-size:11px;font-weight:600;color:#5b647a;white-space:nowrap;}
+.dir-a .evt:hover{background:#e6ebf2;}
+.dir-a .sel{
+  z-index:3;margin:1px 3px;border-radius:4px;cursor:pointer;
+  background:#dff5f1;border:1.5px solid #0FB5A0;color:#0a7d6e;
+  padding:2px 5px;display:flex;flex-direction:column;justify-content:center;gap:1px;
+  transition:box-shadow .15s;
+}
+.dir-a .sel:hover{box-shadow:0 0 0 2px rgba(15,181,160,.15);}
+.dir-a .sel .t{font-size:9px;font-variant-numeric:tabular-nums;}
+.dir-a .sel .n{font-size:11px;font-weight:600;white-space:nowrap;}
+.dir-a .legend{
+  margin-top:auto;padding-top:5px;display:flex;gap:14px;align-items:center;
+  font-size:10px;color:#5b647a;
+}
+.dir-a .lg{display:flex;align-items:center;gap:5px;}
+.dir-a .sw{width:12px;height:12px;border-radius:3px;border:1px solid #e6e9f0;background:#ffffff;}
+.dir-a .sw.busy{background:#eef2f7;border-color:#e0e5ee;}
+.dir-a .sw.picked{background:#dff5f1;border:1.5px solid #0FB5A0;}
+
+/* 右侧预约面板 */
+.dir-a .panel{
+  flex:1;background:#ffffff;border:1px solid #e6e9f0;border-radius:8px;
+  padding:12px 14px;display:flex;flex-direction:column;gap:9px;min-height:0;
+}
+.dir-a .panel h3{font-size:14px;font-weight:600;letter-spacing:.5px;}
+.dir-a .slotbox{
+  background:#dff5f1;border:1px solid #0FB5A0;border-radius:6px;
+  padding:7px 10px;font-size:12px;font-weight:600;color:#0a7d6e;
+  display:flex;justify-content:space-between;align-items:center;
+  font-variant-numeric:tabular-nums;
+}
+.dir-a .slotbox .dur{font-size:10px;font-weight:600;background:#0FB5A0;color:#ffffff;border-radius:9px;padding:1px 8px;}
+.dir-a .flabel{font-size:10px;color:#5b647a;margin-bottom:3px;display:block;}
+.dir-a .input{
+  width:100%;border:1px solid #e6e9f0;border-radius:6px;background:#fbfcfd;
+  color:#1c2333;font-size:12px;padding:6px 8px;
+  font-family:inherit;transition:border-color .15s;
+}
+.dir-a .input:focus{outline:none;border-color:#0FB5A0;background:#ffffff;}
+.dir-a .prow{display:flex;align-items:center;gap:8px;}
+.dir-a .orgsel{
+  flex:0 0 auto;border:1px solid #e6e9f0;border-radius:6px;background:#fbfcfd;
+  color:#1c2333;font-size:11px;padding:4px 8px;cursor:pointer;transition:border-color .15s;
+}
+.dir-a .orgsel:hover{border-color:#0FB5A0;}
+.dir-a .avatars{display:flex;}
+.dir-a .av{
+  width:24px;height:24px;border-radius:50%;background:#e8eef4;color:#5b647a;
+  border:1.5px solid #ffffff;font-size:10px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;margin-left:-5px;
+}
+.dir-a .av:first-child{margin-left:0;}
+.dir-a .av.tl{background:#cdeee9;color:#0a7d6e;}
+.dir-a .rsvp{font-size:10px;color:#5b647a;display:flex;gap:10px;margin-top:2px;font-variant-numeric:tabular-nums;}
+.dir-a .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:1px;}
+.dir-a .d-ok{background:#0FB5A0;}
+.dir-a .d-wait{background:#c3c9d6;}
+.dir-a .d-no{background:#e8a05c;}
+.dir-a .chips{display:flex;gap:6px;align-items:center;}
+.dir-a .chip{
+  display:inline-flex;align-items:center;gap:4px;background:#f2f4f8;
+  border:1px solid #e6e9f0;border-radius:4px;color:#5b647a;
+  font-size:10px;padding:3px 8px;transition:background .15s;
+}
+.dir-a .chip:hover{background:#e9edf3;}
+.dir-a .chip .x{color:#8b93a5;cursor:pointer;}
+.dir-a .submit{
+  width:100%;border:none;border-radius:6px;background:#0FB5A0;color:#ffffff;
+  font-size:13px;font-weight:600;padding:9px 0;cursor:pointer;font-family:inherit;
+  transition:background .15s,transform .1s;
+}
+.dir-a .submit:hover{background:#0da392;}
+.dir-a .submit:active{transform:translateY(1px);}
+.dir-a .panel-foot{
+  margin-top:auto;text-align:center;border-top:1px solid #f0f2f6;padding-top:7px;
+}
+.dir-a .panel-foot a{color:#5b647a;font-size:10px;text-decoration:none;transition:color .15s;font-variant-numeric:tabular-nums;}
+.dir-a .panel-foot a:hover{color:#0FB5A0;}
+.dir-a .note{
+  position:absolute;right:8px;bottom:4px;font-size:10px;color:rgba(28,35,51,.4);
+}
+</style>
+<div class="stage dir-a">
+  <div class="topbar">
+    <a class="back" href="#">← 返回列表</a>
+    <span class="divider"></span>
+    <span class="room-name">海棠会议室</span>
+    <span class="room-meta num">编号 102</span>
+    <span class="room-meta num">容量 12 人</span>
+    <span class="tag">投影</span>
+    <span class="tag">白板</span>
+    <span class="tag">茶水</span>
+    <span class="badge num">即将释放 14:30</span>
+  </div>
+
+  <div class="main">
+    <div class="timeline-card">
+      <div class="grid">
+        <div></div>
+        <div class="dayhead">周一</div>
+        <div class="dayhead today">周二</div>
+        <div class="dayhead">周三</div>
+        <div class="dayhead">周四</div>
+        <div class="dayhead">周五</div>
+
+        <div class="tlabel" style="grid-row:2 / span 2;">08:00</div>
+        <div class="tlabel" style="grid-row:4 / span 2;">09:00</div>
+        <div class="tlabel" style="grid-row:6 / span 2;">10:00</div>
+        <div class="tlabel" style="grid-row:8 / span 2;">11:00</div>
+        <div class="tlabel" style="grid-row:10 / span 2;">12:00</div>
+        <div class="tlabel" style="grid-row:12 / span 2;">13:00</div>
+        <div class="tlabel" style="grid-row:14 / span 2;">14:00</div>
+        <div class="tlabel" style="grid-row:16 / span 2;">15:00</div>
+        <div class="tlabel" style="grid-row:18 / span 2;">16:00</div>
+        <div class="tlabel" style="grid-row:20 / span 2;">17:00</div>
+        <div class="tlabel" style="grid-row:22 / span 2;">18:00</div>
+
+        <div class="daycol" style="grid-column:2;grid-row:2 / span 22;"></div>
+        <div class="daycol today" style="grid-column:3;grid-row:2 / span 22;"></div>
+        <div class="daycol" style="grid-column:4;grid-row:2 / span 22;"></div>
+        <div class="daycol" style="grid-column:5;grid-row:2 / span 22;"></div>
+        <div class="daycol" style="grid-column:6;grid-row:2 / span 22;"></div>
+
+        <div class="evt" style="grid-column:2;grid-row:4 / span 3;">
+          <span class="n">项目周会</span><span class="t">09:00 - 10:30</span>
+        </div>
+        <div class="evt" style="grid-column:2;grid-row:14 / span 2;">
+          <span class="n">招聘面试</span><span class="t">14:00 - 15:00</span>
+        </div>
+        <div class="evt" style="grid-column:3;grid-row:5 / span 2;">
+          <span class="n">部门例会</span><span class="t">09:30 - 10:30</span>
+        </div>
+        <div class="sel" style="grid-column:3;grid-row:14 / span 4;">
+          <span class="n">已选区间</span><span class="t">14:00 - 16:00</span>
+        </div>
+        <div class="evt" style="grid-column:4;grid-row:14 / span 3;">
+          <span class="n">设计评审</span><span class="t">14:00 - 15:30</span>
+        </div>
+        <div class="evt" style="grid-column:5;grid-row:6 / span 3;">
+          <span class="n">客户拜访</span><span class="t">10:00 - 11:30</span>
+        </div>
+        <div class="evt" style="grid-column:6;grid-row:18 / span 2;">
+          <span class="n">周复盘</span><span class="t">16:00 - 17:00</span>
+        </div>
+      </div>
+      <div class="legend">
+        <span class="lg"><span class="sw"></span>空闲</span>
+        <span class="lg"><span class="sw busy"></span>已约</span>
+        <span class="lg"><span class="sw picked"></span>已选</span>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <h3>预约面板</h3>
+      <div class="slotbox"><span>周二 14:00 - 16:00</span><span class="dur num">120 分钟</span></div>
+
+      <div>
+        <label class="flabel">主题</label>
+        <input class="input" type="text" value="产品 v3.3 需求评审">
+      </div>
+
+      <div>
+        <label class="flabel">参会人</label>
+        <div class="prow">
+          <span class="orgsel">产品部 ▾</span>
+          <div class="avatars">
+            <span class="av tl" title="张明">张</span>
+            <span class="av" title="李婷">李</span>
+            <span class="av" title="王哲">王</span>
+            <span class="av" title="陈宇">陈</span>
+            <span class="av" title="孙怡">孙</span>
+          </div>
+        </div>
+        <div class="rsvp">
+          <span><span class="dot d-ok"></span>接受 3</span>
+          <span><span class="dot d-wait"></span>待定 1</span>
+          <span><span class="dot d-no"></span>拒绝 1</span>
+        </div>
+      </div>
+
+      <div>
+        <label class="flabel">备注</label>
+        <input class="input" type="text" value="需要 HDMI 转接头">
+      </div>
+
+      <div>
+        <label class="flabel">附件</label>
+        <div class="chips">
+          <span class="chip">议程.docx<span class="x">×</span></span>
+        </div>
+      </div>
+
+      <button class="submit" type="button">提交预约</button>
+
+      <div class="panel-foot"><a href="#">查看全部预约记录 (7)</a></div>
+    </aside>
+  </div>
+
+  <div class="note">方向样机 A · 不是最终页面</div>
+</div>

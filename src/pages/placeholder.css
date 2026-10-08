@@ -1,0 +1,25 @@
+.ph-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px !important;
+}
+
+.ph-icon {
+  display: inline-grid !important;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius);
+  font-size: 40px;
+}
+
+.ph-tip {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: #eef1ff;
+  color: #3b5bff;
+  font-size: 14px;
+}

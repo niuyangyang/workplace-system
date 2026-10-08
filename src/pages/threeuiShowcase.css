@@ -1,0 +1,132 @@
+.tu-root {
+  position: relative;
+  min-height: 100vh;
+  color: #e6ebf5;
+  background:
+    radial-gradient(120% 80% at 50% -10%, #14224a 0%, rgba(20, 34, 74, 0) 55%),
+    linear-gradient(180deg, #070b18 0%, #0a1226 60%, #070b18 100%);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+}
+
+.tu-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(130% 90% at 50% 0%, transparent 60%, rgba(0, 0, 0, 0.45) 100%);
+  z-index: 0;
+}
+
+.tu-hero {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 56px 24px 12px;
+}
+
+.tu-tag {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #5dcaca;
+  border: 1px solid rgba(93, 202, 202, 0.35);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 16px;
+}
+
+.tu-title {
+  margin: 0 0 10px;
+  font-size: 30px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.tu-sub {
+  margin: 0;
+  max-width: 760px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #9fb0c9;
+}
+
+.tu-grid {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.tu-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(120, 160, 255, 0.16);
+  border-radius: 14px;
+  background: rgba(13, 22, 44, 0.55);
+  overflow: hidden;
+  backdrop-filter: blur(2px);
+}
+
+.tu-card--wide {
+  grid-column: 1 / -1;
+}
+
+.tu-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(120, 160, 255, 0.12);
+}
+
+.tu-card__head h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #dbe6f7;
+}
+
+.tu-card__meta {
+  font-size: 12px;
+  color: #6f80a0;
+}
+
+.tu-stage {
+  height: 320px;
+  background: #04070f;
+}
+
+.tu-stage--tall {
+  height: 380px;
+}
+
+.tu-stage iframe {
+  display: block;
+}
+
+.tu-foot {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 24px 48px;
+  font-size: 12px;
+  color: #6f80a0;
+}
+
+.tu-foot code {
+  color: #5dcaca;
+  background: rgba(93, 202, 202, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+@media (max-width: 900px) {
+  .tu-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

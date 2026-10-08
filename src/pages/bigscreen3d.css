@@ -1,0 +1,94 @@
+/* 3D 数据大屏（/app/bigscreen3d）补充样式
+   版式主体复用 mapScreen.css 的 ms-* 类名（只读引用，未改动原文件）；
+   这里只补「原图位置 → ThreeUI 3D 组件」所需的容器样式。 */
+
+/* 中央「图」区：位置 / 尺寸与原来的 .ms-chart 完全一致，保证版式不变 */
+.bs3d-stage {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 194px;
+  bottom: 242px;
+  overflow: hidden;
+}
+.bs3d-stage iframe {
+  display: block;
+}
+
+/* 中央区左下角标签 */
+.bs3d-stage-tag {
+  position: absolute;
+  left: 26px;
+  bottom: 14px;
+  z-index: 3;
+  padding: 3px 11px;
+  font-size: 11.5px;
+  letter-spacing: 2px;
+  color: #6fe4ff;
+  background: rgba(6, 26, 60, 0.6);
+  border: 1px solid rgba(111, 228, 255, 0.35);
+  border-radius: 999px;
+}
+
+/* 面板内的 3D 组件容器（替代原来的图表区） */
+.bs3d-3dwrap {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 140px;
+  margin-top: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #04101f;
+  border: 1px solid rgba(63, 150, 235, 0.22);
+}
+.bs3d-3dwrap iframe {
+  display: block;
+}
+
+/* 面板底部图例（学历 / 职务占比） */
+.bs3d-legend {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding-top: 7px;
+  margin-top: 7px;
+  border-top: 1px solid rgba(63, 150, 235, 0.24);
+  font-size: 10.5px;
+  color: #9fc0e6;
+}
+.bs3d-legend em {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+.bs3d-legend i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+
+/* 矮视口同步收紧（与 mapScreen.css 的矮屏断点对齐） */
+@media (max-height: 600px) {
+  .bs3d-stage {
+    top: 160px;
+    bottom: 172px;
+  }
+  .bs3d-3dwrap {
+    min-height: 104px;
+    margin-top: 6px;
+  }
+  .bs3d-legend {
+    font-size: 9.5px;
+    padding-top: 5px;
+    margin-top: 5px;
+  }
+  .bs3d-stage-tag {
+    font-size: 10.5px;
+    left: 20px;
+    bottom: 10px;
+  }
+}

@@ -1,0 +1,387 @@
+/* 后台整体：固定一屏高，页面不滚动，仅内容区滚动 */
+.org-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #f5f7fb;
+}
+
+.org-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 左侧主菜单：与顶部导航衔接，撑满剩余高度 */
+.org-sider {
+  flex: 0 0 220px;
+  width: 220px;
+  box-sizing: border-box;
+  background: #fff;
+  border-right: 1px solid #f0f0f0;
+  box-shadow: 2px 0 10px rgba(15, 23, 55, 0.05);
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* 抽屉式收起/展开过渡 */
+  transition: flex-basis 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 收起状态：侧栏收窄，仅展示菜单图标 */
+.org-sider.collapsed {
+  flex: 0 0 80px;
+  width: 80px;
+}
+
+.org-sider .ant-menu {
+  border-right: none !important;
+  background: transparent;
+  flex: 1;
+}
+
+.org-sider .ant-menu-item {
+  margin: 0 !important;
+  width: 100%;
+  border-radius: var(--radius);
+  color: #5b647a;
+  font-weight: 500;
+}
+
+.org-sider .ant-menu-item-selected {
+  background: #3b5bff !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.org-sider .ant-menu-item-selected .anticon {
+  color: #fff !important;
+}
+
+.org-sider .ant-menu-item:hover {
+  color: #3b5bff;
+}
+
+.org-sider .ant-menu-item-selected:hover {
+  color: #fff !important;
+}
+
+/* 内容区 */
+.org-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #f5f7fb;
+}
+
+.org-container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px var(--content-gap) 40px;
+  box-sizing: border-box;
+}
+
+/* 页面标题 */
+.org-page-title {
+  margin: 0 0 18px !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #1f2438;
+}
+
+/* 搜索区域：外层 flex，左侧筛选网格 + 右侧查询/重置按钮 */
+.org-search-bar {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+/* 筛选条件：4 等分网格，3 个条件占前 3 格，第 4 格留空保留 */
+.org-search-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 每个筛选条件等宽 */
+.org-filter-item {
+  margin-bottom: 0 !important;
+}
+
+.org-filter-item .ant-input,
+.org-filter-item .ant-select,
+.org-filter-item .ant-picker,
+.org-filter-item .ant-input-number {
+  width: 100%;
+}
+
+/* 按钮组：作为筛选网格第 4 格，紧贴查询条件，底部对齐 */
+.org-search-btns {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  align-self: end;
+}
+
+/* 操作行：新增组织左对齐，与表格同一条左边缘 */
+.org-action-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+
+/* 表格卡片 */
+.org-table-card {
+  background: #fff;
+}
+
+.org-name-text {
+  font-weight: 500;
+  color: #1f2438;
+}
+
+/* 树形展开图标 */
+.org-expand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  color: #5b647a;
+  cursor: pointer;
+  font-size: 11px;
+  transition: color 0.2s ease;
+}
+
+.org-expand-icon:hover {
+  color: #3b5bff;
+}
+
+.org-tree-indent {
+  display: inline-block;
+  width: 26px;
+}
+
+/* 下级组织数量 */
+.org-count {
+  font-weight: 600;
+  color: #3b5bff;
+}
+
+/* 操作列 */
+.org-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.org-dropdown-delete {
+  color: #ef4444;
+  display: block;
+  width: 100%;
+}
+
+/* 首页统计卡片 */
+.org-card {
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(15, 23, 55, 0.04);
+  border: 1px solid #eef1f6;
+}
+
+/* 首页看板：图表卡片与表格卡片等高对齐 */
+.org-card .ant-card-head {
+  border-bottom: 1px solid #f0f0f0;
+  min-height: 48px;
+}
+
+.org-card .ant-card-head-title {
+  font-weight: 600;
+  color: #1f2438;
+}
+
+.org-stat-card {
+  border-radius: var(--radius);
+  border: 1px solid #eef1f6;
+  box-shadow: 0 1px 3px rgba(15, 23, 55, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.org-stat-icon {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  color: #3b5bff;
+  background: #eef1ff;
+  border-radius: var(--radius);
+}
+
+.org-stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f2438;
+  line-height: 1.1;
+}
+
+.org-stat-suffix {
+  font-size: 13px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.org-stat-label {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* 人员管理：左侧组织树 + 右侧列表，两者等高对齐 */
+.people-wrap {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.people-tree {
+  flex: 0 0 240px;
+  width: 240px;
+  background: #fff;
+  border: 1px solid #eef1f6;
+  border-radius: var(--radius);
+  padding: 16px 12px;
+  box-shadow: 0 1px 3px rgba(15, 23, 55, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.people-tree-search {
+  margin-bottom: 12px;
+}
+
+.people-tree-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.people-tree-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.people-tree-footer .ant-btn {
+  flex: 1;
+}
+
+.people-tree-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2438;
+  padding: 4px 8px 12px;
+}
+
+.people-tree .ant-tree {
+  background: transparent;
+}
+
+.people-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 人员筛选：2 个条件占据前 2 格，按钮横跨末尾两格并右对齐 */
+.people-search-btns {
+  grid-column: 3 / span 2;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+/* 查看组织：纯文本描述，无输入框/下拉框 */
+.org-view-desc .ant-descriptions-item-label {
+  width: 120px;
+  color: #5b647a;
+  background: #fafbfe;
+}
+
+.org-view-desc .ant-descriptions-item-content {
+  color: #1f2438;
+}
+
+/* 弹窗内表单 */
+.ant-modal-title {
+  font-weight: 700;
+}
+
+/* 响应式 */
+@media (max-width: 992px) {
+  .org-sider {
+    flex: 0 0 80px;
+    width: 80px;
+  }
+
+  .org-sider .ant-menu-item span {
+    display: none;
+  }
+
+  .org-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .org-search-form {
+    grid-template-columns: 1fr;
+  }
+
+  .org-search-btns {
+    justify-self: start;
+  }
+
+  .people-search-btns {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .org-container {
+    padding: 16px;
+  }
+
+  .people-wrap {
+    flex-direction: column;
+  }
+
+  .people-tree {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+}

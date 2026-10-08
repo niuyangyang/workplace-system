@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>员工订餐系统 · 方向预览（PC + H5）</title>
+<style>
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;background:#f4f4f2;color:#1a1a1a}
+  .bar{padding:18px 32px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .bar .tip{color:#6b7280;font-size:13px}
+  .dials{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:12px;padding:18px 32px;border-bottom:1px solid #ddd;background:#fafaf8}
+  .dial{display:grid;gap:6px;font-size:13px}
+  .dial b{font-weight:650}
+  .dial output{font-variant-numeric:tabular-nums;color:#b8471f;font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding:28px 32px}
+  .card{background:#fff;border:2px solid #e2e2e0;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-sizing:border-box}
+  .card.selected{border-color:#1a1a1a}
+  .card-head{display:flex;align-items:baseline;gap:10px;padding:14px 20px 10px;flex-wrap:wrap}
+  .card-head .tag{font-size:12px;color:#6b7280}
+  .card-head .rec{font-size:11px;font-weight:700;color:#92400e;background:#fef3c7;border-radius:999px;padding:2px 10px}
+  .mock{height:300px;overflow:hidden;position:relative;display:grid;place-items:center;background:#e9e9e6}
+  .mock>.stage{width:960px;height:600px;transform:scale(.5);transform-origin:center center;flex:0 0 auto}
+  .meta{padding:14px 20px;display:grid;gap:10px;min-width:0;width:100%;box-sizing:border-box}
+  .meta p{margin:0;color:#4b5563;font-size:13px;line-height:1.55;max-width:64ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;writing-mode:horizontal-tb;white-space:normal;overflow-wrap:break-word;word-break:normal}
+  .qmdp-pick-button{position:relative;z-index:1;width:calc(100% - 40px);min-height:44px;margin:0 20px 18px;border:1.5px solid #1a1a1a;border-radius:10px;background:#1a1a1a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;white-space:normal;writing-mode:horizontal-tb;transition:transform .12s cubic-bezier(.23,1,.32,1),box-shadow .12s}
+  .qmdp-pick-button:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(15,23,42,.16)}
+  .qmdp-pick-button:active{transform:translateY(0) scale(.99)}
+  .notes{padding:8px 32px 40px;display:grid;gap:14px}
+  .note-card{background:#fff;border:1px solid #e2e2e0;border-radius:12px;padding:16px 20px}
+  .note-card h3{margin:0 0 6px;font-size:14px}
+  .note-card p{margin:0;font-size:13px;color:#4b5563;line-height:1.6}
+  .note-card .k{color:#92400e;font-weight:600}
+  @media (max-width:760px){
+    .bar{padding:14px 16px}
+    .dials{grid-template-columns:1fr;padding:14px 16px}
+    .grid{grid-template-columns:1fr;padding:14px 16px;gap:18px}
+    .notes{padding:8px 16px 32px}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <strong>员工订餐系统 · 方向样机（每格左边 PC / 右边 H5）</strong>
+    <span class="tip">设计方向样机，不是最终页面 · 键盘 1-4 选择 · 确认后回传当前工作流</span>
+  </div>
+
+  <div class="dials" data-qmdp-dials aria-label="设计拨盘">
+    <label class="dial"><b>视觉冒险度 <output id="varianceOut" data-qmdp-output="variance">4</output></b><input id="variance" data-qmdp-dial="variance" type="range" min="1" max="10" value="4"></label>
+    <label class="dial"><b>动效强度 <output id="motionOut" data-qmdp-output="motion">4</output></b><input id="motion" data-qmdp-dial="motion" type="range" min="1" max="10" value="4"></label>
+    <label class="dial"><b>信息密度 <output id="densityOut" data-qmdp-output="density">6</output></b><input id="density" data-qmdp-dial="density" type="range" min="1" max="10" value="6"></label>
+  </div>
+
+  <div class="grid">
+    <div class="card" data-name="明档点餐 暖橙双栏">
+      <div class="card-head"><strong>方向 A · 明档点餐</strong><span class="tag">暖橙食欲感 · 经典外卖双栏 · H5/PC 同构</span></div>
+      <div class="mock"><div class="stage">
+{{FRAG_A}}
+      </div></div>
+      <div class="meta"><p>左分类右菜品的经典外卖结构，暖橙价格与按钮带食欲，H5 和 PC 天然同构，用户零学习成本。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 A · 明档点餐 暖橙双栏</button>
+    </div>
+
+    <div class="card" data-name="深夜食堂 暗色夜宵">
+      <div class="card-head"><strong>方向 B · 深夜食堂</strong><span class="tag">暗色暖灯 · 加班夜宵场景 · 金色重音</span></div>
+      <div class="mock"><div class="stage">
+{{FRAG_B}}
+      </div></div>
+      <div class="meta"><p>专为加班餐设计的深夜食堂气质，暖金价格像深夜亮灯的窗口，夜宵专档与免配送费信息前置。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 B · 深夜食堂 暗色夜宵</button>
+    </div>
+
+    <div class="card" data-name="高效订餐单 品牌蓝">
+      <div class="card-head"><strong>方向 C · 高效订餐单</strong><span class="tag">延续系统品牌蓝 · 表格勾选 · 行政好汇总</span></div>
+      <div class="mock"><div class="stage">
+{{FRAG_C}}
+      </div></div>
+      <div class="meta"><p>与现有系统同一套品牌蓝，表格化快速勾选 + 数量步进，信息密度最高，行政汇总视角最友好。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 C · 高效订餐单 品牌蓝</button>
+    </div>
+
+    <div class="card" data-name="今日菜单 活力大卡" data-rec="1">
+      <div class="card-head"><strong>方向 D · 今日菜单</strong><span class="rec">推荐</span><span class="tag">H5 优先 · 大卡片 · 分类彩色徽标</span></div>
+      <div class="mock"><div class="stage">
+{{FRAG_D}}
+      </div></div>
+      <div class="meta"><p>手机是主角的大卡片设计，「今天吃什么」的情绪化开场，分类彩色徽标活泼但不花，PC 是同一设计的宽版。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 D · 今日菜单 活力大卡</button>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note-card"><h3>A · 明档点餐 暖橙双栏</h3><p>气质：大众外卖的熟悉感。色彩：暖白 + 食欲橙 #ff6b2c。<span class="k">适合</span>：想让所有人打开就会用，零教育成本。</p></div>
+    <div class="note-card"><h3>B · 深夜食堂 暗色夜宵</h3><p>气质：加班场景的暖灯陪伴感。色彩：深灰蓝底 + 暖金 #f5b301。<span class="k">适合</span>：夜宵是核心场景、想要记忆点强的氛围；白天看稍暗。</p></div>
+    <div class="note-card"><h3>C · 高效订餐单 品牌蓝</h3><p>气质：企业工具的克制高效。色彩：延续门户品牌蓝 #3b5bff。<span class="k">适合</span>：订餐本质是「快速勾选交给行政」，与系统其他应用观感最统一。</p></div>
+    <div class="note-card"><h3>D · 今日菜单 活力大卡（推荐）</h3><p>气质：轻快友好、有食欲又不吵。色彩：白底大卡 + 低饱和分类色 + 单一红重音。<span class="k">推荐理由</span>：订餐天然是手机场景，H5 优先最贴合真实使用；大卡带图信息清楚，分类彩色徽标同时解决「分类查看」的扫读效率；PC 宽版共享同一设计 token，双端一致最好做。<span class="k">可混搭</span>：也可以「D 的卡片 + C 的品牌蓝」，在建议框写一句即可。</p></div>
+  </div>
+
+<script>
+  ['variance','motion','density'].forEach(function(id){
+    var input = document.getElementById(id), out = document.getElementById(id + 'Out');
+    input.addEventListener('input', function(){ out.value = input.value; out.textContent = input.value; });
+  });
+</script>
+</body>
+</html>

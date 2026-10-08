@@ -1,0 +1,277 @@
+/* ============ 会议室预订前台 · 卡片画廊（方向 C · teal 强调） ============ */
+.portal {
+  padding: 24px;
+  max-width: 1388px;
+  margin: 0 auto;
+}
+
+.meeting-page {
+  min-height: 60vh;
+}
+
+/* ---- 筛选栏 ---- */
+.meeting-filters {
+  margin-bottom: 8px;
+}
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  margin-bottom: 12px;
+}
+.meeting-search {
+  width: 320px;
+  max-width: 100%;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.filter-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b647a;
+  white-space: nowrap;
+  min-width: 40px;
+  text-align: right;
+}
+.filter-pill {
+  border: 1px solid #e3e7f0;
+  background: #fff;
+  color: #5b647a;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.filter-pill:hover {
+  border-color: #0fb5a0;
+  color: #0fb5a0;
+}
+.filter-pill.is-active {
+  background: #0fb5a0;
+  border-color: #0fb5a0;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(15, 181, 160, 0.28);
+}
+.meeting-count {
+  margin: 2px 0 18px;
+  font-size: 13px;
+  color: #5b647a;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ---- 为你推荐 条 ---- */
+.rec-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  background: linear-gradient(90deg, #eafaf7 0%, #ffffff 60%);
+  border: 1px solid #cdeee8;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+.rec-tip {
+  color: #5b647a;
+}
+.rec-tip b {
+  color: #1f2433;
+}
+.rec-go {
+  margin-left: 8px;
+  color: #0fb5a0;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rec-go:hover {
+  text-decoration: underline;
+}
+
+/* ---- 卡片画廊 ---- */
+.meeting-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 20px;
+}
+.room-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(20, 30, 60, 0.06);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(20, 30, 60, 0.12);
+}
+.room-cover {
+  position: relative;
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+.room-cover::after {
+  /* 照片压暗渐变，保证状态角标与人数徽标可读 */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 55, 0.08) 0%, rgba(15, 23, 55, 0) 40%, rgba(15, 23, 55, 0.22) 100%);
+  pointer-events: none;
+}
+.room-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.room-cap {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(15, 23, 55, 0.42);
+  color: #fff;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.room-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  padding: 16px 16px 14px;
+}
+.room-name {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #1f2433;
+}
+.room-loc {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #5b647a;
+}
+.room-devices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.room-device-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 2px 8px;
+  font-size: 12px;
+  background: #eef6f5;
+  color: #0a8f7e;
+  border: 1px solid #d4ece8;
+  border-radius: 6px;
+}
+.room-foot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+}
+.room-next {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #5b647a;
+}
+.book-btn {
+  height: auto;
+  padding: 5px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #fff;
+  background: #0fb5a0;
+  border-color: #0fb5a0;
+  box-shadow: 0 4px 12px rgba(15, 181, 160, 0.25);
+}
+.book-btn:hover:not(:disabled) {
+  color: #fff !important;
+  background: #0da48f !important;
+  border-color: #0da48f !important;
+}
+.book-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+.book-btn:disabled {
+  color: #9aa3b2 !important;
+  background: #e8ebf2 !important;
+  border-color: #e8ebf2 !important;
+  box-shadow: none;
+}
+
+.meeting-empty {
+  padding: 80px 0;
+}
+
+/* ---- 预订弹窗 ---- */
+.book-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+}
+.book-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.book-field > label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2433;
+}
+.book-readonly {
+  font-size: 13px;
+  color: #5b647a;
+  background: #f5f7fb;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.book-tip {
+  margin: 0;
+  font-size: 12px;
+  color: #9aa3b2;
+}
+
+@media (max-width: 768px) {
+  .meeting-search {
+    width: 100%;
+  }
+  .meeting-grid {
+    grid-template-columns: 1fr;
+  }
+}

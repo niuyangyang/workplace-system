@@ -1,0 +1,14 @@
+{
+  "id": "D",
+  "label": "选 D：电影沉浸",
+  "name": "电影沉浸",
+  "notes": "",
+  "dials": {
+    "variance": 7,
+    "motion": 7,
+    "density": 4
+  },
+  "adjustments": "",
+  "source": "preview",
+  "receivedAt": "2026-09-24T07:02:50.324Z"
+}

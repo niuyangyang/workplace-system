@@ -1,0 +1,566 @@
+/* ===== 员工籍贯分布 · 可视化大屏（平面风格） ===== */
+/* 性能约定：不使用 backdrop-filter / 大面积 mask 图层等开销较大的效果 */
+.ms-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  color: #cfe4ff;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  /* 参考图配色：顶部标题处蓝色辉光 + 中部蓝色光晕 + 深蓝渐变底 */
+  background:
+    radial-gradient(ellipse 58% 40% at 50% -4%, rgba(64, 160, 255, .62), rgba(26, 96, 210, .22) 46%, rgba(6, 26, 60, 0) 74%),
+    radial-gradient(ellipse 118% 78% at 50% 46%, rgba(22, 92, 190, .30), rgba(6, 26, 60, 0) 68%),
+    linear-gradient(180deg, #08203f 0%, #061a38 40%, #030e22 100%);
+}
+
+/* 地图背后的球形光晕（呼应参考图的地球辉光；纯 CSS，开销极低） */
+.ms-halo {
+  position: absolute; z-index: 0; pointer-events: none;
+  left: 50%; top: 60%; width: min(46vw, 780px); aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(circle, rgba(58, 150, 255, .30) 0%, rgba(30, 92, 200, .13) 44%, transparent 70%);
+}
+
+/* 地图容器：顶部留白给中央统计面板，底部留出宽表格面板（南海诸岛已拆为独立小图，
+   主图 aspect ≈ 1.31，可撑满中央内容区的整个高度） */
+.ms-chart { position: absolute; z-index: 1; left: 0; right: 0; top: 194px; bottom: 242px; }
+
+.ms-vignette {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: radial-gradient(ellipse 76% 70% at 50% 46%, rgba(3, 14, 34, 0) 52%, rgba(3, 14, 34, .4) 84%, rgba(3, 14, 34, .76) 100%);
+}
+
+/* ===== 顶栏：标题 + 左右侧信息（参考图样式） ===== */
+.ms-topbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 6; height: 78px;
+  background: linear-gradient(180deg, rgba(8, 40, 88, .9) 0%, rgba(6, 26, 60, .38) 66%, rgba(6, 20, 44, 0) 100%);
+  pointer-events: none;
+}
+.ms-tb-title {
+  position: absolute; left: 50%; top: 10px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 18px;
+}
+.ms-tb-title h1 {
+  margin: 0; font-size: 29px; letter-spacing: 6px; font-weight: 700; white-space: nowrap;
+  background: linear-gradient(180deg, #ffffff 6%, #cfeaff 44%, #4fd8ff 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(79, 216, 255, .55));
+}
+/* 标题两侧：倾斜渐隐光条 */
+.ms-tb-deco { display: flex; align-items: center; gap: 6px; }
+.ms-tb-deco i {
+  display: block; height: 15px; border-radius: 2px; transform: skewX(-34deg);
+  background: linear-gradient(90deg, rgba(79, 216, 255, 0), #4fd8ff);
+}
+.ms-tb-deco.r i { background: linear-gradient(270deg, rgba(79, 216, 255, 0), #4fd8ff); }
+.ms-tb-deco i:nth-child(1) { width: 30px; opacity: .32; }
+.ms-tb-deco i:nth-child(2) { width: 20px; opacity: .62; }
+.ms-tb-deco i:nth-child(3) { width: 11px; opacity: 1; }
+
+.ms-tb-date,
+.ms-tb-status {
+  position: absolute; top: 24px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12.5px; letter-spacing: 1.2px; color: #8fb8e0;
+}
+.ms-tb-date { left: 28px; }
+.ms-tb-status { right: 180px; }
+.ms-tb-status i {
+  width: 7px; height: 7px; border-radius: 50%; background: #35e0b0; box-shadow: 0 0 8px #35e0b0;
+  animation: msPulse 1.8s ease-in-out infinite;
+}
+@keyframes msPulse { 0%, 100% { opacity: 1 } 50% { opacity: .32 } }
+
+.ms-line {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 68%; height: 2px;
+  background: linear-gradient(90deg, transparent, #2f7bd6 20%, #6fe4ff 50%, #2f7bd6 80%, transparent);
+  box-shadow: 0 0 12px rgba(79, 216, 255, .6);
+}
+
+/* ===== 中央顶部：数据统计（标签 + 环比 + 逐位数字方块） ===== */
+.ms-center-stats {
+  position: absolute; left: 362px; right: 362px; top: 82px; z-index: 6;
+  height: 100px; padding: 0 26px;
+  display: flex; flex-direction: column; justify-content: center;
+  background: linear-gradient(180deg, rgba(10, 42, 90, .9), rgba(6, 22, 48, .86));
+  border: 1px solid rgba(70, 160, 255, .42);
+  border-radius: 10px;
+  box-shadow: 0 0 24px rgba(14, 64, 128, .5), inset 0 1px 0 rgba(120, 200, 255, .12);
+}
+.ms-center-stats::before, .ms-center-stats::after {
+  content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid #57e0ff;
+}
+.ms-center-stats::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
+.ms-center-stats::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; border-radius: 0 0 10px 0; }
+
+.ms-kpis { display: flex; align-items: center; height: 100%; }
+.ms-kpi { display: flex; flex-direction: column; align-items: center; gap: 7px; flex: 1 1 0; }
+/* 各项指标用不同强调色（蓝 / 青 / 黄 / 绿） */
+.ms-kpi:nth-of-type(1) { --kc: #4f9dff; --kg: rgba(79, 157, 255, .5); }
+.ms-kpi:nth-of-type(2) { --kc: #4fd8ff; --kg: rgba(79, 216, 255, .5); }
+.ms-kpi:nth-of-type(3) { --kc: #ffd24a; --kg: rgba(255, 210, 74, .5); }
+.ms-kpi:nth-of-type(4) { --kc: #35e0b0; --kg: rgba(53, 224, 176, .5); }
+
+.ms-kpi-top { display: flex; align-items: center; gap: 8px; }
+.ms-kpi-label { font-size: 12.5px; color: #b9d6f5; letter-spacing: 1.5px; }
+.ms-kpi-badge {
+  font-size: 10.5px; letter-spacing: .5px; padding: 1px 6px; border-radius: 3px;
+  color: #35e0b0; background: rgba(53, 224, 176, .1); border: 1px solid rgba(53, 224, 176, .34);
+}
+.ms-kpi-badge.down { color: #ffb03a; background: rgba(255, 176, 58, .1); border-color: rgba(255, 176, 58, .34); }
+
+/* 逐位数字方块：每位是一卷 0~9 的滚轮（积分器翻牌） */
+.ms-digits { display: flex; align-items: center; gap: 4px; }
+.ms-digit {
+  --dh: 40px;                       /* 单格高度，矮屏断点里改这一个值即可 */
+  position: relative; overflow: hidden;
+  width: 27px; height: var(--dh); border-radius: 5px;
+  background: linear-gradient(180deg, rgba(22, 62, 122, .5), rgba(8, 26, 54, .8));
+  border: 1.4px solid var(--kc);
+  box-shadow: 0 0 10px var(--kg), inset 0 0 10px rgba(120, 200, 255, .08);
+}
+.ms-digit-reel {
+  position: absolute; top: 0; left: 0; width: 100%;
+  display: flex; flex-direction: column;
+  transform: translateY(calc(var(--d) * var(--dh) * -1));
+  transition: transform .7s cubic-bezier(.22, .9, .25, 1);
+  will-change: transform;
+}
+.ms-digit-reel i {
+  display: block; height: var(--dh); line-height: var(--dh); text-align: center;
+  font-size: 23px; font-weight: 700; font-style: normal;
+  color: var(--kc); font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px var(--kg);
+}
+.ms-kpi-unit {
+  font-size: 12px; font-style: normal; color: #6e9ccb; margin-left: 4px;
+}
+
+/* ===== 自定义交互控件（默认地图控件已移除） ===== */
+.ms-ctrl {
+  position: absolute; top: 16px; right: 22px; z-index: 8;
+  display: flex; gap: 6px;
+}
+.ms-ctrl button {
+  width: 30px; height: 30px; padding: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #7fd4ff;
+  background: rgba(9,26,54,.86);
+  border: 1px solid rgba(63,150,235,.42);
+  border-radius: 7px;
+  transition: all .15s;
+}
+.ms-ctrl button:hover { color: #eaf6ff; border-color: #57e0ff; background: rgba(20,58,110,.95); }
+.ms-ctrl button:active { transform: scale(.94); }
+
+/* ===== 四角：弹性双列（自动避免重叠 + 撑满角落） ===== */
+.ms-col {
+  position: absolute; top: 82px; bottom: 34px; width: 330px; z-index: 6;
+  display: flex; flex-direction: column; gap: 10px;
+  pointer-events: none;
+}
+.ms-col-left { left: 20px; }
+.ms-col-right { right: 20px; }
+
+.ms-panel {
+  position: relative;                       /* 关键：让角标锚在面板自身，而不是外层列 */
+  pointer-events: auto;
+  flex: 0 1 auto; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column;    /* 让标题 + 列表竖向撑满 */
+  background: linear-gradient(180deg, rgba(10, 42, 90, .88), rgba(6, 22, 48, .86));
+  border: 1px solid rgba(70, 160, 255, .42);
+  border-radius: 10px; padding: 11px 15px 12px;
+  box-shadow: 0 0 24px rgba(14, 64, 128, .5), inset 0 1px 0 rgba(120, 200, 255, .12);
+}
+.ms-panel::before, .ms-panel::after {
+  content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid #57e0ff;
+}
+.ms-panel::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
+.ms-panel::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; border-radius: 0 0 10px 0; }
+
+.ms-panel-title {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 13.5px; font-weight: 600; color: #dcefff; letter-spacing: 2px;
+  padding-bottom: 6px; margin-bottom: 7px;
+  border-bottom: 1px solid rgba(63,150,235,.28);
+  flex: 0 0 auto;
+}
+.ms-panel-title i {
+  width: 4px; height: 13px; border-radius: 2px;
+  background: linear-gradient(180deg, #57e0ff, #2b7aff);
+}
+.ms-panel-tip { margin-left: auto; font-size: 11px; font-weight: 400; letter-spacing: 0; color: #4f7fb8; }
+
+/* ===== 排行榜（行间距自动均分，把面板撑满） ===== */
+.ms-rank {
+  list-style: none; margin: 0; padding: 0;
+  flex: 1 1 auto; min-height: 0;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+/* 序号 / 名称 / 条形 / 数值 / 环比 —— 用 grid 保证与其它模块列对齐 */
+.ms-rank li {
+  display: grid; grid-template-columns: 17px minmax(0, 58px) 1fr 32px 54px;
+  align-items: center; gap: 7px;
+  flex: 1 1 auto; min-height: 19px; max-height: 44px; border-radius: 4px;
+}
+.ms-panel.is-interactive .ms-rank li { cursor: pointer; }
+.ms-rank li.is-active { background: rgba(87,224,255,.1); }
+.ms-rank .idx {
+  height: 17px; line-height: 17px; text-align: center;
+  font-size: 11px; border-radius: 4px; color: #9fc4ee;
+  background: rgba(43,122,255,.22); border: 1px solid rgba(63,150,235,.4);
+}
+/* 前三名：红 → 橙 → 黄（参考图配色） */
+.ms-rank li:nth-child(1) .idx { color: #04101f; background: #ff6b5e; border-color: #ff6b5e; }
+.ms-rank li:nth-child(2) .idx { color: #04101f; background: #ff9d2e; border-color: #ff9d2e; }
+.ms-rank li:nth-child(3) .idx { color: #04101f; background: #ffd24a; border-color: #ffd24a; }
+.ms-rank .nm { font-size: 12px; color: #d6e9ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-rank li.is-active .nm { color: #8ff0ff; }
+.ms-rank .bar { height: 6px; border-radius: 4px; background: rgba(30,74,132,.55); overflow: hidden; }
+.ms-rank .bar > span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2b7aff, #57e0ff); transition: width .7s cubic-bezier(.25,.9,.3,1); }
+.ms-rank li:nth-child(1) .bar > span { background: linear-gradient(90deg, #ff6b5e, #ff9d2e); }
+.ms-rank li.is-active .bar > span { background: linear-gradient(90deg, #57e0ff, #b9f5ff); }
+.ms-rank .val { text-align: right; font-size: 12px; color: #7fe4ff; font-variant-numeric: tabular-nums; }
+/* 环比徽标 */
+.ms-rank .delta {
+  justify-self: stretch; text-align: center; white-space: nowrap;
+  font-size: 10.5px; padding: 1px 0; border-radius: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.ms-rank .delta.up { color: #35e0b0; background: rgba(53,224,176,.1); border: 1px solid rgba(53,224,176,.3); }
+.ms-rank .delta.down { color: #ff9d6b; background: rgba(255,157,107,.1); border: 1px solid rgba(255,157,107,.3); }
+
+/* ===== 部门分布：部门 / 人数 / 入职 / 离职 ===== */
+.ms-dept-head,
+.ms-dept-list li {
+  display: grid; grid-template-columns: minmax(0, 62px) 1fr 32px 42px 42px;
+  align-items: center; gap: 7px;
+}
+.ms-dept-head {
+  flex: 0 0 auto; padding-bottom: 4px; margin-bottom: 4px;
+  font-size: 10.5px; letter-spacing: .5px; color: #5f86b5;
+  border-bottom: 1px solid rgba(63,150,235,.22);
+}
+.ms-dept-head span:nth-child(3),
+.ms-dept-head span:nth-child(4),
+.ms-dept-head span:nth-child(5) { text-align: right; }
+.ms-dept-list {
+  list-style: none; margin: 0; padding: 0;
+  flex: 1 1 auto; min-height: 0;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.ms-dept-list li { flex: 1 1 auto; min-height: 17px; max-height: 34px; }
+.ms-dept-list .nm { font-size: 11.5px; color: #d6e9ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-dept-list .bar { height: 5px; border-radius: 3px; background: rgba(30,74,132,.55); overflow: hidden; }
+.ms-dept-list .bar > span { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #2b7aff, #57e0ff); transition: width .7s cubic-bezier(.25,.9,.3,1); }
+.ms-dept-list .val { text-align: right; font-size: 11.5px; color: #7fe4ff; font-variant-numeric: tabular-nums; }
+.ms-dept-list .rate { text-align: right; font-size: 11px; font-variant-numeric: tabular-nums; }
+.ms-dept-list .rate.up { color: #35e0b0; }
+.ms-dept-list .rate.down { color: #ff9d6b; }
+
+/* 滚动模式：内容超出面板高度时纵向滚动（行高固定，不再均分撑满） */
+.ms-panel.is-scroll .ms-rank { overflow-y: auto; justify-content: flex-start; padding-right: 4px; }
+.ms-panel.is-scroll .ms-rank li { flex: 0 0 auto; min-height: 27px; max-height: 32px; }
+.ms-panel.is-scroll .ms-rank::-webkit-scrollbar { width: 5px; }
+.ms-panel.is-scroll .ms-rank::-webkit-scrollbar-track { background: transparent; }
+.ms-panel.is-scroll .ms-rank::-webkit-scrollbar-thumb { background: rgba(63,150,235,.5); border-radius: 3px; }
+.ms-panel.is-scroll .ms-rank { scrollbar-width: thin; scrollbar-color: rgba(63,150,235,.5) transparent; }
+
+/* 地图悬停 → 榜行高亮（单向反向联动） */
+.ms-rank li.is-active .val { color: #ffd98a; }
+
+/* ===== 环形分布模块（学历 / 职务）：同心圆环弧 + 图例列表 ===== */
+.ms-donut-body {
+  flex: 1 1 auto; min-height: 0;
+  display: flex; align-items: center; gap: 12px;
+}
+.ms-donut-chart {
+  position: relative; flex: 0 0 auto;
+  height: 100%; aspect-ratio: 1 / 1; max-width: 56%;
+}
+/* 同心圆环弧（SVG，随容器等比缩放） */
+.ms-arc { display: block; width: 100%; height: 100%; overflow: visible; }
+/* 数据刷新时圆弧长度平滑过渡 */
+.ms-arc circle { transition: stroke-dasharray .8s cubic-bezier(.25,.9,.3,1); }
+.ms-donut-center {
+  position: absolute; inset: 0; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.25;
+}
+.ms-donut-center b { font-size: 16px; font-weight: 700; color: #eaf7ff; letter-spacing: .5px; font-variant-numeric: tabular-nums; }
+.ms-donut-center em { font-size: 10px; font-style: normal; color: #6e9ccb; }
+
+.ms-donut-legend {
+  flex: 1 1 auto; min-width: 0; list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 9px;
+}
+.ms-donut-legend li { display: flex; align-items: center; gap: 6px; font-size: 11.5px; min-height: 16px; }
+.ms-donut-legend .dot { flex: 0 0 8px; width: 8px; height: 8px; border-radius: 50%; }
+.ms-donut-legend .nm { flex: 1 1 auto; min-width: 0; color: #cfe4ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-donut-legend .pct { flex: 0 0 auto; color: #7fe4ff; font-variant-numeric: tabular-nums; }
+
+/* ===== 年龄分布：横轴年龄 / 纵轴人数（纯 CSS 柱状图） ===== */
+.ms-age {
+  flex: 1 1 auto; min-height: 0;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  grid-template-rows: 1fr 16px;
+  column-gap: 6px;
+}
+/* 纵轴刻度 */
+.ms-age-axis {
+  grid-area: 1 / 1;
+  display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end;
+  font-size: 9.5px; color: #5f86b5; font-variant-numeric: tabular-nums; line-height: 1;
+}
+/* 绘图区：横向网格线用 repeating-linear-gradient 画，零额外节点 */
+.ms-age-plot {
+  grid-area: 1 / 2;
+  position: relative; display: flex; align-items: flex-end; gap: 7px;
+  border-bottom: 1px solid rgba(63,150,235,.32);
+  background: repeating-linear-gradient(
+    to top,
+    rgba(63,150,235,.16) 0 1px,
+    transparent 1px 20%
+  );
+}
+.ms-age-col { flex: 1 1 0; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.ms-age-bar {
+  display: block; width: 100%; max-width: 20px; border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, #7fe4ff, #2b7aff);
+  box-shadow: 0 0 8px rgba(87,224,255,.28);
+  /* 数据刷新时柱高平滑过渡 */
+  transition: height .7s cubic-bezier(.25,.9,.3,1);
+}
+/* 横轴标签（与柱同宽同间距，保证对齐） */
+.ms-age-xl { grid-area: 2 / 2; display: flex; gap: 7px; padding-top: 3px; }
+.ms-age-xl span {
+  flex: 1 1 0; text-align: center; white-space: nowrap;
+  font-size: 9.5px; color: #5f86b5; font-variant-numeric: tabular-nums;
+}
+/* 折线图容器（司龄分布） */
+.ms-line-chart { flex: 1 1 auto; min-height: 0; width: 100%; }
+/* 分组柱：每档两条（男 / 女） */
+.ms-age-col.is-group { gap: 3px; }
+.ms-age-col.is-group .ms-age-bar { max-width: none; flex: 1 1 0; }
+.ms-age-bar.male { background: linear-gradient(180deg, #7fe4ff, #2b7aff); }
+.ms-age-bar.female {
+  background: linear-gradient(180deg, #ffa8d8, #e0559f);
+  box-shadow: 0 0 8px rgba(255,127,192,.3);
+}
+/* 标题右侧图例 */
+.ms-age-legend {
+  margin-left: auto; display: flex; align-items: center; gap: 10px;
+  font-size: 10.5px; font-weight: 400; letter-spacing: 0; color: #7fa2cc;
+}
+.ms-age-legend em { display: inline-flex; align-items: center; gap: 4px; font-style: normal; font-variant-numeric: tabular-nums; }
+.ms-age-legend i { width: 7px; height: 7px; border-radius: 2px; }
+
+/* ===== 底部宽面板：最近入职人员（表头 + 表格，无标题栏） ===== */
+.ms-dock {
+  position: absolute; left: 362px; right: 362px; bottom: 34px; z-index: 6;
+  height: 200px; padding: 12px 18px 10px;
+  display: flex; flex-direction: column;
+  background: linear-gradient(180deg, rgba(10, 42, 90, .9), rgba(6, 22, 48, .86));
+  border: 1px solid rgba(70, 160, 255, .42);
+  border-radius: 10px; box-shadow: 0 0 24px rgba(14, 64, 128, .5), inset 0 1px 0 rgba(120, 200, 255, .12);
+}
+.ms-dock::before, .ms-dock::after {
+  content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid #57e0ff;
+}
+.ms-dock::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
+.ms-dock::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; border-radius: 0 0 10px 0; }
+
+/* 表格：表头固定，数据行按剩余高度等分撑满 */
+.ms-dock-table { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.ms-dock-row {
+  display: grid; grid-template-columns: 1.25fr 1fr 1.1fr 1fr .85fr 1.1fr;
+  align-items: center; gap: 8px; padding: 0 4px;
+  font-size: 12.5px; color: #cfe4ff;
+  border-bottom: 1px solid rgba(63,150,235,.12);
+}
+.ms-dock-row:last-child { border-bottom: 0; }
+.ms-dock-th {
+  flex: 0 0 auto; height: 36px; color: #7fa2cc; font-size: 12px; letter-spacing: 1px;
+  border-bottom: 1px solid rgba(63,150,235,.32);
+}
+/* 数据区：一个「4 行高」的可视窗口，行绝对定位、靠 transform 上顶 */
+.ms-dock-view { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.ms-dock-item {
+  position: absolute; top: 0; left: 0; right: 0; height: calc(100% / 4);
+  min-height: 0; max-height: none;
+  transition: transform .6s cubic-bezier(.22, .9, .25, 1);
+  will-change: transform;
+}
+/* 新进来的一行：从可视区下方（下一格）滑入 */
+.ms-dock-item.ms-row-enter { animation: msRowEnter .6s cubic-bezier(.22, .9, .25, 1) both; }
+@keyframes msRowEnter {
+  from { transform: translateY(calc((var(--r) + 1) * 100%)); opacity: 0; }
+  to   { transform: translateY(calc(var(--r) * 100%)); opacity: 1; }
+}
+.ms-dock-user { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #e3f3ff; }
+.ms-dock-ava {
+  width: 25px; height: 25px; border-radius: 50%; flex: 0 0 25px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,20,40,.5);
+  box-shadow: 0 0 0 1.2px rgba(127,228,255,.6), 0 0 9px rgba(87,224,255,.32);
+}
+.ms-dock-code { font-variant-numeric: tabular-nums; color: #9fc4ee; letter-spacing: .5px; }
+.ms-dock-edu { color: #7fe4ff; }
+.ms-dock-date { font-variant-numeric: tabular-nums; color: #ffd98a; }
+
+/* ===== 地图悬停科技风：引线 + 光点 + 职务小面板 ===== */
+/* 覆盖层偏移必须与 .ms-chart 完全一致（含矮屏断点），坐标都是容器内像素 */
+.ms-hover-layer {
+  position: absolute; z-index: 7; pointer-events: none;
+  left: 0; right: 0; top: 194px; bottom: 242px;
+}
+.ms-hv-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+/* 引线：斜段 + 横段，pathLength=1 归一化后做描边生长动画 */
+.ms-hv-line {
+  fill: none; stroke: #57e0ff; stroke-width: 1.6; stroke-linecap: round;
+  filter: drop-shadow(0 0 5px rgba(87, 224, 255, .8));
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: msLeadDraw .45s cubic-bezier(.3, .8, .3, 1) .05s forwards;
+}
+@keyframes msLeadDraw { to { stroke-dashoffset: 0; } }
+
+/* 区域中心：亮点 + 扩散呼吸环 */
+.ms-hv-dot, .ms-hv-ring {
+  position: absolute; border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.ms-hv-dot {
+  width: 9px; height: 9px; background: #aef4ff;
+  box-shadow: 0 0 6px #bdf6ff, 0 0 16px rgba(87, 224, 255, .95);
+}
+.ms-hv-ring {
+  width: 30px; height: 30px;
+  border: 1.6px solid rgba(87, 224, 255, .85);
+  animation: msHvRing 1.6s ease-out infinite;
+}
+@keyframes msHvRing {
+  0% { opacity: .95; width: 12px; height: 12px; }
+  100% { opacity: 0; width: 44px; height: 44px; }
+}
+
+/* 职务人数小面板：切角 + 青色描边 + 辉光；位置由内联 left/top 决定（贴地图边缘） */
+.ms-hv-tip {
+  position: absolute; padding: 10px 14px 11px;
+  background: linear-gradient(180deg, rgba(10, 42, 90, .94), rgba(6, 22, 48, .92));
+  border: 1px solid rgba(87, 224, 255, .6);
+  clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+  box-shadow: 0 0 22px rgba(40, 130, 240, .45);
+  animation: msTipIn .28s cubic-bezier(.25, .9, .3, 1) .18s both;
+}
+@keyframes msTipIn {
+  from { opacity: 0; margin-top: 8px; }
+  to { opacity: 1; margin-top: 0; }
+}
+.ms-hv-head {
+  display: flex; align-items: baseline; gap: 9px;
+  padding-bottom: 6px; margin-bottom: 7px;
+  border-bottom: 1px solid rgba(87, 224, 255, .3);
+}
+.ms-hv-head b {
+  font-size: 16px; color: #eaf7ff; letter-spacing: 2.5px;
+  text-shadow: 0 0 12px rgba(87, 224, 255, .6);
+}
+.ms-hv-head span {
+  margin-left: auto; font-size: 11.5px; color: #9fc0e6;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.ms-hv-head span b { color: #ffc861; font-size: 14px; }
+.ms-hv-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.ms-hv-list li {
+  display: grid; grid-template-columns: 8px minmax(0, 62px) 1fr 30px;
+  align-items: center; gap: 7px; font-size: 11.5px;
+}
+.ms-hv-list li i { width: 8px; height: 8px; border-radius: 2px; }
+.ms-hv-list .nm { color: #cfe4ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-hv-list .bar { height: 5px; border-radius: 3px; background: rgba(30, 74, 132, .55); overflow: hidden; }
+.ms-hv-list .bar > span { display: block; height: 100%; border-radius: 3px; transition: width .7s cubic-bezier(.25, .9, .3, 1); }
+.ms-hv-list .val { text-align: right; color: #7fe4ff; font-variant-numeric: tabular-nums; }
+
+/* ===== 南海诸岛小图（合规保留） ===== */
+.ms-inset {
+  position: absolute; z-index: 5; pointer-events: none;
+  right: 374px; bottom: 254px; width: 120px; height: 152px;
+  background: rgba(8, 30, 62, .62);
+  border: 1px solid rgba(70, 160, 255, .45);
+  border-radius: 6px;
+  box-shadow: 0 0 14px rgba(14, 64, 128, .5);
+}
+.ms-inset-chart { width: 100%; height: 100%; }
+.ms-inset-cap {
+  position: absolute; left: 0; right: 0; bottom: 3px; text-align: center;
+  font-size: 10px; letter-spacing: 1px; color: #6e9ccb;
+}
+
+@media (max-width: 1280px) {
+  .ms-center-stats { left: 350px; right: 350px; }
+  .ms-dock { left: 350px; right: 350px; }
+  .ms-inset { right: 362px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ms-tb-status i { animation: none; }
+  .ms-hv-ring { animation: none; opacity: .5; }
+  .ms-hv-line { animation: none; stroke-dashoffset: 0; }
+  .ms-hv-tip { animation: none; }
+}
+
+/* ===== 矮视口适配（笔记本小窗 / 768p 以下）：整体收紧，避免行被裁切 ===== */
+@media (max-height: 600px) {
+  .ms-col { top: 74px; bottom: 30px; gap: 8px; }
+  .ms-panel { padding: 8px 13px 9px; border-radius: 8px; }
+  .ms-panel-title { font-size: 12.5px; padding-bottom: 4px; margin-bottom: 5px; }
+  .ms-panel-tip { font-size: 10px; }
+  .ms-rank li { grid-template-columns: 15px minmax(0, 50px) 1fr 28px 48px; min-height: 16px; }
+  .ms-rank .nm, .ms-rank .val { font-size: 11.5px; }
+  .ms-rank .idx { height: 15px; line-height: 15px; font-size: 10px; }
+  .ms-rank .bar { height: 5px; }
+  .ms-rank .delta { font-size: 9.5px; }
+  .ms-dept-head { font-size: 9.5px; }
+  .ms-dept-head, .ms-dept-list li { grid-template-columns: minmax(0, 56px) 1fr 28px 38px 38px; }
+  .ms-dept-list .nm, .ms-dept-list .val, .ms-dept-list .rate { font-size: 10.5px; }
+  .ms-donut-center b { font-size: 13px; }
+  .ms-donut-center em { font-size: 9px; }
+  .ms-donut-legend li { font-size: 10.5px; min-height: 13px; }
+  .ms-donut-legend .dot { flex-basis: 6px; width: 6px; height: 6px; }
+  /* 矮屏同步收紧：统计面板更矮、地图下移更少 */
+  .ms-center-stats { top: 70px; height: 82px; padding: 0 16px; }
+  .ms-kpi { gap: 5px; }
+  .ms-kpi-label { font-size: 11px; }
+  .ms-kpi-badge { font-size: 9.5px; padding: 0 4px; }
+  .ms-digit { --dh: 32px; width: 22px; border-radius: 4px; }
+  .ms-digit-reel i { font-size: 18px; }
+  .ms-kpi-unit { font-size: 11px; }
+  .ms-chart { top: 160px; bottom: 172px; }
+  .ms-hover-layer { top: 160px; bottom: 172px; }
+  .ms-hv-tip { padding: 7px 11px 8px; }
+  .ms-hv-head b { font-size: 14px; }
+  .ms-hv-list { gap: 4px; }
+  /* 矮屏：宽面板收紧，避免与地图/排行重叠 */
+  .ms-dock { bottom: 30px; height: 132px; padding: 8px 14px 6px; }
+  .ms-dock-th { height: 26px; }
+  .ms-dock-row { font-size: 11px; }
+  .ms-inset { bottom: 184px; right: 362px; width: 92px; height: 118px; }
+}
+
+/* ===== 覆盖层 / 引导 ===== */
+.ms-overlay {
+  position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center;
+  color: #7fd4ff; font-size: 14px; letter-spacing: 3px; pointer-events: none;
+}
+.ms-guide { pointer-events: auto; background: rgba(4,11,24,.72); }
+.ms-guide-card {
+  width: 620px; max-width: 90vw; padding: 26px 30px; letter-spacing: normal;
+  background: linear-gradient(180deg, rgba(9,26,54,.96), rgba(7,18,38,.96));
+  border: 1px solid rgba(63,150,235,.45); border-radius: 12px;
+  box-shadow: 0 0 36px rgba(12,58,110,.7);
+  color: #cfe4ff; font-size: 14px; line-height: 1.85; text-align: left;
+}
+.ms-guide-card h3 { margin: 0 0 12px; font-size: 18px; color: #eaf6ff; letter-spacing: 1px; }
+.ms-guide-card ol { padding-left: 22px; margin: 10px 0; color: #9fc0e6; }
+.ms-guide-card b { color: #7fe4ff; }

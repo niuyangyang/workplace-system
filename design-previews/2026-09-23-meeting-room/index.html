@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>会议室预订 · 设计方向预览</title>
+<style>
+  :root{
+    --ink:#1f2733; --ink-2:#5b647a; --line:#e8ebf1; --bg:#eef1f6;
+    --port-blue:#3b5bff; --ok:#16a34a; --busy:#e5484d; --soon:#f59e0b;
+    --sysfont:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sysfont);-webkit-font-smoothing:antialiased;}
+  .topbar{max-width:1180px;margin:0 auto;padding:28px 24px 8px;}
+  .topbar h1{font-size:22px;margin:0 0 6px;letter-spacing:.5px;}
+  .topbar p{margin:0;color:var(--ink-2);font-size:13px;line-height:1.6;}
+  .topbar .note{margin-top:10px;display:inline-block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--ink-2);}
+  .dials{max-width:1180px;margin:18px auto 0;padding:0 24px;display:flex;gap:26px;flex-wrap:wrap;}
+  .dial{font-size:12px;color:var(--ink-2);}
+  .dial b{color:var(--ink);}
+  .dial input{vertical-align:middle;margin-left:8px;}
+  .grid{max-width:1180px;margin:22px auto 60px;padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media (max-width:860px){.grid{grid-template-columns:1fr;}}
+  .dir{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;display:flex;flex-direction:column;}
+  .dir.sel{outline:3px solid var(--port-blue);outline-offset:0;}
+  .dir-head{padding:14px 18px;border-bottom:1px solid var(--line);}
+  .dir-head .name{font-size:15px;font-weight:600;}
+  .dir-head .tag{font-size:12px;color:var(--ink-2);margin-top:3px;}
+  .dir-head .rec{display:inline-block;margin-left:8px;font-size:11px;color:#fff;background:var(--port-blue);border-radius:999px;padding:1px 8px;vertical-align:middle;}
+  .mock{padding:16px 18px;flex:1;}
+  .pick{display:block;width:100%;border:0;background:var(--port-blue);color:#fff;font-size:14px;padding:11px;border-radius:10px;cursor:pointer;font-family:var(--sysfont);}
+  .pick.confirm{background:#16a34a;}
+  .picked-note{display:none;padding:10px 18px;font-size:12px;color:#16a34a;background:#f0fdf4;border-top:1px solid var(--line);}
+
+  /* ============ 方向 A：延续门户 ============ */
+  .a-wrap{background:#f4f6fb;border-radius:10px;padding:14px;}
+  .a-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
+  .a-top .t{font-size:17px;font-weight:600;}
+  .a-top .s{font-size:12px;color:var(--ink-2);}
+  .a-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .a-filters .f{font-size:12px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--ink-2);}
+  .a-filters .f.on{background:var(--port-blue);color:#fff;border-color:var(--port-blue);}
+  .a-card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px;transition:transform .15s,box-shadow .15s;}
+  .a-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(30,40,60,.08);}
+  .a-card .rn{font-weight:600;font-size:15px;}
+  .a-card .rl{font-size:12px;color:var(--ink-2);margin:2px 0 8px;}
+  .a-card .meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;}
+  .a-card .cap{font-weight:600;}
+  .a-tag{background:#eef2ff;color:var(--port-blue);border-radius:5px;padding:2px 7px;font-size:11px;}
+  .a-status{margin-left:auto;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;}
+  .a-status.free{background:#e7f7ec;color:var(--ok);}
+  .a-status.busy{background:#fdeaea;color:var(--busy);}
+  .a-status.soon{background:#fef3e0;color:var(--soon);}
+  .a-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--ink-2);}
+  .a-btn{background:var(--port-blue);color:#fff;border:0;border-radius:7px;padding:6px 16px;font-size:13px;cursor:pointer;font-family:var(--sysfont);}
+
+  /* ============ 方向 B：高效工具感（Linear 风） ============ */
+  .b-wrap{background:#fafbfc;border-radius:10px;padding:14px;border:1px solid #eef0f3;}
+  .b-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .b-top .t{font-size:15px;font-weight:600;letter-spacing:.3px;}
+  .b-top .cnt{font-family:var(--mono);font-size:12px;color:#6b7280;}
+  .b-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+  .b-chips .c{font-family:var(--mono);font-size:11px;background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:4px 9px;color:#374151;}
+  .b-row{display:grid;grid-template-columns:84px 1fr auto;gap:12px;align-items:center;padding:11px 4px;border-top:1px solid #eef0f3;}
+  .b-row:first-of-type{border-top:0;}
+  .b-code{font-family:var(--mono);font-size:12px;color:#4f46e5;font-weight:600;}
+  .b-name{font-size:14px;font-weight:500;}
+  .b-sub{font-size:12px;color:#6b7280;margin-top:1px;}
+  .b-eq{font-family:var(--mono);font-size:11px;color:#9ca3af;margin-top:2px;}
+  .b-right{text-align:right;}
+  .b-st{font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+  .b-st .dot{width:7px;height:7px;border-radius:50%;}
+  .b-st.free .dot{background:var(--ok);} .b-st.free{color:var(--ok);}
+  .b-st.busy .dot{background:var(--busy);} .b-st.busy{color:var(--busy);}
+  .b-st.soon .dot{background:var(--soon);} .b-st.soon{color:var(--soon);}
+  .b-next{font-size:11px;color:#9ca3af;margin-top:2px;}
+  .b-book{margin-top:6px;font-family:var(--mono);font-size:11px;background:#4f46e5;color:#fff;border:0;border-radius:6px;padding:4px 12px;cursor:pointer;}
+
+  /* ============ 方向 C：卡片画廊 / 留白编辑式 ============ */
+  .c-wrap{background:#f7f8fa;border-radius:10px;padding:14px;}
+  .c-top{margin-bottom:14px;}
+  .c-top .t{font-size:18px;font-weight:600;letter-spacing:.5px;}
+  .c-top .s{font-size:12px;color:#7c8395;margin-top:3px;}
+  .c-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .c-tile{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #eceef2;}
+  .c-photo{height:96px;background:linear-gradient(135deg,#dfe3ea,#c9ced8);display:flex;align-items:flex-end;padding:8px 10px;}
+  .c-photo span{font-size:10px;color:#5b647a;background:rgba(255,255,255,.7);border-radius:5px;padding:2px 6px;}
+  .c-body{padding:10px 12px 12px;}
+  .c-name{font-size:16px;font-weight:600;letter-spacing:.5px;}
+  .c-meta{font-size:12px;color:#7c8395;margin-top:3px;}
+  .c-eq{font-size:11px;color:#9aa1ad;margin-top:6px;}
+  .c-bar{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+  .c-st{font-size:12px;font-weight:600;}
+  .c-st.free{color:#0f766e;} .c-st.busy{color:var(--busy);} .c-st.soon{color:var(--soon);}
+  .c-book{font-size:12px;color:#0f766e;border:1px solid #0f766e;background:#fff;border-radius:7px;padding:4px 12px;cursor:pointer;font-family:var(--sysfont);}
+
+  /* ============ 方向 D：侧栏空间导向 / 非对称 ============ */
+  .d-wrap{display:grid;grid-template-columns:128px 1fr;gap:0;background:#f5f6f8;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
+  .d-nav{background:#eef1f7;padding:12px 10px;border-right:1px solid var(--line);}
+  .d-nav .nh{font-size:11px;color:var(--ink-2);margin:0 0 8px 2px;letter-spacing:.5px;}
+  .d-bld{font-size:13px;font-weight:600;padding:6px 8px;border-radius:7px;margin-bottom:4px;}
+  .d-bld.on{background:#fff;color:var(--port-blue);}
+  .d-floor{font-size:12px;color:var(--ink-2);padding:4px 8px 4px 18px;display:flex;justify-content:space-between;}
+  .d-floor .n{font-family:var(--mono);font-size:11px;background:#fff;border-radius:5px;padding:0 5px;color:var(--ink-2);}
+  .d-main{padding:12px 14px;}
+  .d-main .t{font-size:14px;font-weight:600;margin-bottom:10px;}
+  .d-card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:9px;}
+  .d-card .rn{font-size:14px;font-weight:600;}
+  .d-card .rl{font-size:12px;color:var(--ink-2);margin:2px 0 6px;}
+  .d-card .meta{display:flex;gap:8px;align-items:center;font-size:12px;flex-wrap:wrap;}
+  .d-cap{font-weight:600;}
+  .d-tag{background:#eef2ff;color:var(--port-blue);border-radius:5px;padding:2px 6px;font-size:11px;}
+  .d-st{margin-left:auto;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;}
+  .d-st.free{background:#e7f7ec;color:var(--ok);} .d-st.busy{background:#fdeaea;color:var(--busy);} .d-st.soon{background:#fef3e0;color:var(--soon);}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>会议室预订 · 设计方向预览</h1>
+    <p>这是设计方向样机，用于选择视觉与交互气质，不是最终页面。选定方向（或提出混搭）后，我才进入正式实现。</p>
+    <div class="note">四方向沿「布局 × 色彩 × 密度 × 字体」轴级差异，请只看遮住颜色也能区分彼此。</div>
+  </div>
+
+  <div class="dials">
+    <label class="dial">视觉冒险度 <b>5</b><input type="range" min="1" max="10" value="5" disabled></label>
+    <label class="dial">动效强度 <b>4</b><input type="range" min="1" max="10" value="4" disabled></label>
+    <label class="dial">信息密度 <b>6</b><input type="range" min="1" max="10" value="6" disabled></label>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <!-- 方向 A -->
+    <section class="dir" data-dir="A">
+      <div class="dir-head">
+        <div class="name">方向 A · 延续门户 <span class="rec">推荐</span></div>
+        <div class="tag">最稳，严格沿用现有门户语言（蓝 #3b5bff + antd 卡片网格），风险最低</div>
+      </div>
+      <div class="mock">
+        <div class="a-wrap">
+          <div class="a-top"><div class="t">会议室预订</div><div class="s">全系统 38 间可预约</div></div>
+          <div class="a-filters">
+            <span class="f on">全部楼宇</span><span class="f">全部楼层</span><span class="f">容量</span><span class="f">设备</span><span class="f">状态</span>
+          </div>
+          <div class="a-card">
+            <div class="rn">致远厅</div><div class="rl">主楼 · 3F</div>
+            <div class="meta"><span class="cap">12 人</span><span class="a-tag">投影</span><span class="a-tag">视频会议</span><span class="a-tag">白板</span><span class="a-status free">空闲</span></div>
+            <div class="a-foot"><span>下次可用：现在</span><button class="a-btn">预订</button></div>
+          </div>
+          <div class="a-card">
+            <div class="rn">305 会议室</div><div class="rl">主楼 · 3F</div>
+            <div class="meta"><span class="cap">6 人</span><span class="a-tag">电视</span><span class="a-tag">白板</span><span class="a-status busy">使用中</span></div>
+            <div class="a-foot"><span>使用中 09:00-10:30</span><button class="a-btn" style="background:#cbd2e6;color:#5b647a;cursor:not-allowed">已满</button></div>
+          </div>
+          <div class="a-card">
+            <div class="rn">路演厅</div><div class="rl">研发中心 · 2F</div>
+            <div class="meta"><span class="cap">30 人</span><span class="a-tag">LED屏</span><span class="a-tag">音响</span><span class="a-tag">视频会议</span><span class="a-status soon">即将空出</span></div>
+            <div class="a-foot"><span>10:30 后可用</span><button class="a-btn">预订</button></div>
+          </div>
+        </div>
+      </div>
+      <button class="pick" data-dir="A">选择方向 A</button>
+      <div class="picked-note">已选择 A，请在对话中告诉我「选 A」即可进入正式实现。</div>
+    </section>
+
+    <!-- 方向 B -->
+    <section class="dir" data-dir="B">
+      <div class="dir-head">
+        <div class="name">方向 B · 高效工具感</div>
+        <div class="tag">Linear 风：高密列表 + 等宽编号 + 语义状态点，工具属性强</div>
+      </div>
+      <div class="mock">
+        <div class="b-wrap">
+          <div class="b-top"><div class="t">会议室</div><div class="cnt">38 ROOMS</div></div>
+          <div class="b-chips"><span class="c">all</span><span class="c">free</span><span class="c">≥10</span><span class="c">vc</span><span class="c">M</span></div>
+          <div class="b-row">
+            <div class="b-code">M-301</div>
+            <div><div class="b-name">致远厅</div><div class="b-sub">主楼 · 3F · 12人</div><div class="b-eq">投影 / 视频会议 / 白板</div></div>
+            <div class="b-right"><span class="b-st free"><span class="dot"></span>空闲</span><div class="b-next">可用</div><button class="b-book">预订</button></div>
+          </div>
+          <div class="b-row">
+            <div class="b-code">M-305</div>
+            <div><div class="b-name">305 会议室</div><div class="b-sub">主楼 · 3F · 6人</div><div class="b-eq">电视 / 白板</div></div>
+            <div class="b-right"><span class="b-st busy"><span class="dot"></span>使用中</span><div class="b-next">09:00-10:30</div></div>
+          </div>
+          <div class="b-row">
+            <div class="b-code">R-201</div>
+            <div><div class="b-name">路演厅</div><div class="b-sub">研发中心 · 2F · 30人</div><div class="b-eq">LED屏 / 音响 / 视频会议</div></div>
+            <div class="b-right"><span class="b-st soon"><span class="dot"></span>即将空出</span><div class="b-next">10:30</div><button class="b-book">预订</button></div>
+          </div>
+        </div>
+      </div>
+      <button class="pick" data-dir="B">选择方向 B</button>
+      <div class="picked-note">已选择 B，请在对话中告诉我「选 B」即可进入正式实现。</div>
+    </section>
+
+    <!-- 方向 C -->
+    <section class="dir" data-dir="C">
+      <div class="dir-head">
+        <div class="name">方向 C · 卡片画廊</div>
+        <div class="tag">留白编辑式：大图卡 + 大字房名 + 克制信息，安静高级（无实景图时以占位块示意）</div>
+      </div>
+      <div class="mock">
+        <div class="c-wrap">
+          <div class="c-top"><div class="t">找一间会议室</div><div class="s">38 间 · 现在 21 间空闲</div></div>
+          <div class="c-grid">
+            <div class="c-tile">
+              <div class="c-photo"><span>会议室实景图</span></div>
+              <div class="c-body"><div class="c-name">致远厅</div><div class="c-meta">主楼 3F · 12 人</div><div class="c-eq">投影 · 视频会议 · 白板</div>
+                <div class="c-bar"><span class="c-st free">空闲</span><button class="c-book">预订</button></div></div>
+            </div>
+            <div class="c-tile">
+              <div class="c-photo"><span>会议室实景图</span></div>
+              <div class="c-body"><div class="c-name">路演厅</div><div class="c-meta">研发中心 2F · 30 人</div><div class="c-eq">LED屏 · 音响 · 视频会议</div>
+                <div class="c-bar"><span class="c-st soon">10:30 空出</span><button class="c-book">预订</button></div></div>
+            </div>
+            <div class="c-tile">
+              <div class="c-photo"><span>会议室实景图</span></div>
+              <div class="c-body"><div class="c-name">头脑风暴室</div><div class="c-meta">研发中心 2F · 8 人</div><div class="c-eq">白板墙 · 便利贴</div>
+                <div class="c-bar"><span class="c-st free">空闲</span><button class="c-book">预订</button></div></div>
+            </div>
+            <div class="c-tile">
+              <div class="c-photo"><span>会议室实景图</span></div>
+              <div class="c-body"><div class="c-name">接待室</div><div class="c-meta">行政楼 1F · 4 人</div><div class="c-eq">沙发 · 电视</div>
+                <div class="c-bar"><span class="c-st busy">已预订</span><button class="c-book" style="border-color:#cbd2e6;color:#9aa1ad">已满</button></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="pick" data-dir="C">选择方向 C</button>
+      <div class="picked-note">已选择 C，请在对话中告诉我「选 C」即可进入正式实现。</div>
+    </section>
+
+    <!-- 方向 D -->
+    <section class="dir" data-dir="D">
+      <div class="dir-head">
+        <div class="name">方向 D · 侧栏空间导向</div>
+        <div class="tag">非对称：左侧楼宇/楼层导航（带房间数），右侧该层房间，空间感强</div>
+      </div>
+      <div class="mock">
+        <div class="d-wrap">
+          <div class="d-nav">
+            <div class="nh">楼宇</div>
+            <div class="d-bld on">主楼</div>
+            <div class="d-floor">3F <span class="n">9</span></div>
+            <div class="d-floor">4F <span class="n">7</span></div>
+            <div class="d-bld">研发中心</div>
+            <div class="d-floor">2F <span class="n">12</span></div>
+            <div class="d-bld">行政楼</div>
+            <div class="d-floor">1F <span class="n">4</span></div>
+          </div>
+          <div class="d-main">
+            <div class="t">主楼 · 3F · 9 间</div>
+            <div class="d-card"><div class="rn">致远厅</div><div class="rl">3F · 12 人</div>
+              <div class="meta"><span class="d-cap">12 人</span><span class="d-tag">投影</span><span class="d-tag">视频会议</span><span class="d-st free">空闲</span></div></div>
+            <div class="d-card"><div class="rn">305 会议室</div><div class="rl">3F · 6 人</div>
+              <div class="meta"><span class="d-cap">6 人</span><span class="d-tag">电视</span><span class="d-st busy">使用中</span></div></div>
+            <div class="d-card"><div class="rn">培训室</div><div class="rl">3F · 24 人</div>
+              <div class="meta"><span class="d-cap">24 人</span><span class="d-tag">投影</span><span class="d-tag">音响</span><span class="d-st free">空闲</span></div></div>
+          </div>
+        </div>
+      </div>
+      <button class="pick" data-dir="D">选择方向 D</button>
+      <div class="picked-note">已选择 D，请在对话中告诉我「选 D」即可进入正式实现。</div>
+    </section>
+
+  </div>
+
+<script>
+  document.querySelectorAll('.pick').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var d = btn.getAttribute('data-dir');
+      document.querySelectorAll('.dir').forEach(function(s){ s.classList.remove('sel'); });
+      btn.closest('.dir').classList.add('sel');
+      document.querySelectorAll('.picked-note').forEach(function(n){ n.style.display='none'; });
+      btn.closest('.dir').querySelector('.picked-note').style.display='block';
+      btn.textContent = '已选择 ' + d + ' · 请在对话中确认';
+      btn.classList.add('confirm');
+    });
+  });
+</script>
+</body>
+</html>

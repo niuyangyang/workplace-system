@@ -1,23 +1,31 @@
-## TYPO3 v6.2
-# Ignore several upload and file directories.
-/fileadmin/user_upload/
-/fileadmin/_temp_/
-/fileadmin/_processed_/
-/uploads/
-# Ignore cache
-/typo3conf/temp_CACHED*
-/typo3conf/temp_fieldInfo.php
-/typo3conf/deprecation_*.log
-/typo3conf/ENABLE_INSTALL_TOOL
-/typo3conf/realurl_autoconf.php
-/FIRST_INSTALL
-# Ignore system folders, you should have them symlinked.
-# If not comment out the following entries.
-/typo3
-/typo3_src
-/typo3_src-*
-/Packages
-/.htaccess
-/index.php
-# Ignore temp directory.
-/typo3temp/
+# 依赖与构建产物
+node_modules/
+dist/
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.js
+vite.config.js.timestamp-*
+
+# 环境变量与密钥（含天地图 Key，切勿提交）
+.env.local
+.env.*.local
+
+# 开发过程日志
+*.log
+.dev*.log
+.build*.log
+.npm-*.log
+
+# 过程产物（体积大 / 本地用）
+screenshots/
+.shots/
+.build_verify/
+.trash/
+deploy/*.zip
+.workbuddy/
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

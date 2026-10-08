@@ -1,0 +1,72 @@
+.banner-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  max-width: 1388px;
+  margin: 0 auto;
+  padding: 76px 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+}
+
+.banner-tag {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 4px;
+  opacity: 0.92;
+  margin-bottom: 10px;
+  color: #fff !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+.banner-title {
+  color: #fff !important;
+  margin: 0 !important;
+  font-size: 34px !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.banner-sub {
+  display: block;
+  max-width: 760px;
+  margin-top: 12px !important;
+  font-size: 16px !important;
+  color: rgba(255, 255, 255, 0.94) !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.22);
+}
+
+/* ===== 业务页 banner：把本页关键数字放进标题/副标题 ===== */
+.banner-title .banner-num {
+  margin: 0 6px;
+  font-size: 42px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(255, 255, 255, 0.35), 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.banner-sub b {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* 逾期 / 未读等需要提醒的数字用暖色 */
+.banner-sub .is-warn {
+  color: #ffd89a;
+}
+
+.banner-sub .is-danger {
+  color: #ffb1b1;
+}
+
+@media (max-width: 768px) {
+  .banner-content {
+    padding: 72px 24px 0;
+  }
+  .banner-title {
+    font-size: 26px !important;
+  }
+}

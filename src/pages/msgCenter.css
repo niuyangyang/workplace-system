@@ -1,0 +1,142 @@
+/* ===== 门户次级页（待办事项 / 通知公告）=====
+   内容区样式取自 sjtu-admin 门户（.portal / .page-head / .notice-*），
+   仅容器宽度沿用本项目首页的对齐宽度（源项目为 1440）。 */
+
+.mc-layout {
+  min-height: 100vh;
+  background: #f4f5f7;
+}
+
+/* 内容容器（源项目同名规则：padding 24px + 居中） */
+.portal {
+  padding: 24px;
+  max-width: 1388px;
+  margin: 0 auto;
+}
+
+.page-head {
+  margin-bottom: 16px;
+}
+
+/* 通知公告：标题链接 */
+.notice-title-link {
+  color: #c8161e;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.notice-title-link:hover {
+  text-decoration: underline;
+}
+
+/* 详情抽屉内容 */
+.notice-detail-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2430;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+.notice-detail-meta {
+  margin-bottom: 16px;
+}
+
+.notice-rich {
+  font-size: 14px;
+  line-height: 1.9;
+  color: #333;
+}
+
+.notice-rich p {
+  margin: 0 0 14px;
+}
+
+.notice-rich strong {
+  color: #c8161e;
+}
+
+/* 详情抽屉内的附件区：整行可点，点击即下载 */
+.notice-files {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid #eef1f6;
+}
+
+.notice-files-title {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2430;
+}
+
+.notice-files-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notice-files-list li + li {
+  margin-top: 8px;
+}
+
+.notice-file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #eef1f6;
+  border-radius: 8px;
+  background: #fafbfc;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.notice-file:hover {
+  border-color: rgba(200, 22, 30, 0.35);
+  background: #fff6f6;
+}
+
+.notice-file-icon {
+  flex: 0 0 auto;
+  font-size: 16px;
+  color: #c8161e;
+}
+
+.notice-file-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+  color: #1f2430;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notice-file:hover .notice-file-name {
+  color: #c8161e;
+}
+
+.notice-file-size {
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: #98a1b0;
+  font-variant-numeric: tabular-nums;
+}
+
+.notice-file-dl {
+  flex: 0 0 auto;
+  font-size: 15px;
+  color: #98a1b0;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.notice-file:hover .notice-file-dl {
+  color: #c8161e;
+  transform: translateY(1px);
+}
+
+/* 本项目 ConfigProvider 把 borderRadius 设为 5，源项目为 antd 默认 8，这里还原 */
+.portal .ant-card {
+  border-radius: 8px;
+}

@@ -1,0 +1,88 @@
+/* ===== 应用中心 =====
+   类名与规则逐条移植自 sjtu-admin 门户（src/index.css 的「应用中心区块」），
+   保证观感与交互完全一致；仅外层容器沿用本项目首页的对齐宽度。
+   差异说明：本项目 ConfigProvider 把 borderRadius 设为 5，源项目为 antd 默认 8，
+   故在 .subsystem-card 上显式还原 8px。 */
+
+.app-grid {
+  width: 100%;
+  max-width: 1388px;
+  margin: 0 auto;
+  padding: 40px 24px 44px;
+}
+
+/* ===== 区块头 ===== */
+.portal-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.portal-section-head h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2430;
+  margin: 0;
+}
+.portal-section-head span {
+  font-size: 13px;
+  color: #8a94a6;
+}
+
+/* ===== 卡片内部 ===== */
+.subsystem-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.subsystem-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #fce9ea;
+  color: #c8161e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.subsystem-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.subsystem-meta {
+  flex: 1;
+  min-width: 0;
+}
+.subsystem-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2430;
+}
+.subsystem-desc {
+  font-size: 12px;
+  color: #8a94a6;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.subsystem-arrow {
+  color: #c8cdd6;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.subsystem-card:hover .subsystem-arrow {
+  color: #c8161e;
+  transform: translateX(3px);
+}
+
+/* 本项目圆角令牌为 5px，这里还原源项目的 8px */
+.app-grid .subsystem-card {
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .app-grid {
+    padding: 28px 20px 32px;
+  }
+}

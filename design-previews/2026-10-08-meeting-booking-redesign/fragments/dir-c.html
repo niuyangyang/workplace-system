@@ -1,0 +1,196 @@
+<style>
+.dir-c{width:960px;height:600px;position:relative;overflow:hidden;background:#101318;color:#e6e9ef;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;font-size:12px;line-height:1.4;display:flex;flex-direction:column;}
+.dir-c *{margin:0;padding:0;box-sizing:border-box;font-style:normal;}
+.dir-c .mono{font-family:ui-monospace,"SF Mono",Consolas,monospace;}
+
+/* 顶部细条 */
+.dir-c .topbar{flex:0 0 40px;background:#171b22;border-bottom:1px solid #262d38;display:flex;align-items:center;justify-content:space-between;padding:0 14px;}
+.dir-c .room{font-size:12px;font-weight:600;color:#e6e9ef;}
+.dir-c .room .meta{color:#98a2b3;font-weight:400;}
+.dir-c .room .sep{color:#5a6474;margin:0 5px;}
+.dir-c .topright{display:flex;align-items:center;gap:16px;}
+.dir-c .release{display:flex;align-items:center;gap:6px;font-size:11px;color:#98a2b3;}
+.dir-c .release .dot{width:6px;height:6px;border-radius:50%;background:#f59e0b;}
+.dir-c .release .tm{font-family:ui-monospace,"SF Mono",Consolas,monospace;color:#e6e9ef;}
+.dir-c .back{font-size:11px;color:#98a2b3;}
+.dir-c .back:hover{color:#e6e9ef;}
+
+/* 周网格 */
+.dir-c .gridwrap{flex:1 1 auto;min-height:0;padding:0 12px;display:flex;flex-direction:column;}
+.dir-c .dayhead{flex:0 0 26px;display:flex;border-bottom:1px solid #262d38;}
+.dir-c .dayhead .corner{flex:0 0 46px;}
+.dir-c .dayhead .day{flex:1 1 0;display:flex;align-items:center;gap:6px;padding-left:8px;font-size:11px;color:#98a2b3;}
+.dir-c .dayhead .day .dt{font-family:ui-monospace,"SF Mono",Consolas,monospace;font-size:10px;}
+.dir-c .dayhead .day.on{color:#e6e9ef;}
+.dir-c .dayhead .day.on .dt{color:#3ecf8e;}
+.dir-c .gridbody{flex:1 1 auto;min-height:0;display:flex;position:relative;}
+.dir-c .timescale{flex:0 0 46px;position:relative;}
+.dir-c .timescale .tl{position:absolute;right:8px;font-family:ui-monospace,"SF Mono",Consolas,monospace;font-size:10px;color:#98a2b3;}
+.dir-c .days{flex:1 1 auto;display:flex;}
+.dir-c .daycol{flex:1 1 0;position:relative;border-right:1px solid #1c222b;
+  background-image:repeating-linear-gradient(to bottom,#232a34 0 1px,transparent 1px 30px),repeating-linear-gradient(to bottom,#191f27 0 1px,transparent 1px 15px);}
+.dir-c .daycol:last-child{border-right:none;}
+
+/* 已约块 / 已选块 */
+.dir-c .blk{position:absolute;left:3px;right:3px;background:#212936;border:1px solid #2b3441;border-radius:4px;padding:2px 6px;overflow:hidden;}
+.dir-c .blk .t{font-size:10px;color:#aab4c4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dir-c .blk .tm{font-family:ui-monospace,"SF Mono",Consolas,monospace;font-size:9px;color:#aab4c4;}
+.dir-c .blk.mini{display:flex;align-items:center;}
+.dir-c .blk.picked{background:#1c3a2e;border:1px solid #3ecf8e;}
+.dir-c .blk.picked .t{color:#e6e9ef;}
+.dir-c .blk.picked .tm{color:#3ecf8e;}
+.dir-c .blk.picked .tag{position:absolute;top:3px;right:5px;font-size:9px;color:#3ecf8e;}
+
+/* 图例 */
+.dir-c .legend{flex:0 0 24px;display:flex;align-items:center;gap:16px;border-top:1px solid #262d38;padding:0 2px;}
+.dir-c .lg{display:flex;align-items:center;gap:5px;font-size:10px;color:#98a2b3;}
+.dir-c .sw{width:10px;height:10px;border-radius:3px;}
+.dir-c .sw.free{border:1px solid #262d38;}
+.dir-c .sw.busy{background:#212936;border:1px solid #2b3441;}
+.dir-c .sw.picked{background:#1c3a2e;border:1px solid #3ecf8e;}
+.dir-c .wk{margin-left:auto;font-size:10px;color:#98a2b3;}
+.dir-c .wk .dt{font-family:ui-monospace,"SF Mono",Consolas,monospace;}
+
+/* 快捷提示 */
+.dir-c .hint{flex:0 0 22px;display:flex;align-items:center;gap:6px;padding:0 14px;border-top:1px solid #262d38;font-size:10px;color:#98a2b3;}
+.dir-c .kbd{font-family:ui-monospace,"SF Mono",Consolas,monospace;font-size:9px;color:#e6e9ef;background:#1d232c;border:1px solid #262d38;border-radius:3px;padding:1px 5px;}
+
+/* 底部命令条 */
+.dir-c .cmdbar{flex:0 0 158px;background:#171b22;border-top:1px solid #262d38;display:flex;}
+.dir-c .seg{padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-width:0;}
+.dir-c .seg.topic{flex:0 0 248px;border-right:1px solid #262d38;}
+.dir-c .seg.people{flex:1 1 auto;border-right:1px solid #262d38;}
+.dir-c .seg.attach{flex:0 0 300px;}
+.dir-c .lbl{font-size:11px;color:#98a2b3;letter-spacing:2px;}
+.dir-c .input{background:#101318;border:1px solid #3ecf8e;border-radius:4px;padding:7px 10px;font-size:12px;color:#e6e9ef;caret-color:#3ecf8e;}
+.dir-c .ftip{font-size:10px;color:#98a2b3;}
+.dir-c .avs{display:flex;align-items:center;}
+.dir-c .av{width:22px;height:22px;border-radius:50%;color:#dfe4ec;font-size:10px;display:flex;align-items:center;justify-content:center;position:relative;border:2px solid #171b22;margin-left:-5px;}
+.dir-c .av:first-child{margin-left:0;}
+.dir-c .av.c1{background:#354b57;}
+.dir-c .av.c2{background:#3c5148;}
+.dir-c .av.c3{background:#514a3a;}
+.dir-c .av.c4{background:#4a3f3f;}
+.dir-c .av.c5{background:#3f4450;}
+.dir-c .av .st{position:absolute;right:-2px;bottom:-2px;width:7px;height:7px;border-radius:50%;border:2px solid #171b22;}
+.dir-c .av .st.ok{background:#3ecf8e;}
+.dir-c .av .st.pend{background:#f59e0b;}
+.dir-c .av .st.no{background:#6b7480;}
+.dir-c .addbtn{margin-left:10px;background:none;border:none;font-size:11px;color:#98a2b3;cursor:pointer;}
+.dir-c .addbtn .plus{color:#3ecf8e;font-weight:600;margin-right:3px;}
+.dir-c .rsvp{display:flex;align-items:center;gap:12px;font-size:10px;color:#98a2b3;}
+.dir-c .rsvp .d{width:5px;height:5px;border-radius:50%;margin-right:4px;}
+.dir-c .rsvp .d.ok{background:#3ecf8e;}
+.dir-c .rsvp .d.pend{background:#f59e0b;}
+.dir-c .rsvp .d.no{background:#6b7480;}
+.dir-c .rsvp .n{font-family:ui-monospace,"SF Mono",Consolas,monospace;color:#e6e9ef;}
+.dir-c .chip{display:inline-flex;align-items:center;gap:6px;background:#1d232c;border:1px solid #262d38;border-radius:4px;padding:3px 8px;font-size:11px;color:#e6e9ef;}
+.dir-c .chip .badge{font-family:ui-monospace,"SF Mono",Consolas,monospace;font-size:8px;color:#98a2b3;background:#262d38;border-radius:2px;padding:1px 3px;}
+.dir-c .chip .x{color:#98a2b3;font-size:10px;}
+.dir-c .note{font-size:10px;color:#98a2b3;}
+.dir-c .note .v{color:#e6e9ef;}
+.dir-c .submitrow{display:flex;justify-content:flex-end;margin-top:auto;}
+.dir-c .btn{background:#3ecf8e;border:none;border-radius:4px;padding:9px 18px;font-size:12px;font-weight:600;color:#101318;font-family:inherit;}
+.dir-c .btn .k{font-family:ui-monospace,"SF Mono",Consolas,monospace;margin-left:6px;}
+
+/* 角标 */
+.dir-c .wm{position:absolute;right:10px;bottom:6px;font-size:10px;color:rgba(230,233,239,0.4);z-index:5;}
+</style>
+<div class="stage dir-c">
+
+  <div class="topbar">
+    <div class="room">海棠会议室<span class="sep">·</span><span class="meta">102</span><span class="sep">·</span><span class="meta">12 人</span><span class="sep">·</span><span class="meta">投影/白板/茶水</span></div>
+    <div class="topright">
+      <span class="release"><span class="dot"></span>即将释放 <span class="tm">14:30</span></span>
+      <span class="back">返回列表</span>
+    </div>
+  </div>
+
+  <div class="gridwrap">
+    <div class="dayhead">
+      <div class="corner"></div>
+      <div class="day">周一 <span class="dt">10/12</span></div>
+      <div class="day on">周二 <span class="dt">10/13</span></div>
+      <div class="day">周三 <span class="dt">10/14</span></div>
+      <div class="day">周四 <span class="dt">10/15</span></div>
+      <div class="day">周五 <span class="dt">10/16</span></div>
+    </div>
+    <div class="gridbody">
+      <div class="timescale">
+        <span class="tl" style="top:0">08:00</span>
+        <span class="tl" style="top:30px;transform:translateY(-50%)">09:00</span>
+        <span class="tl" style="top:60px;transform:translateY(-50%)">10:00</span>
+        <span class="tl" style="top:90px;transform:translateY(-50%)">11:00</span>
+        <span class="tl" style="top:120px;transform:translateY(-50%)">12:00</span>
+        <span class="tl" style="top:150px;transform:translateY(-50%)">13:00</span>
+        <span class="tl" style="top:180px;transform:translateY(-50%)">14:00</span>
+        <span class="tl" style="top:210px;transform:translateY(-50%)">15:00</span>
+        <span class="tl" style="top:240px;transform:translateY(-50%)">16:00</span>
+        <span class="tl" style="top:270px;transform:translateY(-50%)">17:00</span>
+        <span class="tl" style="top:300px;transform:translateY(-50%)">18:00</span>
+        <span class="tl" style="top:317px">19:00</span>
+      </div>
+      <div class="days">
+        <div class="daycol">
+          <div class="blk" style="top:30px;height:45px"><div class="t">项目周会</div><div class="tm">09:00-10:30</div></div>
+          <div class="blk mini" style="top:210px;height:30px"><div class="t">迭代走查</div></div>
+        </div>
+        <div class="daycol">
+          <div class="blk" style="top:60px;height:45px"><div class="t">设计评审</div><div class="tm">10:00-11:30</div></div>
+          <div class="blk picked" style="top:180px;height:60px"><span class="tag">已选</span><div class="t">产品 v3.3 需求评审</div><div class="tm">14:00-16:00</div></div>
+        </div>
+        <div class="daycol">
+          <div class="blk mini" style="top:60px;height:30px"><div class="t">平台例会</div></div>
+          <div class="blk" style="top:180px;height:45px"><div class="t">客户沟通·阿里</div><div class="tm">14:00-15:30</div></div>
+        </div>
+        <div class="daycol">
+          <div class="blk" style="top:45px;height:45px"><div class="t">智能审批技术方案</div><div class="tm">09:30-11:00</div></div>
+        </div>
+        <div class="daycol">
+          <div class="blk mini" style="top:45px;height:30px"><div class="t">招聘面试·终面</div></div>
+          <div class="blk" style="top:240px;height:45px"><div class="t">季度复盘</div><div class="tm">16:00-17:30</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <span class="lg"><span class="sw free"></span>空闲</span>
+      <span class="lg"><span class="sw busy"></span>已约</span>
+      <span class="lg"><span class="sw picked"></span>已选</span>
+      <span class="wk"><span class="dt">10/12</span> 至 <span class="dt">10/16</span> · 全周视图</span>
+    </div>
+  </div>
+
+  <div class="hint">选区间后直接回车提交 <span class="sep">·</span> <span class="kbd">Esc</span> 取消</div>
+
+  <div class="cmdbar">
+    <div class="seg topic">
+      <div class="lbl">主题</div>
+      <div class="input">产品 v3.3 需求评审</div>
+      <div class="ftip">示例：迭代走查、客户沟通、面试</div>
+    </div>
+    <div class="seg people">
+      <div class="lbl">参会人</div>
+      <div class="avs">
+        <span class="av c1">陈<span class="st ok"></span></span>
+        <span class="av c2">林<span class="st ok"></span></span>
+        <span class="av c3">赵<span class="st ok"></span></span>
+        <span class="av c4">苏<span class="st pend"></span></span>
+        <span class="av c5">周<span class="st no"></span></span>
+        <button class="addbtn" type="button"><span class="plus">+</span>从组织树添加</button>
+      </div>
+      <div class="rsvp">
+        <span><span class="d ok"></span>接受 <span class="n">3</span></span>
+        <span><span class="d pend"></span>待定 <span class="n">1</span></span>
+        <span><span class="d no"></span>拒绝 <span class="n">1</span></span>
+      </div>
+    </div>
+    <div class="seg attach">
+      <div class="lbl">附件与备注</div>
+      <div><span class="chip"><span class="badge">DOC</span>议程.docx<span class="x">×</span></span></div>
+      <div class="note">备注：<span class="v">需要 HDMI 转接头</span></div>
+      <div class="submitrow"><button class="btn" type="button">提交预约<span class="k">⏎</span></button></div>
+    </div>
+  </div>
+
+  <div class="wm">方向样机 C · 不是最终页面</div>
+</div>

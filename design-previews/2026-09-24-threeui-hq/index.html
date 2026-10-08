@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计方向预览 · 星辉数字总部（ThreeUI 3D 组件）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Archivo+Narrow:wght@400;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== 选择外壳：中性克制，不与 mockup 抢戏 ===== */
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  background:#f2f2f0;color:#181818;-webkit-font-smoothing:antialiased}
+.bar{padding:16px 28px;border-bottom:1px solid #dededa;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;background:#fafaf8}
+.bar strong{font-size:14px;font-weight:650;letter-spacing:.2px}
+.bar .keys{font-size:12px;color:#6b6b66;font-variant-numeric:tabular-nums}
+.bar .state{font-size:12px;color:#4a6b52}
+.note{margin:0;padding:12px 28px;font-size:12.5px;line-height:1.6;color:#6b6b66;
+  background:#f2f2f0;border-bottom:1px solid #e4e4e0;max-width:92ch}
+.dials{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:18px;
+  padding:18px 28px;border-bottom:1px solid #dededa;background:#fafaf8}
+.dial{display:grid;gap:7px;font-size:12.5px;color:#3a3a36}
+.dial b{font-weight:600}
+.dial output{font-variant-numeric:tabular-nums;font-weight:700;color:#181818}
+.dial input{width:100%;accent-color:#181818}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;padding:24px 28px}
+.card{background:#fff;border:1.5px solid #e0e0dc;border-radius:12px;overflow:hidden;
+  cursor:pointer;display:flex;flex-direction:column;min-width:0;transition:border-color 160ms cubic-bezier(.23,1,.32,1)}
+.card:hover{border-color:#b9b9b3}
+.card.selected{border-color:#181818;box-shadow:0 0 0 1px #181818}
+.mock{position:relative;overflow:hidden;display:grid;place-items:center;background:#e8e8e4}
+.mock>.stage{width:960px;height:600px;transform-origin:center center;position:relative}
+.mock .stamp{position:absolute;right:9px;bottom:7px;z-index:3;font-size:9.5px;letter-spacing:.4px;
+  padding:2px 7px;border-radius:999px;background:rgb(20 20 20 / 55%);color:#fff}
+.meta{padding:14px 18px 12px;display:grid;gap:6px;width:100%}
+.meta h3{margin:0;font-size:14.5px;font-weight:650;display:flex;align-items:center;gap:8px}
+.meta .badge{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;
+  background:#181818;color:#fff;letter-spacing:.4px}
+.meta p{margin:0;font-size:12.5px;line-height:1.55;color:#5d5d57;width:100%;max-width:64ch;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  white-space:normal;overflow-wrap:break-word}
+.qmdp-pick-button{width:calc(100% - 36px);min-height:44px;margin:0 18px 16px;
+  border:1.5px solid #181818;background:#fff;color:#181818;border-radius:9px;
+  font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;
+  transition:background 140ms cubic-bezier(.23,1,.32,1),transform 100ms}
+.qmdp-pick-button:hover{background:#181818;color:#fff}
+.qmdp-pick-button:active{transform:scale(.99)}
+.explain{padding:8px 28px 56px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.explain article{background:#fafaf8;border:1px solid #e4e4e0;border-radius:10px;padding:16px 18px}
+.explain h4{margin:0 0 8px;font-size:13px;font-weight:650}
+.explain dl{margin:0;display:grid;grid-template-columns:74px 1fr;gap:5px 10px;font-size:12.5px;line-height:1.6}
+.explain dt{color:#8a8a83}
+.explain dd{margin:0;color:#3a3a36}
+.confirm{position:fixed;inset:0;display:none;place-items:center;background:rgb(0 0 0 / 34%);z-index:20}
+.confirm.open{display:grid}
+.dialog{width:min(540px,calc(100vw - 32px));background:#fff;border-radius:13px;padding:22px 24px;
+  box-shadow:0 24px 60px rgb(0 0 0 / 24%)}
+.dialog h2{margin:0 0 8px;font-size:17px}
+.dialog p{margin:0 0 14px;font-size:12.5px;line-height:1.6;color:#5d5d57;font-variant-numeric:tabular-nums}
+.dialog textarea{width:100%;min-height:86px;resize:vertical;border:1.5px solid #dcdcd6;border-radius:8px;
+  padding:10px 12px;font-family:inherit;font-size:13px;line-height:1.6;color:#181818}
+.dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+.dialog button{min-height:40px;padding:0 18px;border-radius:8px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;border:1.5px solid #181818}
+#cancelPick{background:#fff;color:#181818}
+#confirmPick{background:#181818;color:#fff}
+.pickbar{position:fixed;bottom:0;left:0;right:0;padding:13px;background:#181818;color:#fff;
+  text-align:center;font-size:13px;transform:translateY(100%);
+  transition:transform 220ms cubic-bezier(.23,1,.32,1)}
+.pickbar.show{transform:translateY(0)}
+@media (max-width:860px){
+  .grid{grid-template-columns:1fr;padding:16px;gap:16px}
+  .explain{grid-template-columns:1fr;padding:8px 16px 48px}
+  .dials{grid-template-columns:1fr;padding:16px}
+  .bar,.note{padding-left:16px;padding-right:16px}
+}
+
+/* ============ 方向 A · 深邃驾驶舱（scoped: .sa-a） ============ */
+.sa-a{background:#0a0d14;color:#c8d6e8;font-family:'JetBrains Mono',ui-monospace,"PingFang SC",monospace;
+  display:grid;grid-template-rows:54px 1fr 62px;height:600px;overflow:hidden}
+.sa-a .top{display:flex;align-items:center;gap:16px;padding:0 26px;
+  border-bottom:1px solid rgb(120 200 235 / 18%)}
+.sa-a .brand{font-size:15px;font-weight:700;letter-spacing:.8px;color:#eaf6ff}
+.sa-a .brand em{font-style:normal;color:#3fd8c8}
+.sa-a .top .meta{margin-left:auto;font-size:11px;color:#5f7d9c;letter-spacing:1px}
+.sa-a .live{display:flex;align-items:center;gap:6px;font-size:11px;color:#3fd8c8}
+.sa-a .live i{width:6px;height:6px;border-radius:50%;background:#3fd8c8;box-shadow:0 0 8px #3fd8c8}
+.sa-a .body{display:grid;grid-template-columns:212px 1fr 234px;min-height:0}
+.sa-a .rail{border-right:1px solid rgb(120 200 235 / 14%);padding:18px 20px;display:flex;
+  flex-direction:column;gap:16px}
+.sa-a .k{font-size:10px;letter-spacing:1.6px;color:#4e6a86}
+.sa-a .v{font-size:29px;font-weight:700;color:#eaf6ff;line-height:1.1;font-variant-numeric:tabular-nums}
+.sa-a .v small{font-size:11px;font-weight:400;color:#5f7d9c;margin-left:4px}
+.sa-a .center{position:relative;display:grid;place-items:center;overflow:hidden}
+.sa-a .center h1{position:absolute;top:44px;left:0;right:0;text-align:center;margin:0;
+  font-size:33px;font-weight:700;letter-spacing:7px;color:#f2f9ff;z-index:2}
+.sa-a .center .sub{position:absolute;top:92px;left:0;right:0;text-align:center;font-size:11.5px;
+  letter-spacing:3px;color:#4e8ba0;z-index:2}
+.sa-a .field{position:absolute;inset:0}
+.sa-a .right{border-left:1px solid rgb(120 200 235 / 14%);padding:18px 20px;display:flex;flex-direction:column}
+.sa-a .apps{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.sa-a .app{display:flex;justify-content:space-between;font-size:11.5px;color:#9fb8d0;
+  padding-bottom:8px;border-bottom:1px solid rgb(120 200 235 / 10%)}
+.sa-a .app b{color:#3fd8c8;font-weight:500}
+.sa-a .foot{display:flex;align-items:center;gap:22px;padding:0 26px;font-size:11px;color:#5f7d9c;
+  border-top:1px solid rgb(120 200 235 / 18%)}
+.sa-a .foot b{color:#c8d6e8;font-weight:500}
+
+/* ============ 方向 B · 明亮精密（scoped: .sa-b） ============ */
+.sa-b{background:#fbfbf9;color:#16181d;font-family:'Space Grotesk',-apple-system,"PingFang SC",sans-serif;
+  height:600px;overflow:hidden;display:flex;flex-direction:column}
+.sa-b .nav{display:flex;align-items:center;gap:26px;padding:22px 40px;font-size:12.5px;color:#5b5f6b}
+.sa-b .nav .logo{font-size:15px;font-weight:700;color:#16181d;letter-spacing:.2px}
+.sa-b .nav .grow{flex:1}
+.sa-b .nav .cta{padding:8px 16px;border-radius:7px;background:#1b3a8f;color:#fff;font-weight:600;font-size:12px}
+.sa-b .hero{flex:1;display:grid;grid-template-columns:1.02fr .98fr;gap:22px;padding:6px 40px 0;min-height:0}
+.sa-b .copy{display:flex;flex-direction:column;justify-content:center;gap:18px;padding-bottom:26px}
+.sa-b .copy .eyebrow{font-size:11px;letter-spacing:2.4px;color:#8b8f9a}
+.sa-b .copy h1{margin:0;font-size:46px;line-height:1.08;letter-spacing:-1.4px;font-weight:700;max-width:11ch}
+.sa-b .copy p{margin:0;font-size:13.5px;line-height:1.75;color:#5b5f6b;max-width:34ch}
+.sa-b .ctaRow{display:flex;gap:12px;align-items:center}
+.sa-b .btn{padding:11px 20px;border-radius:8px;background:#1b3a8f;color:#fff;font-size:12.5px;font-weight:600}
+.sa-b .btn.ghost{background:transparent;color:#16181d;border:1.5px solid #d8dae0}
+.sa-b .visual{position:relative;border-radius:14px;overflow:hidden;background:#0d1220;
+  box-shadow:0 20px 44px -22px rgb(22 24 29 / 34%)}
+.sa-b .visual .cap{position:absolute;left:16px;bottom:14px;font-size:11px;color:#9fb2d6;letter-spacing:.6px}
+.sa-b .strip{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #e6e7ea;
+  padding:16px 40px;gap:18px}
+.sa-b .strip div{display:flex;flex-direction:column;gap:3px}
+.sa-b .strip b{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.4px}
+.sa-b .strip span{font-size:11.5px;color:#7c808b}
+
+/* ============ 方向 C · 编辑叙事（scoped: .sa-c） ============ */
+.sa-c{background:#f6f2ea;color:#241f1b;font-family:'Archivo Narrow',-apple-system,"PingFang SC",sans-serif;
+  height:600px;overflow:hidden;display:flex;flex-direction:column;padding:0 0 0 0}
+.sa-c .masthead{display:flex;align-items:baseline;gap:20px;padding:20px 40px 14px;
+  border-bottom:3px solid #241f1b}
+.sa-c .masthead h1{margin:0;font-size:34px;font-weight:700;letter-spacing:-.6px;line-height:1}
+.sa-c .masthead .issue{margin-left:auto;font-size:11.5px;letter-spacing:1.8px;color:#8a6a52}
+.sa-c .subbar{display:flex;gap:22px;padding:9px 40px;font-size:11px;letter-spacing:1.6px;
+  color:#7b6c5e;border-bottom:1px solid #ddd5c8}
+.sa-c .cols{flex:1;display:grid;grid-template-columns:1.15fr .9fr 1.15fr;gap:0;min-height:0}
+.sa-c .col{padding:20px 22px;border-right:1px solid #e2dbcf;min-width:0}
+.sa-c .col:last-child{border-right:0}
+.sa-c .col h2{margin:0 0 10px;font-size:17px;font-weight:700;line-height:1.25}
+.sa-c .col p{margin:0 0 11px;font-size:12.5px;line-height:1.72;color:#4c4238}
+.sa-c .lead{font-size:14px;line-height:1.68;color:#241f1b;font-weight:600}
+.sa-c .fig{margin:0;border:1px solid #d9d1c4;background:#12161d;height:214px;position:relative;overflow:hidden}
+.sa-c .fig figcaption{position:absolute;left:0;right:0;bottom:0;padding:7px 10px;font-size:10.5px;
+  color:#c9c2b6;background:linear-gradient(transparent,rgb(0 0 0 / 62%))}
+.sa-c .num{font-size:11px;letter-spacing:2px;color:#b1512a;font-weight:700}
+.sa-c .list{margin:0;padding:0;list-style:none;font-size:12.5px;line-height:1.9;color:#4c4238}
+.sa-c .list li{display:flex;gap:10px;border-bottom:1px solid #e8e1d5;padding:5px 0}
+.sa-c .list b{color:#241f1b;font-weight:600}
+.sa-c .list span:last-child{margin-left:auto;font-variant-numeric:tabular-nums;color:#8a6a52}
+
+/* ============ 方向 D · 电影沉浸（scoped: .sa-d） ============ */
+.sa-d{background:#111318;color:#f4f5f7;font-family:'Sora',-apple-system,"PingFang SC",sans-serif;
+  height:600px;position:relative;overflow:hidden}
+.sa-d .field{position:absolute;inset:0}
+.sa-d .grain{position:absolute;inset:0;background:
+  radial-gradient(120% 80% at 50% 8%, rgb(255 255 255 / 7%), transparent 60%)}
+.sa-d .top{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;
+  padding:24px 44px;font-size:11.5px;letter-spacing:2.6px;color:#b9c0cc;z-index:3}
+.sa-d .top .grow{flex:1}
+.sa-d .bottom{position:absolute;left:0;right:0;bottom:0;padding:0 44px 46px;z-index:3}
+.sa-d .bottom h1{margin:0 0 14px;font-size:62px;font-weight:300;line-height:1.02;letter-spacing:-2px}
+.sa-d .bottom h1 b{font-weight:700}
+.sa-d .bottom p{margin:0 0 22px;font-size:14px;line-height:1.7;color:#aeb6c2;max-width:44ch}
+.sa-d .btns{display:flex;gap:14px;align-items:center}
+.sa-d .b1{padding:13px 26px;border-radius:999px;background:#f4f5f7;color:#111318;
+  font-size:13px;font-weight:600}
+.sa-d .b2{font-size:13px;color:#d6dbe3;border-bottom:1px solid rgb(214 219 227 / 42%);padding-bottom:2px}
+.sa-d .corner{position:absolute;right:44px;bottom:52px;text-align:right;z-index:3;font-size:11px;
+  line-height:2;letter-spacing:1.4px;color:#8f97a5;font-variant-numeric:tabular-nums}
+.sa-d .corner b{display:block;font-size:22px;color:#f4f5f7;letter-spacing:-.5px;font-weight:600}
+
+/* 3D 场的 CSS 示意（实装为 ThreeUI FlowField / ConnectivityGraph） */
+.fld-lines{position:absolute;inset:-6% -4%;opacity:.96}
+.fld-lines svg{width:100%;height:100%}
+.fld-glow{position:absolute;left:50%;top:50%;width:78%;aspect-ratio:1;transform:translate(-50%,-50%);
+  border-radius:50%;filter:blur(46px);pointer-events:none}
+.fld-net{position:absolute;inset:0}
+.fld-net svg{width:100%;height:100%}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <strong>星辉数字总部 · 方向样机</strong>
+  <span class="state" id="state">未选择</span>
+</div>
+<p class="note">这四张是设计方向样机，用于比较视觉与交互气质，不是最终页面。选定方向或写下混搭要求后，才进入正式实现。</p>
+
+<div class="dials" aria-label="设计拨盘">
+  <label class="dial"><b>视觉冒险度 <output id="varianceOut" data-qmdp-output="variance">7</output></b>
+    <input id="variance" data-qmdp-dial="variance" type="range" min="1" max="10" value="7"></label>
+  <label class="dial"><b>动效强度 <output id="motionOut" data-qmdp-output="motion">7</output></b>
+    <input id="motion" data-qmdp-dial="motion" type="range" min="1" max="10" value="7"></label>
+  <label class="dial"><b>信息密度 <output id="densityOut" data-qmdp-output="density">4</output></b>
+    <input id="density" data-qmdp-dial="density" type="range" min="1" max="10" value="4"></label>
+</div>
+
+<div class="grid">
+
+  <!-- ============ A · 深邃驾驶舱 ============ -->
+  <article class="card" data-dir="A" data-label="选 A：深邃驾驶舱">
+    <div class="mock">
+      <div class="stage sa-a">
+        <div class="field">
+          <div class="fld-glow" style="background:radial-gradient(circle,rgb(63 216 200 / 22%),transparent 68%)"></div>
+          <div class="fld-lines">
+            <svg viewBox="0 0 960 600" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="ga" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#3fd8c8" stop-opacity="0"/>
+                  <stop offset=".45" stop-color="#3fd8c8" stop-opacity=".85"/>
+                  <stop offset="1" stop-color="#3fd8c8" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g fill="none" stroke="url(#ga)" stroke-width="1.1">
+                <path d="M-40 430 C 180 300, 300 470, 520 330 S 820 250, 1000 350"/>
+                <path d="M-40 470 C 200 350, 320 500, 540 370 S 840 300, 1000 400"/>
+                <path d="M-40 380 C 170 250, 290 420, 510 280 S 810 200, 1000 300" opacity=".6"/>
+                <path d="M-40 520 C 220 420, 340 560, 560 430 S 860 360, 1000 450" opacity=".5"/>
+                <path d="M-40 330 C 160 210, 280 380, 500 240 S 800 160, 1000 250" opacity=".35"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="top">
+          <span class="brand">星辉科技集团 <em>/ 数字总部</em></span>
+          <span class="live"><i></i>系统在线</span>
+          <span class="meta">2026-09-24 · 集团总部</span>
+        </div>
+        <div class="body">
+          <div class="rail">
+            <div><div class="k">一级组织</div><div class="v">15<small>个</small></div></div>
+            <div><div class="k">在职员工</div><div class="v">58<small>人</small></div></div>
+            <div><div class="k">办公载体</div><div class="v">1<small>栋 · 16 间会议室</small></div></div>
+          </div>
+          <div class="center">
+            <h1>星辉数字总部</h1>
+            <div class="sub">ORGANIZATION · RESOURCE · APPLICATION</div>
+          </div>
+          <div class="right">
+            <div class="k">应用矩阵</div>
+            <div class="apps">
+              <div class="app"><span>人员组织</span><b>15 / 58</b></div>
+              <div class="app"><span>会议室预订</span><b>16 间</b></div>
+              <div class="app"><span>制度管理</span><b>启用</b></div>
+              <div class="app"><span>企业文档</span><b>启用</b></div>
+              <div class="app"><span>楼宇 3D</span><b>启用</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="foot">
+          <span>实装：<b>FlowField</b> 全屏数据场 + <b>ConnectivityGraph</b> 组织网络</span>
+          <span>刷新 12s 前</span>
+        </div>
+      </div>
+      <span class="stamp">方向样机</span>
+    </div>
+    <div class="meta">
+      <h3>A · 深邃驾驶舱</h3>
+      <p>等宽字体把 15 个组织、58 人、16 间会议室压进一屏三栏，全屏 3D 数据场当背景。最像集团作战室的一块屏。</p>
+    </div>
+    <button class="qmdp-pick-button" type="button" data-qmdp-native-handler="true">选择 A · 深邃驾驶舱</button>
+  </article>
+
+  <!-- ============ B · 明亮精密 ============ -->
+  <article class="card" data-dir="B" data-label="选 B：明亮精密">
+    <div class="mock">
+      <div class="stage sa-b">
+        <div class="nav">
+          <span class="logo">星辉科技集团</span>
+          <span>数字总部</span><span>组织</span><span>应用</span>
+          <span class="grow"></span><span class="cta">进入工作台</span>
+        </div>
+        <div class="hero">
+          <div class="copy">
+            <div class="eyebrow">NEXUS OF THE GROUP</div>
+            <h1>把十五个组织装进一个总部</h1>
+            <p>组织、会议室、制度、文档与楼宇，收在同一处入口。员工进入系统三秒内知道自己该去哪。</p>
+            <div class="ctaRow">
+              <span class="btn">进入工作台</span>
+              <span class="btn ghost">查看组织架构</span>
+            </div>
+          </div>
+          <div class="visual">
+            <div class="fld-net">
+              <svg viewBox="0 0 460 420" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <defs>
+                  <radialGradient id="gb" cx="50%" cy="50%">
+                    <stop offset="0" stop-color="#5fe0d0"/>
+                    <stop offset="1" stop-color="#5fe0d0" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <g stroke="#5fe0d0" stroke-width=".9" opacity=".72">
+                  <line x1="230" y1="210" x2="90" y2="96"/><line x1="230" y1="210" x2="368" y2="118"/>
+                  <line x1="230" y1="210" x2="72" y2="300"/><line x1="230" y1="210" x2="380" y2="300"/>
+                  <line x1="230" y1="210" x2="160" y2="372"/><line x1="230" y1="210" x2="330" y2="366"/>
+                  <line x1="230" y1="210" x2="230" y2="58"/><line x1="230" y1="210" x2="128" y2="176"/>
+                  <line x1="230" y1="210" x2="336" y2="196"/>
+                </g>
+                <g fill="#7ff0e2">
+                  <circle cx="90" cy="96" r="3"/><circle cx="368" cy="118" r="3"/><circle cx="72" cy="300" r="3"/>
+                  <circle cx="380" cy="300" r="3"/><circle cx="160" cy="372" r="3"/><circle cx="330" cy="366" r="3"/>
+                  <circle cx="230" cy="58" r="3.4"/><circle cx="128" cy="176" r="3"/><circle cx="336" cy="196" r="3"/>
+                </g>
+                <circle cx="230" cy="210" r="34" fill="url(#gb)" opacity=".5"/>
+                <circle cx="230" cy="210" r="5" fill="#bdf6ff"/>
+              </svg>
+            </div>
+            <span class="cap">组织关系网络 · 15 个一级组织</span>
+          </div>
+        </div>
+        <div class="strip">
+          <div><b>15</b><span>一级组织</span></div>
+          <div><b>58</b><span>在职员工</span></div>
+          <div><b>16</b><span>会议室</span></div>
+          <div><b>8</b><span>业务应用</span></div>
+        </div>
+      </div>
+      <span class="stamp">方向样机</span>
+    </div>
+    <div class="meta">
+      <h3>B · 明亮精密 <span class="badge">推荐</span></h3>
+      <p>亮底大留白配无衬线展示体，右侧一块深色组织网络作唯一视觉焦点。像正经企业官网，不做控制台。</p>
+    </div>
+    <button class="qmdp-pick-button" type="button" data-qmdp-native-handler="true">选择 B · 明亮精密</button>
+  </article>
+
+  <!-- ============ C · 编辑叙事 ============ -->
+  <article class="card" data-dir="C" data-label="选 C：编辑叙事">
+    <div class="mock">
+      <div class="stage sa-c">
+        <div class="masthead">
+          <h1>星辉数字总部</h1>
+          <span class="issue">第 01 期 · 2026 年 9 月</span>
+        </div>
+        <div class="subbar">
+          <span>组织</span><span>资源</span><span>制度</span><span>载体</span><span>人物</span>
+        </div>
+        <div class="cols">
+          <div class="col">
+            <div class="num">01 / 组织</div>
+            <h2>十五个部门，一个总部</h2>
+            <p class="lead">从总裁办到研发中心的五个小组，集团用一条组织线把 58 名员工连成可查、可调、可追溯的一张网。</p>
+            <p>组织树支持逐级下钻，任意节点可看到负责人、联系电话与在职人数；跨部门协作时不必再问"这个人归谁管"。</p>
+          </div>
+          <div class="col">
+            <figure class="fig">
+              <div class="fld-lines" style="inset:0">
+                <svg viewBox="0 0 320 214" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#e0b64a" stop-opacity=".1"/>
+                      <stop offset=".5" stop-color="#4fd8ff" stop-opacity=".9"/>
+                      <stop offset="1" stop-color="#4fd8ff" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <g fill="none" stroke="url(#gc)" stroke-width="1">
+                    <path d="M-10 180 C 70 120, 110 190, 180 120 S 280 80, 340 130"/>
+                    <path d="M-10 200 C 80 150, 120 210, 190 150 S 290 110, 340 160" opacity=".6"/>
+                    <path d="M-10 150 C 60 90, 100 160, 170 90 S 270 50, 340 100" opacity=".4"/>
+                  </g>
+                </svg>
+              </div>
+              <figcaption>组织脉络 · 实装为 ThreeUI FlowField</figcaption>
+            </figure>
+          </div>
+          <div class="col">
+            <div class="num">02 / 资源</div>
+            <h2>会议室与载体</h2>
+            <ul class="list">
+              <li><b>星辉科技大厦</b><span>1 栋</span></li>
+              <li><b>会议室</b><span>16 间</span></li>
+              <li><b>可约时段</b><span>09:00-18:00</span></li>
+              <li><b>最小粒度</b><span>15 分钟</span></li>
+              <li><b>企业文档</b><span>共享中</span></li>
+            </ul>
+            <p>预订按周课表排布，参会人从组织树勾选，冲突时段直接置灰。</p>
+          </div>
+        </div>
+      </div>
+      <span class="stamp">方向样机</span>
+    </div>
+    <div class="meta">
+      <h3>C · 编辑叙事</h3>
+      <p>报头、期号、三栏与横向分隔线，窄体无衬线做出内部刊物气质。把系统信息当一期内参来讲。</p>
+    </div>
+    <button class="qmdp-pick-button" type="button" data-qmdp-native-handler="true">选择 C · 编辑叙事</button>
+  </article>
+
+  <!-- ============ D · 电影沉浸 ============ -->
+  <article class="card" data-dir="D" data-label="选 D：电影沉浸">
+    <div class="mock">
+      <div class="stage sa-d">
+        <div class="field">
+          <div class="fld-glow" style="background:radial-gradient(circle,rgb(150 170 200 / 16%),transparent 66%)"></div>
+          <div class="fld-lines">
+            <svg viewBox="0 0 960 600" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="gd" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#dfe6f2" stop-opacity="0"/>
+                  <stop offset=".5" stop-color="#dfe6f2" stop-opacity=".62"/>
+                  <stop offset="1" stop-color="#dfe6f2" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g fill="none" stroke="url(#gd)" stroke-width=".9">
+                <path d="M-60 380 C 200 240, 340 430, 560 280 S 860 190, 1020 300"/>
+                <path d="M-60 430 C 220 300, 360 480, 580 330 S 880 250, 1020 350" opacity=".66"/>
+                <path d="M-60 330 C 180 200, 320 380, 540 240 S 840 150, 1020 250" opacity=".44"/>
+                <path d="M-60 480 C 240 370, 380 540, 600 400 S 900 330, 1020 420" opacity=".3"/>
+              </g>
+            </svg>
+          </div>
+          <div class="grain"></div>
+        </div>
+        <div class="top">
+          <span>星辉科技集团</span><span class="grow"></span><span>数字总部 · 2026</span>
+        </div>
+        <div class="bottom">
+          <h1>一座楼，<br><b>装着整个集团。</b></h1>
+          <p>十五个组织、五十八名员工、十六间会议室，同在一个数字总部里运转。</p>
+          <div class="btns">
+            <span class="b1">进入数字总部</span>
+            <span class="b2">浏览应用矩阵</span>
+          </div>
+        </div>
+        <div class="corner">
+          <b>09:00-18:00</b>
+          会议室可约时段
+        </div>
+      </div>
+      <span class="stamp">方向样机</span>
+    </div>
+    <div class="meta">
+      <h3>D · 电影沉浸</h3>
+      <p>全屏 3D 场铺满，超大字号压在下三分之一。最少的界面，最强的第一眼。</p>
+    </div>
+    <button class="qmdp-pick-button" type="button" data-qmdp-native-handler="true">选择 D · 电影沉浸</button>
+  </article>
+
+</div>
+
+<section class="explain">
+  <article>
+    <h4>A · 深邃驾驶舱</h4>
+    <dl>
+      <dt>气质</dt><dd>集团作战室，信息优先</dd>
+      <dt>字体</dt><dd>西文等宽 JetBrains Mono + 中文系统栈</dd>
+      <dt>色彩</dt><dd>深蓝黑 #0a0d14 + 单一青色重音</dd>
+      <dt>记忆点</dt><dd>全屏数据场做背景，等宽数字栅格</dd>
+      <dt>实装组件</dt><dd>FlowField 铺满 + ConnectivityGraph 组织网络</dd>
+      <dt>适用</dt><dd>需要一屏看全集团资源与运行时状态</dd>
+    </dl>
+  </article>
+  <article>
+    <h4>B · 明亮精密（推荐）</h4>
+    <dl>
+      <dt>气质</dt><dd>正经企业官网，克制而有分量</dd>
+      <dt>字体</dt><dd>西文展示体 Space Grotesk + 中文系统栈</dd>
+      <dt>色彩</dt><dd>近白 #fbfbf9 + 深蓝 #1b3a8f 单重音</dd>
+      <dt>记忆点</dt><dd>亮底大留白，右侧一块深色组织网络当唯一焦点</dd>
+      <dt>实装组件</dt><dd>ConnectivityGraph 组织网络 + FlowField 细部</dd>
+      <dt>推荐理由</dt><dd>你要的是"跟系统有关的丰富内容"，门户形态比控制台更能装下组织、应用、制度、文档与楼宇；亮底也让它明显区别于已经被你否掉的数据大屏</dd>
+    </dl>
+  </article>
+  <article>
+    <h4>C · 编辑叙事</h4>
+    <dl>
+      <dt>气质</dt><dd>集团内参，有阅读节奏</dd>
+      <dt>字体</dt><dd>西文窄体 Archivo Narrow + 中文系统栈</dd>
+      <dt>色彩</dt><dd>暖米 #f6f2ea + 砖红 #b1512a 重音</dd>
+      <dt>记忆点</dt><dd>报头 + 期号 + 章节编号，横向分隔线切分内容</dd>
+      <dt>实装组件</dt><dd>FlowField 作为章节大图</dd>
+      <dt>适用</dt><dd>想做集团介绍、年度叙事、内部刊物式内容</dd>
+    </dl>
+  </article>
+  <article>
+    <h4>D · 电影沉浸</h4>
+    <dl>
+      <dt>气质</dt><dd>品牌影片，第一眼优先</dd>
+      <dt>字体</dt><dd>西文展示体 Sora + 中文系统栈</dd>
+      <dt>色彩</dt><dd>深灰 #111318 + 银白单色，几乎无彩</dd>
+      <dt>记忆点</dt><dd>全屏 3D 场 + 超大字号压底三分之一</dd>
+      <dt>实装组件</dt><dd>FlowField 全屏 + GlassmorphismCta 主行动</dd>
+      <dt>适用</dt><dd>对外品牌页、大屏开场、发布会背景</dd>
+    </dl>
+    <p style="margin:10px 0 0;font-size:12px;color:#8a8a83">也可以只挑中意的细节，在对话里告诉我，比如"要 B 的配色 + C 的字体"。</p>
+  </article>
+</section>
+
+<div class="confirm" id="confirm" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="dialog">
+    <h2 id="confirmTitle">确认设计方向</h2>
+    <p id="confirmMeta"></p>
+    <textarea id="adjustments" placeholder="可选：写想调整的地方，比如更稳一点、要 B 的配色 + C 的字体"></textarea>
+    <div class="row">
+      <button type="button" id="cancelPick">取消</button>
+      <button type="button" id="confirmPick">确认并回传</button>
+    </div>
+  </div>
+</div>
+<div class="pickbar" id="pickbar"></div>
+
+<script>
+  var pending = null;
+  function dials(){
+    return {
+      variance: Number(document.getElementById('variance').value),
+      motion: Number(document.getElementById('motion').value),
+      density: Number(document.getElementById('density').value)
+    };
+  }
+  ['variance','motion','density'].forEach(function(id){
+    var input = document.getElementById(id), out = document.getElementById(id + 'Out');
+    input.addEventListener('input', function(){
+      out.value = input.value;
+      out.textContent = input.value;
+    });
+  });
+  function selectionText(payload){
+    var v = payload.dials || dials();
+    var advice = payload.adjustments ? '；建议：' + payload.adjustments : '';
+    return payload.label + '；拨盘：视觉冒险度 ' + v.variance +
+      ' / 动效强度 ' + v.motion + ' / 信息密度 ' + v.density + advice;
+  }
+  async function sendSelection(payload){
+    if (location.protocol === 'file:') {
+      if (navigator.clipboard) { try { await navigator.clipboard.writeText(selectionText(payload)); } catch(e){} }
+      return { ok:false, fallback:true };
+    }
+    try {
+      var res = await fetch('/api/select', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      return await res.json();
+    } catch (e) { return { ok:false, fallback:true }; }
+  }
+  function openConfirm(i){
+    var card = document.querySelectorAll('.card')[i];
+    if (!card) return;
+    document.querySelectorAll('.card').forEach(function(c, idx){
+      c.classList.toggle('selected', idx === i);
+    });
+    var id = 'ABCD'[i];
+    var name = card.getAttribute('data-label').replace('选 ' + id + '：', '');
+    pending = { id:id, name:name, label:'选 ' + id + '：' + name };
+    var v = dials();
+    document.getElementById('confirmMeta').textContent =
+      pending.label + ' · 视觉冒险度 ' + v.variance + ' / 动效强度 ' + v.motion + ' / 信息密度 ' + v.density;
+    document.getElementById('confirm').classList.add('open');
+    document.getElementById('adjustments').focus();
+  }
+  async function confirmSelection(){
+    if (!pending) return;
+    var bar = document.getElementById('pickbar');
+    var payload = {
+      id: pending.id, label: pending.label, name: pending.name,
+      notes: '', dials: dials(),
+      adjustments: document.getElementById('adjustments').value.trim()
+    };
+    var result = await sendSelection(payload);
+    bar.textContent = result.ok
+      ? '已选择 ' + pending.label + '，已回传'
+      : '已选择 ' + pending.label + '，当前不会自动回传，请回到对话发送这句话';
+    bar.classList.add('show');
+    document.getElementById('confirm').classList.remove('open');
+    document.getElementById('state').textContent = '已选 ' + pending.id;
+  }
+  document.querySelectorAll('.card').forEach(function(card, i){
+    card.addEventListener('click', function(e){
+      if (e.target.closest('.qmdp-pick-button')) return;
+      openConfirm(i);
+    });
+    card.querySelector('.qmdp-pick-button').addEventListener('click', function(e){
+      e.stopPropagation();
+      openConfirm(i);
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    var i = ['1','2','3','4'].indexOf(e.key);
+    if (i > -1) openConfirm(i);
+  });
+  document.getElementById('cancelPick').onclick = function(){
+    document.getElementById('confirm').classList.remove('open');
+  };
+  document.getElementById('confirmPick').onclick = confirmSelection;
+
+  /* 样机舞台按卡片宽度自适应缩放，填满可用空间 */
+  function fitStages(){
+    document.querySelectorAll('.mock').forEach(function(mock){
+      var w = mock.clientWidth;
+      if (!w) return;
+      var s = w / 960;
+      var stage = mock.querySelector('.stage');
+      if (stage) stage.style.transform = 'scale(' + s + ')';
+      mock.style.height = Math.round(600 * s) + 'px';
+    });
+  }
+  window.addEventListener('resize', fitStages);
+  window.addEventListener('load', fitStages);
+  fitStages();
+</script>
+</body>
+</html>

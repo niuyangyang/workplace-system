@@ -1,0 +1,341 @@
+<style>
+.dir-b, .dir-b * { margin: 0; padding: 0; box-sizing: border-box; }
+.dir-b {
+  position: relative;
+  width: 960px;
+  height: 600px;
+  overflow: hidden;
+  background: #faf9f7;
+  color: #2d2a26;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部通栏 */
+.dir-b .topbar {
+  flex: 0 0 64px;
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid #eae6df;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+}
+.dir-b .room { display: flex; align-items: center; gap: 10px; }
+.dir-b .room-badge {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: #f1ede6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: #2d2a26;
+}
+.dir-b .room-name { font-size: 13px; font-weight: 600; color: #2d2a26; }
+.dir-b .room-meta { font-size: 12px; color: #8a857c; }
+
+.dir-b .steps { display: flex; align-items: center; gap: 10px; }
+.dir-b .step {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 2px;
+  font-size: 13px; font-weight: 450; color: #8a857c;
+}
+.dir-b .step .no { font-size: 12px; font-weight: 600; }
+.dir-b .step.done { color: #2d2a26; font-weight: 600; }
+.dir-b .step.done .no { color: #8a857c; }
+.dir-b .tick { color: #4f46e5; font-size: 12px; }
+.dir-b .step.current {
+  background: #eef0fd;
+  border-radius: 999px;
+  padding: 5px 12px;
+  color: #4f46e5; font-weight: 600;
+}
+.dir-b .step.current .no { color: #4f46e5; }
+.dir-b .step-line { width: 22px; height: 1px; background: #e0dbd2; }
+.dir-b .jump-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 22px; padding: 0 10px;
+  margin-left: 4px;
+  background: #ffffff;
+  border: 1px solid #e0dbd2;
+  border-radius: 999px;
+  font-size: 11px; font-weight: 450; color: #2d2a26;
+  cursor: pointer;
+  box-shadow: 0 1px 1px rgba(45, 42, 38, 0.03);
+}
+.dir-b .jump-chip .chip-tick { color: #4f46e5; font-size: 10px; }
+
+/* 主区域 */
+.dir-b .main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dir-b .card {
+  width: 640px;
+  background: #ffffff;
+  border: 1px solid #eae6df;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(45, 42, 38, 0.04), 0 10px 28px rgba(45, 42, 38, 0.05);
+}
+.dir-b .card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 18px 24px 0;
+}
+.dir-b .card-title { font-size: 15px; font-weight: 600; color: #2d2a26; }
+.dir-b .slot-hint { font-size: 12px; color: #8a857c; }
+
+.dir-b .card-body {
+  display: flex;
+  gap: 20px;
+  padding: 16px 24px 20px;
+}
+
+/* 左列：组织树 */
+.dir-b .depts { flex: 0 0 168px; width: 168px; }
+.dir-b .col-label {
+  font-size: 11px; font-weight: 450; color: #8a857c;
+  margin-bottom: 8px; padding-left: 2px;
+}
+.dir-b .dept {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 12px;
+  margin-bottom: 4px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  font-size: 13px; font-weight: 450; color: #2d2a26;
+}
+.dir-b .dept .cnt { font-size: 12px; color: #8a857c; }
+.dir-b .dept.on {
+  background: #f4f5fe;
+  border-color: #b9bef3;
+  font-weight: 600;
+}
+.dir-b .dept.on .cnt { color: #4f46e5; font-weight: 600; }
+
+/* 右列：人员网格 */
+.dir-b .people { flex: 1; min-width: 0; }
+.dir-b .people-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.dir-b .people-head .col-label { margin-bottom: 0; padding-left: 2px; }
+.dir-b .people-count { font-size: 11px; color: #8a857c; }
+.dir-b .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.dir-b .person {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px;
+  background: #ffffff;
+  border: 1px solid #eae6df;
+  border-radius: 10px;
+}
+.dir-b .avatar {
+  flex: 0 0 34px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: #f1ede6;
+  color: #8a857c;
+  font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+}
+.dir-b .p-info { flex: 1; min-width: 0; }
+.dir-b .p-name { font-size: 13px; font-weight: 450; color: #2d2a26; line-height: 1.3; }
+.dir-b .p-role { font-size: 11px; color: #8a857c; line-height: 1.5; }
+.dir-b .st-acc { color: #16a34a; }
+.dir-b .st-pend { color: #d97706; }
+.dir-b .st-rej { color: #dc2626; }
+.dir-b .person.on { background: #f4f5fe; border-color: #c9cdf5; }
+.dir-b .person.on .p-name { font-weight: 600; }
+.dir-b .person.on .avatar { background: #e2e5fb; color: #4f46e5; }
+.dir-b .check {
+  flex: 0 0 18px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #d9d4ca;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+}
+.dir-b .person.on .check { background: #4f46e5; border-color: #4f46e5; color: #ffffff; }
+
+/* 底部条 */
+.dir-b .card-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid #eae6df;
+  padding: 13px 24px;
+}
+.dir-b .rsvp { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #8a857c; }
+.dir-b .rsvp .lead { font-size: 13px; font-weight: 600; color: #2d2a26; }
+.dir-b .rsvp .c-acc { color: #16a34a; }
+.dir-b .rsvp .c-pend { color: #d97706; }
+.dir-b .rsvp .c-rej { color: #dc2626; }
+.dir-b .actions { display: flex; align-items: center; gap: 10px; }
+.dir-b .btn {
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px; font-weight: 600;
+  display: inline-flex; align-items: center;
+  cursor: pointer;
+}
+.dir-b .btn-sec { background: #ffffff; border: 1px solid #e0dbd2; color: #2d2a26; }
+.dir-b .btn-pri {
+  background: #4f46e5;
+  border: 1px solid #4f46e5;
+  color: #ffffff;
+  padding: 0 18px;
+  box-shadow: 0 1px 2px rgba(79, 70, 229, 0.2);
+}
+
+/* 角标 */
+.dir-b .wm {
+  position: absolute;
+  right: 14px; bottom: 10px;
+  font-size: 10px;
+  color: #2d2a26;
+  opacity: 0.4;
+}
+</style>
+<div class="stage dir-b">
+
+  <div class="topbar">
+    <div class="room">
+      <div class="room-badge">海</div>
+      <div>
+        <span class="room-name">海棠会议室</span>
+        <span class="room-meta"> · 102 · 容 12 人</span>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step done">
+        <span class="no">01</span>
+        <span>选时段</span>
+        <span class="tick">✓</span>
+        <span class="jump-chip">周二 14:00-16:00</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step current">
+        <span class="no">02</span>
+        <span>邀请参会人</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <span class="no">03</span>
+        <span>确认提交</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="card">
+
+      <div class="card-head">
+        <div class="card-title">邀请参会人</div>
+        <div class="slot-hint">已选时段：周二 14:00 - 16:00 · 120 分钟</div>
+      </div>
+
+      <div class="card-body">
+        <div class="depts">
+          <div class="col-label">部门</div>
+          <div class="dept on"><span>产品部</span><span class="cnt">12 人</span></div>
+          <div class="dept"><span>研发部</span><span class="cnt">18 人</span></div>
+          <div class="dept"><span>设计部</span><span class="cnt">8 人</span></div>
+          <div class="dept"><span>行政部</span><span class="cnt">5 人</span></div>
+        </div>
+
+        <div class="people">
+          <div class="people-head">
+            <div class="col-label">产品部成员</div>
+            <div class="people-count">共 12 人</div>
+          </div>
+          <div class="grid">
+            <div class="person on">
+              <div class="avatar">张</div>
+              <div class="p-info">
+                <div class="p-name">张明</div>
+                <div class="p-role">产品负责人 · <span class="st-acc">已接受</span></div>
+              </div>
+              <div class="check">✓</div>
+            </div>
+            <div class="person on">
+              <div class="avatar">李</div>
+              <div class="p-info">
+                <div class="p-name">李婷</div>
+                <div class="p-role">产品运营 · <span class="st-acc">已接受</span></div>
+              </div>
+              <div class="check">✓</div>
+            </div>
+            <div class="person on">
+              <div class="avatar">王</div>
+              <div class="p-info">
+                <div class="p-name">王哲</div>
+                <div class="p-role">前端工程师 · <span class="st-acc">已接受</span></div>
+              </div>
+              <div class="check">✓</div>
+            </div>
+            <div class="person on">
+              <div class="avatar">陈</div>
+              <div class="p-info">
+                <div class="p-name">陈宇</div>
+                <div class="p-role">前端工程师 · <span class="st-pend">待定</span></div>
+              </div>
+              <div class="check">✓</div>
+            </div>
+            <div class="person on">
+              <div class="avatar">孙</div>
+              <div class="p-info">
+                <div class="p-name">孙怡</div>
+                <div class="p-role">财务主管 · <span class="st-rej">已拒绝</span></div>
+              </div>
+              <div class="check">✓</div>
+            </div>
+            <div class="person">
+              <div class="avatar">周</div>
+              <div class="p-info">
+                <div class="p-name">周敏</div>
+                <div class="p-role">安全专员</div>
+              </div>
+              <div class="check"></div>
+            </div>
+            <div class="person">
+              <div class="avatar">刘</div>
+              <div class="p-info">
+                <div class="p-name">刘建国</div>
+                <div class="p-role">实验室安全员</div>
+              </div>
+              <div class="check"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-foot">
+        <div class="rsvp">
+          <span class="lead">已选 5 人</span>
+          <span>·</span>
+          <span class="c-acc">接受 3</span>
+          <span>·</span>
+          <span class="c-pend">待定 1</span>
+          <span>·</span>
+          <span class="c-rej">拒绝 1</span>
+        </div>
+        <div class="actions">
+          <div class="btn btn-sec">上一步</div>
+          <div class="btn btn-pri">下一步：确认提交</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="wm">方向样机 B · 不是最终页面</div>
+
+</div>

@@ -1,0 +1,131 @@
+/* 制度前台 · 意见收集页 */
+.oc-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding-bottom: 56px;
+}
+
+/* ——— 顶部 banner：深蓝渐变 ——— */
+.oc-banner {
+  background: linear-gradient(135deg, #0f2456 0%, #1e3a8a 48%, #2b4acb 100%);
+}
+.oc-banner-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 92px 24px 94px;
+  text-align: center;
+}
+.oc-banner-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fff;
+}
+.oc-banner-desc {
+  max-width: 760px;
+  margin: 16px auto 0;
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ——— 主体 ——— */
+.oc-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 22px 24px 0;
+}
+.oc-main .ant-tabs-nav {
+  margin-bottom: 18px;
+}
+
+.oc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.oc-item {
+  border-radius: 12px !important;
+  border: 1px solid #eef2f7 !important;
+  box-shadow: 0 1px 4px rgba(15, 31, 86, 0.04);
+}
+
+.oc-item:hover {
+  box-shadow: 0 8px 24px rgba(15, 31, 86, 0.08);
+}
+
+.oc-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.oc-item-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.oc-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 34px;
+  margin-bottom: 14px;
+}
+
+.oc-meta-cell {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.oc-meta-cell label {
+  color: #94a3b8;
+}
+
+.oc-meta-cell b {
+  color: #334155;
+  font-weight: 600;
+}
+
+.oc-item-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #64748b;
+}
+
+/* 卡片底部操作提示（整卡可点） */
+.oc-item-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed #eef2f7;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.oc-item-action.is-open {
+  color: #3b5bff;
+}
+.oc-item-action.is-closed {
+  color: #94a3b8;
+  font-weight: 500;
+}
+.oc-item .ant-card-body {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .oc-main {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}

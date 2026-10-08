@@ -1,0 +1,56 @@
+/* 制度前台顶部导航：与页面内容列（max-width 1280px + 24px 内边距）左对齐 */
+.portal-nav {
+  position: absolute;
+  top: 0;
+  /* -16px 抵消首个导航项 16px 左内边距，使「首页」文字/下划线正好落在内容左边界 */
+  left: max(216px, calc((100% - 1280px) / 2 + 8px));
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 64px;
+}
+
+.portal-nav-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 64px;
+  padding: 0 16px;
+  font-size: 15px;
+  line-height: 64px;
+  color: #5b647a;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.portal-nav-item:hover {
+  color: #3b5bff;
+}
+
+.portal-nav-item.active {
+  color: #3b5bff;
+  font-weight: 600;
+}
+
+.portal-nav-item.active::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: #3b5bff;
+}
+
+/* 窄屏：品牌名隐藏，导航贴近 logo 之后，避免与品牌重叠 */
+@media (max-width: 768px) {
+  .portal-nav {
+    left: 62px;
+  }
+  .portal-nav-item {
+    padding: 0 10px;
+    font-size: 14px;
+  }
+}

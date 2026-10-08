@@ -1,0 +1,175 @@
+/* 制度前台 · 提交意见页（左目录 + 右正文） */
+.os-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding-bottom: 56px;
+}
+
+/* 主体：左目录 + 右正文 */
+.os-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.os-toc {
+  flex: 0 0 240px;
+  width: 240px;
+  position: sticky;
+  top: 84px;
+  max-height: calc(100vh - 108px);
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #eaeef5;
+  border-radius: 12px;
+  padding: 14px 14px 18px;
+}
+.os-toc-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2440;
+  margin-bottom: 10px;
+}
+.os-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.os-toc-item {
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.5;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.os-toc-item:hover {
+  background: #eef2ff;
+  color: #1e3a8a;
+}
+.os-toc-item.lv1 {
+  padding-left: 22px;
+  font-size: 13px;
+  color: #64748b;
+}
+.os-toc-item.lv2 {
+  padding-left: 34px;
+  font-size: 12.5px;
+  color: #94a3b8;
+}
+.os-toc-empty {
+  font-size: 13px;
+  color: #94a3b8;
+  padding: 4px 10px;
+}
+
+.os-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #eaeef5;
+  border-radius: 12px;
+  padding: 22px 28px 30px;
+}
+
+.os-tip {
+  background: #f0f5ff;
+  border: 1px dashed #c7d6ff;
+  color: #3b5bff;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+}
+
+.os-sec {
+  padding: 12px 0 16px;
+  border-bottom: 1px dashed #f1f4f9;
+  scroll-margin-top: 84px;
+}
+.os-sec:last-child {
+  border-bottom: none;
+}
+.os-sec-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2440;
+}
+.os-sec.lv1 .os-sec-title {
+  font-size: 15px;
+  color: #334155;
+}
+.os-sec.lv2 .os-sec-title {
+  font-size: 14px;
+  color: #475569;
+}
+.os-sec-btn.ant-btn {
+  margin-left: auto;
+  padding: 0 6px;
+  height: auto;
+  opacity: 0.72;
+  transition: opacity 0.15s ease;
+}
+.os-sec:hover .os-sec-btn.ant-btn {
+  opacity: 1;
+}
+.os-sec-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #15803d;
+  background: #eafaf1;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.os-sec-content {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.95;
+  color: #334155;
+  text-indent: 2em;
+}
+
+/* 弹窗内引用的段落 */
+.os-quote {
+  background: #f7f9fc;
+  border-left: 3px solid #c7d6ff;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  max-height: 120px;
+  overflow: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #64748b;
+}
+
+.os-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+}
+.os-closed {
+  border-radius: 12px;
+  color: #64748b;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .os-layout {
+    flex-direction: column;
+  }
+  .os-toc {
+    position: static;
+    width: 100%;
+    flex: 1 1 auto;
+    max-height: none;
+  }
+}

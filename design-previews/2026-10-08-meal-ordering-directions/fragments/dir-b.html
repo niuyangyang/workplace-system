@@ -1,0 +1,237 @@
+<style>
+/* ===== 方向 B · 深夜食堂（暗色 + 暖金） ===== */
+.dir-b{
+  position:relative;width:960px;height:600px;overflow:hidden;
+  background:#14161c;color:#f0ede6;
+  font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+  font-style:normal;font-variant-numeric:tabular-nums;
+  display:flex;align-items:center;justify-content:center;gap:38px;
+}
+.dir-b *{box-sizing:border-box;margin:0;padding:0;font-style:normal;}
+.dir-b button{appearance:none;-webkit-appearance:none;font-family:inherit;cursor:default;}
+
+/* 夜灯氛围层（<6% 极轻暖渐变） */
+.dir-b .ambient{position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(460px 300px at 28% 0%, rgba(245,179,1,0.05), transparent 70%),
+    radial-gradient(420px 280px at 86% 12%, rgba(255,138,76,0.04), transparent 70%);
+}
+
+/* ===== PC 窗口 mockup ===== */
+.dir-b .pc{position:relative;z-index:1;width:580px;height:556px;background:#1c1f27;border:1px solid #2e3340;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;}
+.dir-b .pc-bar{flex:none;height:34px;display:flex;align-items:center;gap:6px;padding:0 12px;background:#232733;border-bottom:1px solid #2e3340;}
+.dir-b .dot{width:8px;height:8px;border-radius:50%;}
+.dir-b .dot.r{background:#d16a5c;}
+.dir-b .dot.y{background:#d9a353;}
+.dir-b .dot.g{background:#7ea86a;}
+.dir-b .win-title{margin-left:8px;font-size:12px;color:#9aa0ad;}
+.dir-b .pc-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:13px 16px 12px;}
+
+.dir-b .policy{flex:none;display:flex;align-items:center;gap:8px;font-size:12px;color:#9aa0ad;}
+.dir-b .policy i{flex:none;width:6px;height:6px;border-radius:50%;background:#f5b301;}
+.dir-b .policy .hours{margin-left:auto;font-variant-numeric:tabular-nums;}
+
+.dir-b .hint{flex:none;display:flex;align-items:center;gap:8px;background:#232733;border:1px solid #2e3340;border-radius:8px;padding:8px 12px;font-size:12px;}
+.dir-b .hint .t{color:#f0ede6;font-weight:600;font-variant-numeric:tabular-nums;}
+.dir-b .hint .sep{color:#9aa0ad;}
+.dir-b .hint .free{color:#9aa0ad;}
+.dir-b .badge-late{font-size:11px;line-height:1;font-weight:600;color:#ff8a4c;background:rgba(255,138,76,0.10);border:1px solid rgba(255,138,76,0.30);border-radius:4px;padding:3px 6px;}
+
+.dir-b .pills{flex:none;display:flex;gap:8px;}
+.dir-b .pill{font-size:12px;color:#9aa0ad;background:#232733;border:1px solid #2e3340;border-radius:999px;padding:6px 14px;white-space:nowrap;}
+.dir-b .pill.on{background:#f5b301;border-color:#f5b301;color:#14161c;font-weight:600;}
+
+.dir-b .grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:10px;}
+.dir-b .dish{position:relative;background:#232733;border:1px solid #2e3340;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;}
+.dir-b .thumb{flex:none;height:74px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+  background:radial-gradient(90px 58px at 50% 45%, rgba(245,179,1,0.06), transparent 75%),linear-gradient(165deg,#282c38,#1e222d);}
+.dir-b .badge-low{position:absolute;top:0;right:0;background:#f5b301;color:#14161c;font-size:10px;font-weight:700;padding:3px 7px;border-radius:0 9px 0 8px;}
+.dir-b .d-info{flex:1;min-height:0;display:flex;flex-direction:column;gap:3px;padding:8px 10px 10px;}
+.dir-b .d-name{font-size:13px;font-weight:600;color:#f0ede6;}
+.dir-b .d-stock{font-size:11px;color:#9aa0ad;}
+.dir-b .d-stock .hot{color:#f5b301;font-weight:600;}
+.dir-b .d-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;}
+.dir-b .price{font-size:16px;font-weight:700;color:#f5b301;letter-spacing:-0.2px;font-variant-numeric:tabular-nums;}
+.dir-b .plus{width:22px;height:22px;border-radius:50%;border:1px solid rgba(245,179,1,0.60);background:transparent;color:#f5b301;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;}
+
+.dir-b .pc-foot{flex:none;height:46px;display:flex;align-items:center;gap:10px;padding:0 16px;background:#1f222b;border-top:1px solid #2e3340;}
+.dir-b .cart-sum{font-size:12px;color:#9aa0ad;}
+.dir-b .cart-sum b{color:#f0ede6;font-weight:700;}
+.dir-b .cart-sum .gold{color:#f5b301;}
+.dir-b .primary{margin-left:auto;background:#f5b301;color:#14161c;border:none;border-radius:8px;font-size:12.5px;font-weight:700;padding:9px 14px;}
+
+/* ===== 手机 mockup ===== */
+.dir-b .phone{position:relative;z-index:1;width:270px;height:556px;background:#1c1f27;border:1px solid #2e3340;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:10px 12px 12px;}
+.dir-b .notch{flex:none;width:56px;height:4px;border-radius:999px;background:#2e3340;margin:2px auto 0;}
+.dir-b .ph-status{flex:none;display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#9aa0ad;font-variant-numeric:tabular-nums;}
+.dir-b .sig{display:flex;gap:3px;}
+.dir-b .sig i{width:4px;height:4px;border-radius:50%;background:#2e3340;}
+.dir-b .sig i.on{background:#9aa0ad;}
+.dir-b .ph-head{flex:none;}
+.dir-b .ph-title{font-size:15px;font-weight:700;color:#f0ede6;}
+.dir-b .ph-sub{margin-top:3px;font-size:10.5px;line-height:1.4;color:#9aa0ad;}
+.dir-b .hint.sm{padding:7px 10px;font-size:11px;border-radius:7px;gap:6px;}
+.dir-b .hint.sm .badge-late{font-size:10px;padding:2px 5px;}
+.dir-b .pills.ph-pills{overflow:hidden;}
+.dir-b .pills.ph-pills .pill{flex:none;font-size:11px;padding:5px 11px;}
+
+.dir-b .ph-list{flex:1;min-height:0;display:flex;flex-direction:column;gap:7px;}
+.dir-b .row{flex:1;min-height:0;position:relative;display:flex;align-items:center;gap:9px;background:#232733;border:1px solid #2e3340;border-radius:10px;padding:8px;}
+.dir-b .rthumb{flex:none;width:44px;height:44px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;
+  background:radial-gradient(38px 26px at 50% 45%, rgba(245,179,1,0.06), transparent 75%),linear-gradient(165deg,#282c38,#1e222d);}
+.dir-b .r-info{flex:1;min-width:0;}
+.dir-b .r-name{font-size:12.5px;font-weight:600;color:#f0ede6;white-space:nowrap;}
+.dir-b .r-stock{margin-top:2px;font-size:10.5px;color:#9aa0ad;}
+.dir-b .r-right{flex:none;display:flex;align-items:center;gap:8px;}
+.dir-b .price.sm{font-size:13px;}
+.dir-b .plus.sm{width:20px;height:20px;font-size:13px;}
+.dir-b .ph-cart{flex:none;height:46px;display:flex;align-items:center;gap:8px;background:#232733;border:1px solid #2e3340;border-radius:12px;padding:0 6px 0 12px;}
+.dir-b .ph-cart .primary{padding:8px 12px;font-size:12px;border-radius:8px;}
+
+/* ===== 菜品小图（纯 CSS，无 emoji） ===== */
+.dir-b .art{display:block;position:relative;}
+.dir-b .a-noodle{width:30px;height:15px;background:linear-gradient(180deg,#caa257,#8f6b34);border-radius:0 0 30px 30px;}
+.dir-b .a-noodle::before{content:"";position:absolute;left:3px;right:3px;top:-5px;height:4px;border-radius:3px;background:repeating-linear-gradient(90deg,#e3c98d 0 3px,transparent 3px 6px);}
+.dir-b .a-skewer{width:4px;height:26px;border-radius:2px;background:linear-gradient(180deg,#a97e42,#6e5433);transform:rotate(24deg);box-shadow:11px 6px 0 -1px #b98a4a;}
+.dir-b .a-paluda{width:22px;height:24px;background:linear-gradient(180deg,#4a3d29,#33291a);border-radius:4px 4px 8px 8px;}
+.dir-b .a-paluda::before{content:"";position:absolute;left:3px;right:3px;top:4px;height:11px;border-radius:3px;
+  background:radial-gradient(circle at 5px 4px,#ecd9ab 1.6px,transparent 2.2px),radial-gradient(circle at 12px 2px,#c9a86a 1.6px,transparent 2.2px),radial-gradient(circle at 15px 8px,#ecd9ab 1.6px,transparent 2.2px);}
+.dir-b .a-oden{width:38px;height:2px;background:#6e5a3a;border-radius:2px;}
+.dir-b .a-oden::before{content:"";position:absolute;left:5px;top:-4px;width:9px;height:9px;border-radius:50%;background:#d8b877;box-shadow:13px 1px 0 0 #c2a05e;}
+.dir-b .a-oden::after{content:"";position:absolute;right:5px;top:-3px;width:8px;height:8px;border-radius:50%;background:#a98a4e;}
+.dir-b .a-coffee{width:16px;height:26px;border:1px solid rgba(232,220,194,0.35);border-radius:3px 3px 6px 6px;
+  background:linear-gradient(180deg,rgba(232,220,194,0.14),rgba(122,74,40,0.55) 45%,#5b3a20);}
+.dir-b .a-coffee::before{content:"";position:absolute;left:2px;right:2px;top:5px;height:3px;border-radius:2px;background:rgba(232,220,194,0.40);}
+.dir-b .a-rice{width:30px;height:15px;background:linear-gradient(180deg,#e6ddc8 0 40%,#b98a4a 40%);border-radius:0 0 30px 30px;}
+.dir-b .a-rice::before{content:"";position:absolute;left:8px;top:-3px;width:12px;height:6px;border-radius:6px 6px 2px 2px;background:#6b4a2a;}
+
+/* 角落标注 */
+.dir-b .note{position:absolute;right:12px;bottom:10px;z-index:2;font-size:10px;letter-spacing:0.5px;color:rgba(240,237,230,0.4);}
+</style>
+
+<div class="stage dir-b">
+  <div class="ambient"></div>
+
+  <!-- PC 窗口 -->
+  <div class="pc">
+    <div class="pc-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="win-title">员工订餐 · 深夜食堂</span>
+    </div>
+    <div class="pc-body">
+      <div class="policy"><i></i>加班餐由行政部统一采购，月底随餐补结算<span class="hours">今日供餐 21:00 – 23:30</span></div>
+      <div class="hint"><span class="t">22:00 前</span><span class="badge-late">夜宵专档</span><span class="sep">·</span><span class="free">免配送费</span></div>
+      <div class="pills">
+        <span class="pill">全部</span>
+        <span class="pill">晚餐套餐</span>
+        <span class="pill on">加班夜宵</span>
+        <span class="pill">饮品小食</span>
+      </div>
+      <div class="grid">
+        <div class="dish">
+          <div class="thumb"><i class="art a-noodle"></i></div>
+          <div class="d-info">
+            <div class="d-name">小龙虾拌面</div>
+            <div class="d-stock">剩 8 份 · <b class="hot">抢手</b></div>
+            <div class="d-foot"><span class="price">¥28</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <div class="thumb"><i class="art a-skewer"></i></div>
+          <div class="d-info">
+            <div class="d-name">烤串拼盘</div>
+            <div class="d-stock">剩 5 份</div>
+            <div class="d-foot"><span class="price">¥32</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <div class="thumb"><i class="art a-paluda"></i></div>
+          <div class="d-info">
+            <div class="d-name">泡鲁达</div>
+            <div class="d-stock">剩 15 份</div>
+            <div class="d-foot"><span class="price">¥16</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <div class="thumb"><i class="art a-oden"></i></div>
+          <div class="d-info">
+            <div class="d-name">关东煮</div>
+            <div class="d-stock">剩 22 份</div>
+            <div class="d-foot"><span class="price">¥12</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <div class="thumb"><i class="art a-coffee"></i></div>
+          <div class="d-info">
+            <div class="d-name">冰美式</div>
+            <div class="d-stock">剩 30 份</div>
+            <div class="d-foot"><span class="price">¥9</span><button class="plus">+</button></div>
+          </div>
+        </div>
+        <div class="dish">
+          <span class="badge-low">仅剩 3 份</span>
+          <div class="thumb"><i class="art a-rice"></i></div>
+          <div class="d-info">
+            <div class="d-name">卤肉双拼饭</div>
+            <div class="d-stock">仅剩 3 份 · 库存紧张</div>
+            <div class="d-foot"><span class="price">¥18</span><button class="plus">+</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pc-foot">
+      <span class="cart-sum">已选 <b>3</b> 件 · 合计 <b class="gold">¥60</b></span>
+      <button class="primary">提交订餐（行政部统一采购）</button>
+    </div>
+  </div>
+
+  <!-- 手机 -->
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="ph-status"><span>22:41</span><span class="sig"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+    <div class="ph-head">
+      <div class="ph-title">深夜食堂</div>
+      <div class="ph-sub">加班餐由行政部统一采购，月底随餐补结算</div>
+    </div>
+    <div class="hint sm"><span class="t">22:00 前</span><span class="badge-late">夜宵专档</span><span class="sep">·</span><span class="free">免配送费</span></div>
+    <div class="pills ph-pills">
+      <span class="pill">全部</span>
+      <span class="pill">晚餐套餐</span>
+      <span class="pill on">加班夜宵</span>
+      <span class="pill">饮品小食</span>
+    </div>
+    <div class="ph-list">
+      <div class="row">
+        <div class="rthumb"><i class="art a-noodle"></i></div>
+        <div class="r-info"><div class="r-name">小龙虾拌面</div><div class="r-stock">剩 8 份 · 抢手</div></div>
+        <div class="r-right"><span class="price sm">¥28</span><button class="plus sm">+</button></div>
+      </div>
+      <div class="row">
+        <div class="rthumb"><i class="art a-skewer"></i></div>
+        <div class="r-info"><div class="r-name">烤串拼盘</div><div class="r-stock">剩 5 份</div></div>
+        <div class="r-right"><span class="price sm">¥32</span><button class="plus sm">+</button></div>
+      </div>
+      <div class="row">
+        <div class="rthumb"><i class="art a-paluda"></i></div>
+        <div class="r-info"><div class="r-name">泡鲁达</div><div class="r-stock">剩 15 份</div></div>
+        <div class="r-right"><span class="price sm">¥16</span><button class="plus sm">+</button></div>
+      </div>
+      <div class="row">
+        <div class="rthumb"><i class="art a-oden"></i></div>
+        <div class="r-info"><div class="r-name">关东煮</div><div class="r-stock">剩 22 份</div></div>
+        <div class="r-right"><span class="price sm">¥12</span><button class="plus sm">+</button></div>
+      </div>
+      <div class="row">
+        <div class="rthumb"><i class="art a-coffee"></i></div>
+        <div class="r-info"><div class="r-name">冰美式</div><div class="r-stock">剩 30 份</div></div>
+        <div class="r-right"><span class="price sm">¥9</span><button class="plus sm">+</button></div>
+      </div>
+    </div>
+    <div class="ph-cart">
+      <span class="cart-sum">已选 <b>3</b> 件 · <b class="gold">¥60</b></span>
+      <button class="primary">提交订餐</button>
+    </div>
+  </div>
+
+  <div class="note">方向样机 B · 不是最终页面</div>
+</div>

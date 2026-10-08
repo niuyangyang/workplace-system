@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议室预约页重设计 · 方向预览</title>
+<style>
+  /* 壳：中性克制，不与方向 mockup 抢戏 */
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;background:#f4f4f2;color:#1a1a1a}
+  .bar{padding:18px 32px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .bar .tip{color:#6b7280;font-size:13px}
+  .dials{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:12px;padding:18px 32px;border-bottom:1px solid #ddd;background:#fafaf8}
+  .dial{display:grid;gap:6px;font-size:13px}
+  .dial b{font-weight:650}
+  .dial output{font-variant-numeric:tabular-nums;color:#0f766e;font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding:28px 32px}
+  .card{background:#fff;border:2px solid #e2e2e0;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-sizing:border-box}
+  .card.selected{border-color:#1a1a1a}
+  .card-head{display:flex;align-items:baseline;gap:10px;padding:14px 20px 10px}
+  .card-head .tag{font-size:12px;color:#6b7280}
+  .card-head .rec{font-size:11px;font-weight:700;color:#92400e;background:#fef3c7;border-radius:999px;padding:2px 10px}
+  .mock{height:300px;overflow:hidden;position:relative;display:grid;place-items:center;background:#e9e9e6}
+  .mock>.stage{width:960px;height:600px;transform:scale(.5);transform-origin:center center;flex:0 0 auto}
+  .meta{padding:14px 20px;display:grid;gap:10px;min-width:0;width:100%;box-sizing:border-box}
+  .meta p{margin:0;color:#4b5563;font-size:13px;line-height:1.55;max-width:64ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;writing-mode:horizontal-tb;white-space:normal;overflow-wrap:break-word;word-break:normal}
+  .qmdp-pick-button{position:relative;z-index:1;width:calc(100% - 40px);min-height:44px;margin:0 20px 18px;border:1.5px solid #1a1a1a;border-radius:10px;background:#1a1a1a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;white-space:normal;writing-mode:horizontal-tb;transition:transform .12s cubic-bezier(.23,1,.32,1),box-shadow .12s}
+  .qmdp-pick-button:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(15,23,42,.16)}
+  .qmdp-pick-button:active{transform:translateY(0) scale(.99)}
+  /* 方向说明区：与样机区分 */
+  .notes{padding:8px 32px 40px;display:grid;gap:14px}
+  .note-card{background:#fff;border:1px solid #e2e2e0;border-radius:12px;padding:16px 20px}
+  .note-card h3{margin:0 0 6px;font-size:14px}
+  .note-card p{margin:0;font-size:13px;color:#4b5563;line-height:1.6}
+  .note-card .k{color:#92400e;font-weight:600}
+  @media (max-width:760px){
+    .bar{padding:14px 16px}
+    .dials{grid-template-columns:1fr;padding:14px 16px}
+    .grid{grid-template-columns:1fr;padding:14px 16px;gap:18px}
+    .notes{padding:8px 16px 32px}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <strong>会议室预约页重设计 · 方向样机</strong>
+    <span class="tip">设计方向样机，不是最终页面 · 键盘 1-4 选择 · 确认后回传当前工作流</span>
+  </div>
+
+  <div class="dials" data-qmdp-dials aria-label="设计拨盘">
+    <label class="dial"><b>视觉冒险度 <output id="varianceOut" data-qmdp-output="variance">4</output></b><input id="variance" data-qmdp-dial="variance" type="range" min="1" max="10" value="4"></label>
+    <label class="dial"><b>动效强度 <output id="motionOut" data-qmdp-output="motion">4</output></b><input id="motion" data-qmdp-dial="motion" type="range" min="1" max="10" value="4"></label>
+    <label class="dial"><b>信息密度 <output id="densityOut" data-qmdp-output="density">6</output></b><input id="density" data-qmdp-dial="density" type="range" min="1" max="10" value="6"></label>
+  </div>
+
+  <div class="grid">
+    <div class="card" data-name="主检查台 Master-Detail">
+      <div class="card-head"><strong>方向 A · 主检查台</strong><span class="tag">零弹窗 · 左时间轴右面板 · teal 延续</span></div>
+      <div class="mock"><div class="stage">
+{{FRAG_A}}
+      </div></div>
+      <div class="meta"><p>时间轴加大加好点，右侧预约面板实时跟随已选时段更新，填完就地提交，全程不弹窗。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 A · 主检查台 Master-Detail</button>
+    </div>
+
+    <div class="card" data-name="三步向导 Stepper">
+      <div class="card-head"><strong>方向 B · 三步向导</strong><span class="tag">分步专注 · 暖白靛蓝 · Stripe 气质</span></div>
+      <div class="mock"><div class="stage">
+{{FRAG_B}}
+      </div></div>
+      <div class="meta"><p>选时段、邀人、确认拆成三步，每屏只做一件事，适合不想被一屏表单吓到的场景。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 B · 三步向导 Stepper</button>
+    </div>
+
+    <div class="card" data-name="调度台 Dense Dark">
+      <div class="card-head"><strong>方向 C · 调度台</strong><span class="tag">暗色高密度 · 等宽数字 · 命令条</span></div>
+      <div class="mock"><div class="stage">
+{{FRAG_C}}
+      </div></div>
+      <div class="meta"><p>全周信息一屏尽收，底部命令条像专业调度工具，回车即提交，效率取向拉满。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 C · 调度台 Dense Dark</button>
+    </div>
+
+    <div class="card" data-name="日历优先 Calendar-first" data-rec="1">
+      <div class="card-head"><strong>方向 D · 日历优先</strong><span class="rec">推荐</span><span class="tag">Cal.com 气质 · 浮出快卡 · 极简发丝线</span></div>
+      <div class="mock"><div class="stage">
+{{FRAG_D}}
+      </div></div>
+      <div class="meta"><p>日历是绝对主角，选中时段原地浮出确认卡，最快路径完成预约，最像成熟的日程产品。</p></div>
+      <button type="button" class="qmdp-pick-button">选择 D · 日历优先 Calendar-first</button>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note-card"><h3>A · 主检查台 Master-Detail</h3><p>气质：安静高效的内勤工具。字体：系统栈 + tabular-nums。色彩：冷灰白底，延续现有品牌 teal。<span class="k">记忆点</span>：右侧预约面板随选中时段实时生长。<span class="k">适合</span>：想保留现有配色连续性、改动最自然。</p></div>
+    <div class="note-card"><h3>B · 三步向导 Stepper</h3><p>气质：暖色高端、被引导的安全感。字体：系统栈，字重分层。色彩：暖白 + 暖墨 + 单色靛蓝。<span class="k">记忆点</span>：步骤条上可回跳的已选时段 chip。<span class="k">适合</span>：预约流程想彻底重组、降低一次性填表压力。</p></div>
+    <div class="note-card"><h3>C · 调度台 Dense Dark</h3><p>气质：深色专业、行政/IT 管理员视角。字体：系统栈 + 等宽时间数字。色彩：深灰蓝底 + 单一绿重音。<span class="k">记忆点</span>：命令条式预约，回车即提交。<span class="k">适合</span>：高频订房、重度用户；整页气质与前台门户差异最大。</p></div>
+    <div class="note-card"><h3>D · 日历优先 Calendar-first（推荐）</h3><p>气质：成熟日程产品的干净利落。字体：系统栈小字号高精度。色彩：纯白 + 发丝线 + 单点蓝。<span class="k">推荐理由</span>：最贴合「高效专业」的设计读取——选中即浮卡是预约的最短路径，功能全保留且信息组织天然清晰；发丝线日历自带专业感。<span class="k">可混搭</span>：也可以只要 D 的配色 + A 的右栏，或 D 的浮卡 + C 的暗色，在建议框里写一句即可。</p></div>
+  </div>
+
+<script>
+  ['variance','motion','density'].forEach(function(id){
+    var input = document.getElementById(id), out = document.getElementById(id + 'Out');
+    input.addEventListener('input', function(){ out.value = input.value; out.textContent = input.value; });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<style>
+.dir-d{
+  position:relative;width:960px;height:600px;overflow:hidden;
+  background:#fbfbfd;color:#17181c;
+  font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Helvetica,Arial,sans-serif;
+  font-size:12px;line-height:1.4;text-align:left;
+}
+.dir-d *,.dir-d *::before,.dir-d *::after{margin:0;padding:0;box-sizing:border-box;font-style:normal;}
+.dir-d .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
+
+/* ---------- 背景点缀 ---------- */
+.dir-d .dd-blob{position:absolute;left:14px;top:60px;width:320px;height:320px;border-radius:50%;background:#f1f1f7;}
+.dir-d .dd-blob2{position:absolute;left:400px;bottom:-90px;width:220px;height:220px;border-radius:50%;background:#f3f0ea;}
+
+/* ---------- 手机 mockup ---------- */
+.dir-d .dd-phone{
+  position:absolute;left:84px;top:20px;width:300px;height:560px;
+  background:#fff;border:8px solid #1d1e24;border-radius:40px;
+  box-shadow:0 14px 34px rgba(23,24,28,.14);overflow:hidden;
+}
+.dir-d .dd-notch{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:82px;height:15px;border-radius:9px;background:#1d1e24;z-index:6;}
+.dir-d .dd-screen{position:absolute;inset:0;background:#fbfbfd;padding:30px 14px 78px;overflow:hidden;}
+.dir-d .dd-status{display:flex;justify-content:space-between;font-size:9px;color:#83878f;margin-bottom:10px;}
+.dir-d .dd-h1{font-size:22px;font-weight:800;letter-spacing:.5px;}
+.dir-d .dd-date{font-size:11px;color:#83878f;margin-top:3px;}
+.dir-d .dd-notice{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:10px;color:#83878f;background:#fff;border-radius:9px;padding:3px 8px;box-shadow:0 4px 16px rgba(23,24,28,.06);}
+.dir-d .dd-notice i{width:5px;height:5px;border-radius:50%;background:#e8543f;flex:none;}
+
+/* 分类胶囊 */
+.dir-d .dd-pills{display:flex;gap:8px;margin-top:13px;overflow:hidden;}
+.dir-d .dd-pill{flex:none;display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 12px;border-radius:15px;background:#fff;border:1px solid #ececef;font-size:11px;color:#17181c;font-weight:500;box-shadow:0 4px 16px rgba(23,24,28,.06);}
+.dir-d .dd-pill i{position:relative;width:7px;height:7px;border-radius:50%;flex:none;}
+.dir-d .dd-pill.c1 i{background:#e8543f;}
+.dir-d .dd-pill.c2 i{background:#1f8a5d;}
+.dir-d .dd-pill.c3 i{background:#a5661f;}
+.dir-d .dd-pill.c4 i{background:#2a7fd4;}
+.dir-d .dd-pill.on{background:#e8543f;border-color:#e8543f;color:#fff;font-weight:600;}
+.dir-d .dd-pill.on i{background:#fff;}
+.dir-d .dd-pill.on i::after{content:"";position:absolute;left:1.5px;top:1.5px;width:4px;height:4px;border-radius:50%;background:#e8543f;}
+
+/* 菜品大卡 */
+.dir-d .dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.dir-d .dd-card{background:#fff;border-radius:16px;box-shadow:0 4px 16px rgba(23,24,28,.06);padding:7px;}
+.dir-d .dd-img{position:relative;height:60px;border-radius:11px;overflow:hidden;}
+.dir-d .dd-img em{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.6);}
+.dir-d .dd-img em::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:rgba(23,24,28,.12);}
+.dir-d .dd-img.beef{background:linear-gradient(135deg,#f7d9c9,#e8b39a);}
+.dir-d .dd-img.chicken{background:linear-gradient(135deg,#fbe3d4,#f0c09a);}
+.dir-d .dd-img.broc{background:linear-gradient(135deg,#ddefdd,#b7d9bc);}
+.dir-d .dd-img.juice{background:linear-gradient(135deg,#fdeacb,#f7c98b);}
+.dir-d .dd-stock{position:absolute;top:5px;left:5px;font-size:8px;font-weight:600;color:#e8543f;background:rgba(255,255,255,.94);border-radius:8px;padding:2px 6px;line-height:1;}
+.dir-d .dd-name{font-size:12px;font-weight:600;margin-top:6px;}
+.dir-d .dd-meta{display:flex;align-items:center;margin-top:5px;}
+.dir-d .dd-price{color:#e8543f;font-size:14px;font-weight:700;}
+.dir-d .dd-sales{flex:1;font-size:9px;color:#83878f;margin-left:5px;}
+.dir-d .dd-add{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;line-height:1;flex:none;}
+.dir-d .dd-add.solid{background:#e8543f;color:#fff;}
+.dir-d .dd-add.out{background:#fff;border:1.5px solid #e8543f;color:#e8543f;}
+
+/* 底部购物车悬浮条 */
+.dir-d .dd-cart{position:absolute;left:10px;right:10px;bottom:10px;height:54px;background:#fff;border-radius:27px;box-shadow:0 8px 24px rgba(23,24,28,.14);display:flex;align-items:center;padding:0 6px 0 8px;z-index:5;}
+.dir-d .dd-bag{position:relative;width:38px;height:38px;border-radius:50%;background:#fdeae6;flex:none;}
+.dir-d .dd-bag i{position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);width:13px;height:11px;background:#e8543f;border-radius:2px 2px 4px 4px;}
+.dir-d .dd-bag i::before{content:"";position:absolute;left:1.8px;top:-5px;width:6.4px;height:6px;border:1.8px solid #e8543f;border-bottom:none;border-radius:6px 6px 0 0;}
+.dir-d .dd-cartinfo{flex:1;margin-left:8px;font-size:11px;font-weight:600;}
+.dir-d .dd-cartinfo b{color:#e8543f;font-weight:700;}
+.dir-d .dd-go{height:38px;padding:0 16px;border-radius:19px;background:#e8543f;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;letter-spacing:1px;}
+
+/* ---------- PC 陪衬窗口 ---------- */
+.dir-d .dd-pc{position:absolute;left:462px;top:74px;width:420px;height:450px;background:#fff;border:1px solid #ececef;border-radius:12px;box-shadow:0 14px 34px rgba(23,24,28,.10);overflow:hidden;}
+.dir-d .dd-chrome{height:28px;background:#f4f4f7;border-bottom:1px solid #ececef;display:flex;align-items:center;gap:5px;padding:0 10px;}
+.dir-d .dd-chrome i{width:7px;height:7px;border-radius:50%;background:#d9d9e0;}
+.dir-d .dd-url{width:190px;height:16px;margin:0 auto;border-radius:8px;background:#fff;border:1px solid #e6e6ec;font-size:8px;color:#83878f;text-align:center;line-height:15px;}
+.dir-d .dd-chrome span{width:26px;flex:none;}
+.dir-d .dd-pcbody{height:420px;background:#fbfbfd;padding:12px 14px;overflow:hidden;}
+.dir-d .dd-banner{height:64px;border-radius:12px;background:#fdeee9;display:flex;align-items:center;padding:0 14px;position:relative;overflow:hidden;}
+.dir-d .dd-banner h3{font-size:13px;font-weight:700;color:#17181c;}
+.dir-d .dd-banner p{font-size:10px;color:#83878f;margin-top:3px;}
+.dir-d .dd-banner i{position:absolute;border-radius:50%;}
+.dir-d .dd-banner i.b1{right:64px;top:-22px;width:74px;height:74px;background:rgba(232,84,63,.14);}
+.dir-d .dd-banner i.b2{right:16px;bottom:-30px;width:88px;height:88px;background:rgba(232,84,63,.20);}
+.dir-d .dd-pclayout{display:flex;gap:12px;margin-top:10px;}
+.dir-d .dd-side{width:92px;flex:none;padding-top:2px;}
+.dir-d .dd-side h4{font-size:12px;font-weight:700;margin-bottom:8px;}
+.dir-d .dd-nav{display:flex;align-items:center;gap:6px;height:28px;padding:0 8px;border-radius:8px;font-size:11px;color:#17181c;margin-bottom:2px;}
+.dir-d .dd-nav i{width:6px;height:6px;border-radius:50%;flex:none;}
+.dir-d .dd-nav.n1 i{background:#e8543f;}
+.dir-d .dd-nav.n2 i{background:#1f8a5d;}
+.dir-d .dd-nav.n3 i{background:#a5661f;}
+.dir-d .dd-nav.n4 i{background:#2a7fd4;}
+.dir-d .dd-nav.on{background:#fdeae6;color:#e8543f;font-weight:600;}
+.dir-d .dd-pcgrid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start;}
+.dir-d .dd-pcard{background:#fff;border-radius:16px;box-shadow:0 4px 16px rgba(23,24,28,.06);padding:8px;}
+.dir-d .dd-pimg{position:relative;height:56px;border-radius:10px;overflow:hidden;}
+.dir-d .dd-pimg em{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.6);}
+.dir-d .dd-pimg em::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:rgba(23,24,28,.12);}
+.dir-d .dd-pimg.beef{background:linear-gradient(135deg,#f7d9c9,#e8b39a);}
+.dir-d .dd-pimg.chicken{background:linear-gradient(135deg,#fbe3d4,#f0c09a);}
+.dir-d .dd-pimg.broc{background:linear-gradient(135deg,#ddefdd,#b7d9bc);}
+.dir-d .dd-pimg.juice{background:linear-gradient(135deg,#fdeacb,#f7c98b);}
+.dir-d .dd-pimg.pork{background:linear-gradient(135deg,#f9dcd4,#e9a9a0);}
+.dir-d .dd-pimg.plum{background:linear-gradient(135deg,#e6dfd6,#c9b8a3);}
+.dir-d .dd-pimg.noodle{background:linear-gradient(135deg,#fbe9d0,#f2cd96);}
+.dir-d .dd-pimg.fish{background:linear-gradient(135deg,#ddeef0,#b5d5da);}
+.dir-d .dd-pimg.coffee{background:linear-gradient(135deg,#e8e0d6,#c2a98a);}
+.dir-d .dd-stock2{position:absolute;top:5px;left:5px;font-size:8px;font-weight:600;color:#e8543f;background:rgba(255,255,255,.94);border-radius:8px;padding:2px 6px;line-height:1;}
+.dir-d .dd-pname{font-size:11px;font-weight:600;margin-top:6px;white-space:nowrap;overflow:hidden;}
+.dir-d .dd-pmeta{display:flex;align-items:center;margin-top:5px;}
+.dir-d .dd-pprice{color:#e8543f;font-size:12px;font-weight:700;}
+.dir-d .dd-psales{flex:1;font-size:8px;color:#83878f;margin-left:4px;}
+.dir-d .dd-padd{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;line-height:1;flex:none;}
+.dir-d .dd-padd.solid{background:#e8543f;color:#fff;}
+.dir-d .dd-padd.out{background:#fff;border:1.5px solid #e8543f;color:#e8543f;}
+
+/* 角标 */
+.dir-d .dd-note{position:absolute;right:10px;bottom:8px;font-size:10px;color:rgba(23,24,28,.4);letter-spacing:.5px;}
+</style>
+
+<div class="stage dir-d">
+  <!-- 背景点缀 -->
+  <div class="dd-blob"></div>
+  <div class="dd-blob2"></div>
+
+  <!-- ============ 手机（主角） ============ -->
+  <div class="dd-phone">
+    <div class="dd-notch"></div>
+    <div class="dd-screen">
+      <div class="dd-status num"><span>9:41</span><span>LTE · 86%</span></div>
+      <div class="dd-h1">今天吃什么？</div>
+      <div class="dd-date num">10 月 8 日 周四</div>
+      <div class="dd-notice"><i></i><span class="num">14:30 前下单 · 17:30 送达工位</span></div>
+
+      <!-- 分类胶囊 -->
+      <div class="dd-pills">
+        <span class="dd-pill c1 on"><i></i>午餐套餐</span>
+        <span class="dd-pill c2"><i></i>晚餐</span>
+        <span class="dd-pill c3"><i></i>夜宵</span>
+        <span class="dd-pill c4"><i></i>饮品</span>
+      </div>
+
+      <!-- 菜品大卡 -->
+      <div class="dd-grid">
+        <div class="dd-card">
+          <div class="dd-img beef"><em></em><span class="dd-stock num">剩 15 份</span></div>
+          <div class="dd-name">红烧牛肉饭</div>
+          <div class="dd-meta"><span class="dd-price num">¥22</span><span class="dd-sales num">月销 128</span><span class="dd-add solid">+</span></div>
+        </div>
+        <div class="dd-card">
+          <div class="dd-img chicken"><em></em></div>
+          <div class="dd-name">宫保鸡丁饭</div>
+          <div class="dd-meta"><span class="dd-price num">¥18</span><span class="dd-sales num">月销 96</span><span class="dd-add out">+</span></div>
+        </div>
+        <div class="dd-card">
+          <div class="dd-img broc"><em></em></div>
+          <div class="dd-name">蒜蓉西兰花</div>
+          <div class="dd-meta"><span class="dd-price num">¥8</span><span class="dd-sales num">月销 64</span><span class="dd-add out">+</span></div>
+        </div>
+        <div class="dd-card">
+          <div class="dd-img juice"><em></em></div>
+          <div class="dd-name">鲜榨橙汁</div>
+          <div class="dd-meta"><span class="dd-price num">¥12</span><span class="dd-sales num">月销 88</span><span class="dd-add solid">+</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部购物车悬浮条 -->
+    <div class="dd-cart">
+      <span class="dd-bag"><i></i></span>
+      <span class="dd-cartinfo num">已选 2 件 · <b>¥40</b></span>
+      <span class="dd-go">去提交</span>
+    </div>
+  </div>
+
+  <!-- ============ PC 陪衬窗口（同一设计的桌面版） ============ -->
+  <div class="dd-pc">
+    <div class="dd-chrome">
+      <i></i><i></i><i></i>
+      <div class="dd-url num">meal.company.com/today</div>
+      <span></span>
+    </div>
+    <div class="dd-pcbody">
+      <!-- 顶部横幅 -->
+      <div class="dd-banner">
+        <div>
+          <h3>午餐时段供应中</h3>
+          <p class="num">14:30 前下单 · 17:30 送达工位</p>
+        </div>
+        <i class="b1"></i><i class="b2"></i>
+      </div>
+
+      <div class="dd-pclayout">
+        <!-- 左侧分类列表 -->
+        <div class="dd-side">
+          <h4>今日菜单</h4>
+          <div class="dd-nav n1 on"><i></i>午餐套餐</div>
+          <div class="dd-nav n2"><i></i>晚餐</div>
+          <div class="dd-nav n3"><i></i>夜宵</div>
+          <div class="dd-nav n4"><i></i>饮品</div>
+        </div>
+
+        <!-- 3 列菜品大卡 -->
+        <div class="dd-pcgrid">
+          <div class="dd-pcard">
+            <div class="dd-pimg beef"><em></em><span class="dd-stock2 num">剩 15 份</span></div>
+            <div class="dd-pname">红烧牛肉饭</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥22</span><span class="dd-psales num">月销 128</span><span class="dd-padd solid">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg chicken"><em></em></div>
+            <div class="dd-pname">宫保鸡丁饭</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥18</span><span class="dd-psales num">月销 96</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg broc"><em></em></div>
+            <div class="dd-pname">蒜蓉西兰花</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥8</span><span class="dd-psales num">月销 64</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg juice"><em></em></div>
+            <div class="dd-pname">鲜榨橙汁</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥12</span><span class="dd-psales num">月销 88</span><span class="dd-padd solid">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg pork"><em></em></div>
+            <div class="dd-pname">糖醋里脊饭</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥20</span><span class="dd-psales num">月销 72</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg plum"><em></em></div>
+            <div class="dd-pname">桂花酸梅汤</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥9</span><span class="dd-psales num">月销 54</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg noodle"><em></em></div>
+            <div class="dd-pname">番茄鸡蛋面</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥14</span><span class="dd-psales num">月销 110</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg fish"><em></em></div>
+            <div class="dd-pname">清蒸鲈鱼饭</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥26</span><span class="dd-psales num">月销 41</span><span class="dd-padd out">+</span></div>
+          </div>
+          <div class="dd-pcard">
+            <div class="dd-pimg coffee"><em></em></div>
+            <div class="dd-pname">冰美式</div>
+            <div class="dd-pmeta"><span class="dd-pprice num">¥15</span><span class="dd-psales num">月销 133</span><span class="dd-padd solid">+</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 角标 -->
+  <div class="dd-note">方向样机 D · 不是最终页面</div>
+</div>

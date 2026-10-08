@@ -1,0 +1,49 @@
+/* ===== 门户顶部导航 =====
+   规则取自 sjtu-admin 门户（.topnav-menu / .topnav-link），保持观感与交互一致。 */
+
+.topnav-menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  /* 关键：本项目顶栏 .site-header 设了 line-height:64px，会被链接继承并把
+     hover 胶囊撑到 76px 高；这里复位行高，胶囊只包住文字。 */
+  line-height: normal;
+}
+
+.topnav-link {
+  color: rgba(255, 255, 255, 0.85);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 20px;
+  user-select: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.topnav-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.topnav-link.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 本项目补充：模块页实色顶栏（.site-header--solid）下的深色适配。
+   源项目导航只出现在深色 hero 上，这里补一份保证复用时不串色。 */
+.site-header--solid .topnav-link {
+  color: #5b647a;
+}
+
+.site-header--solid .topnav-link:hover {
+  background: rgba(59, 91, 255, 0.08);
+  color: #3b5bff;
+}
+
+.site-header--solid .topnav-link.active {
+  color: #3b5bff;
+}

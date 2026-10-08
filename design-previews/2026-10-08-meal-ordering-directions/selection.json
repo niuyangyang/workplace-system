@@ -1,0 +1,14 @@
+{
+  "id": "A",
+  "label": "A: 明档点餐 暖橙双栏",
+  "name": "明档点餐 暖橙双栏",
+  "notes": "",
+  "dials": {
+    "variance": 4,
+    "motion": 4,
+    "density": 6
+  },
+  "adjustments": "",
+  "source": "click",
+  "receivedAt": "2026-10-08T07:19:53.846Z"
+}

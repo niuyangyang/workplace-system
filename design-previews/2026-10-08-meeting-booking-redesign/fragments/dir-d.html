@@ -1,0 +1,183 @@
+<style>
+/* 方向 D · 日历优先 Calendar-first · 静态迷你样机（所有选择器 scoped 于 .dir-d） */
+.dir-d .stage, .dir-d .stage * { box-sizing: border-box; margin: 0; padding: 0; }
+.dir-d .stage button { font-family: inherit; }
+.dir-d .stage {
+  position: relative; width: 960px; height: 600px; overflow: hidden;
+  background: #ffffff; color: #16181d;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-size: 12px; line-height: 1.45;
+}
+
+/* ===== 顶部工具行 ===== */
+.dir-d .toolbar { position: relative; display: flex; align-items: center; justify-content: space-between; height: 46px; padding: 0 16px; border-bottom: 1px solid #e5e7eb; }
+.dir-d .tb-left { display: flex; align-items: center; gap: 8px; }
+.dir-d .back { font-size: 12px; color: #2563eb; cursor: pointer; }
+.dir-d .back:hover { text-decoration: underline; }
+.dir-d .sep { color: #d1d5db; font-size: 12px; }
+.dir-d .room { font-size: 13px; font-weight: 600; color: #16181d; }
+.dir-d .meta { font-size: 12px; color: #6b7280; }
+.dir-d .tb-mid { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; }
+.dir-d .range { font-size: 13px; font-weight: 600; color: #16181d; font-variant-numeric: tabular-nums; }
+.dir-d .nav { width: 22px; height: 22px; border: none; background: transparent; color: #6b7280; font-size: 14px; line-height: 1; border-radius: 6px; cursor: pointer; }
+.dir-d .nav:hover { background: #f3f4f6; color: #16181d; }
+.dir-d .tb-right { display: flex; align-items: center; gap: 14px; }
+.dir-d .today { font-size: 12px; color: #16181d; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+.dir-d .today:hover { border-color: #2563eb; color: #2563eb; }
+.dir-d .records { font-size: 12px; color: #2563eb; cursor: pointer; }
+.dir-d .records:hover { text-decoration: underline; }
+
+/* ===== 列头 ===== */
+.dir-d .dayheads { display: grid; grid-template-columns: 52px repeat(5, 1fr); align-items: center; height: 34px; border-bottom: 1px solid #e5e7eb; }
+.dir-d .dh { display: flex; align-items: baseline; justify-content: center; gap: 5px; }
+.dir-d .dw { font-size: 10.5px; color: #6b7280; }
+.dir-d .dd { font-size: 12px; font-weight: 600; color: #16181d; font-variant-numeric: tabular-nums; }
+.dir-d .dh.is-today .dd { color: #2563eb; }
+
+/* ===== 日历主体（绝对主角） ===== */
+.dir-d .gridwrap { position: relative; }
+.dir-d .grid { display: grid; grid-template-columns: 52px repeat(5, 1fr); height: 517px; }
+.dir-d .tl { height: 47px; padding-right: 8px; text-align: right; font-size: 10px; color: #9ca3af; font-variant-numeric: tabular-nums; transform: translateY(-5px); }
+.dir-d .daycol { position: relative; border-left: 1px solid #e5e7eb; background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 23.5px, #f4f5f7 23.5px, #f4f5f7 24.5px, transparent 24.5px, transparent 47px); }
+.dir-d .c { height: 47px; border-top: 1px solid #e5e7eb; }
+.dir-d .c:first-child { border-top: none; }
+/* hover 规则：鼠标悬停空白时段，淡蓝提示可点击拖选 */
+.dir-d .c:hover { background: rgba(37,99,235,.04); cursor: pointer; }
+
+/* 已约事件块：整块底色 + 3px 圆角，无竖线 */
+.dir-d .ev { position: absolute; left: 4px; right: 4px; z-index: 2; background: #eef1f5; border-radius: 3px; padding: 4px 8px; overflow: hidden; cursor: pointer; }
+.dir-d .ev:hover { background: #e4e8ee; }
+.dir-d .et { font-size: 11px; font-weight: 600; color: #374151; white-space: nowrap; }
+.dir-d .es { font-size: 10px; margin-top: 1px; color: #6b7280; font-variant-numeric: tabular-nums; }
+.dir-d .ev1 { top: 47px; height: 70px; }
+.dir-d .ev2 { top: 94px; height: 70px; }
+.dir-d .ev3 { top: 282px; height: 70px; }
+.dir-d .ev4 { top: 329px; height: 70px; }
+
+/* 已选区间：蓝 12% 底 + 1.5px 蓝边 */
+.dir-d .sel { position: absolute; left: 4px; right: 4px; top: 282px; height: 94px; z-index: 1; background: rgba(37,99,235,.12); border: 1.5px solid #2563eb; border-radius: 4px; }
+.dir-d .sel span { position: absolute; top: 4px; left: 8px; font-size: 10px; color: #2563eb; font-variant-numeric: tabular-nums; }
+
+/* 当前时间线（今天 = 周三 10/8） */
+.dir-d .nowline { position: absolute; left: 0; right: 0; top: 156px; z-index: 3; border-top: 1.5px solid rgba(37,99,235,.7); pointer-events: none; }
+.dir-d .nowline::before { content: ""; position: absolute; left: -3px; top: -4px; width: 6px; height: 6px; border-radius: 50%; background: #2563eb; }
+
+/* ===== 浮出快速确认卡 ===== */
+.dir-d .pop { position: absolute; left: 250px; top: 390px; width: 226px; z-index: 10; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 8px 24px rgba(37,99,235,.12); padding: 12px 14px; }
+.dir-d .pop::after { content: ""; position: absolute; left: 28px; top: -5px; width: 9px; height: 9px; background: #ffffff; border-left: 1px solid #e5e7eb; border-top: 1px solid #e5e7eb; transform: rotate(45deg); }
+.dir-d .pop-title { font-size: 12.5px; font-weight: 600; color: #16181d; }
+.dir-d .pop-time { font-size: 11px; margin-top: 3px; color: #6b7280; font-variant-numeric: tabular-nums; }
+.dir-d .pop-people { display: flex; align-items: center; margin: 11px 0 12px; }
+.dir-d .av { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #4b5563; border: 1.5px solid #ffffff; margin-left: -6px; }
+.dir-d .av:first-child { margin-left: 0; }
+.dir-d .a1 { background: #eef1f5; }
+.dir-d .a2 { background: #e4e8ee; }
+.dir-d .a3 { background: #dde2ea; }
+.dir-d .a4 { background: #e9edf2; }
+.dir-d .a5 { background: #e2e6ec; }
+.dir-d .more { background: #f9fafb; color: #6b7280; font-variant-numeric: tabular-nums; }
+.dir-d .pop-actions { display: flex; align-items: center; }
+.dir-d .btn { border: none; background: #2563eb; color: #ffffff; font-size: 12px; font-weight: 500; border-radius: 6px; padding: 6px 16px; cursor: pointer; }
+.dir-d .btn:hover { background: #1d4ed8; }
+.dir-d .alter { margin-left: 14px; font-size: 11.5px; color: #2563eb; cursor: pointer; }
+.dir-d .alter:hover { text-decoration: underline; }
+
+/* ===== 低干扰标注 ===== */
+.dir-d .mark { position: absolute; right: 12px; bottom: 6px; z-index: 20; font-size: 10px; color: rgba(22,24,29,.4); pointer-events: none; }
+</style>
+<div class="stage dir-d">
+  <div class="toolbar">
+    <div class="tb-left">
+      <span class="back">← 返回列表</span>
+      <span class="sep">·</span>
+      <span class="room">海棠会议室</span>
+      <span class="meta">· 容 12 人 · 投影 / 白板 / 茶水</span>
+    </div>
+    <div class="tb-mid">
+      <button class="nav">‹</button>
+      <span class="range">10 月 6 日 - 12 日</span>
+      <button class="nav">›</button>
+    </div>
+    <div class="tb-right">
+      <button class="today">今天</button>
+      <span class="records">预约记录</span>
+    </div>
+  </div>
+
+  <div class="dayheads">
+    <div></div>
+    <div class="dh"><span class="dw">周一</span><span class="dd">10/6</span></div>
+    <div class="dh"><span class="dw">周二</span><span class="dd">10/7</span></div>
+    <div class="dh is-today"><span class="dw">周三</span><span class="dd">10/8</span></div>
+    <div class="dh"><span class="dw">周四</span><span class="dd">10/9</span></div>
+    <div class="dh"><span class="dw">周五</span><span class="dd">10/10</span></div>
+  </div>
+
+  <div class="gridwrap">
+    <div class="grid">
+      <div class="gutter">
+        <div class="tl">08:00</div>
+        <div class="tl">09:00</div>
+        <div class="tl">10:00</div>
+        <div class="tl">11:00</div>
+        <div class="tl">12:00</div>
+        <div class="tl">13:00</div>
+        <div class="tl">14:00</div>
+        <div class="tl">15:00</div>
+        <div class="tl">16:00</div>
+        <div class="tl">17:00</div>
+        <div class="tl">18:00</div>
+      </div>
+
+      <div class="daycol">
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div>
+        <div class="ev ev1"><div class="et">项目周会</div><div class="es">09:00 - 10:30</div></div>
+      </div>
+
+      <div class="daycol">
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div>
+        <div class="ev ev2"><div class="et">客户沟通·阿里</div><div class="es">10:00 - 11:30</div></div>
+        <div class="sel"><span>14:00 - 16:00</span></div>
+      </div>
+
+      <div class="daycol">
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div>
+        <div class="ev ev3"><div class="et">设计评审</div><div class="es">14:00 - 15:30</div></div>
+        <div class="nowline"></div>
+      </div>
+
+      <div class="daycol">
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div>
+        <div class="ev ev4"><div class="et">季度复盘</div><div class="es">15:00 - 16:30</div></div>
+      </div>
+
+      <div class="daycol">
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div>
+      </div>
+    </div>
+
+    <div class="pop">
+      <div class="pop-title">新产品评审</div>
+      <div class="pop-time">周二 14:00 - 16:00 · 120 分钟</div>
+      <div class="pop-people">
+        <span class="av a1">陈</span><span class="av a2">林</span><span class="av a3">王</span><span class="av a4">苏</span><span class="av a5">郑</span><span class="av more">+5</span>
+      </div>
+      <div class="pop-actions">
+        <button class="btn">确认预约</button>
+        <span class="alter">修改时段</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark">方向样机 D · 不是最终页面</div>
+</div>
