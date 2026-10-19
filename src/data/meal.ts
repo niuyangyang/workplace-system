@@ -69,6 +69,89 @@ export const DISHES: Dish[] = [
   { id: 'd17', name: '蒜蓉西兰花', spec: '清爽小菜', category: 'drink', price: 8, sales: 44, left: 26, img: '/meal/d17.webp', tint: G.veg },
 ]
 
+/* ---------- 订单（原型展示用静态数据） ---------- */
+export type MealOrderStatus = 'wait' | 'transit' | 'done' | 'cancel'
+
+export interface MealOrderItem {
+  name: string
+  qty: number
+  price: number
+  img: string
+}
+export interface MealOrderDelivery {
+  name: string
+  phone: string
+  eta: string
+}
+export interface MealOrder {
+  id: string
+  date: string
+  items: MealOrderItem[]
+  total: number
+  status: string
+  statusType: MealOrderStatus
+  /** 配送地址 */
+  address: string
+  /** 配送员信息（已取消订单无） */
+  delivery?: MealOrderDelivery
+  /** 下单备注 */
+  note?: string
+}
+
+export const MEAL_ORDERS: MealOrder[] = [
+  {
+    id: 'MC20261016',
+    date: '2026-10-16 11:20',
+    items: [
+      { name: '红烧牛肉饭', qty: 1, price: 22, img: '/meal/d1.webp' },
+      { name: '冰美式', qty: 1, price: 9, img: '/meal/d14.webp' },
+    ],
+    total: 31,
+    status: '配送中',
+    statusType: 'transit',
+    address: '3 号科研楼 502 工位',
+    delivery: { name: '王立军', phone: '138****6621', eta: '17:30' },
+    note: '微辣，放茶水间保温柜即可',
+  },
+  {
+    id: 'MC20261015',
+    date: '2026-10-15 11:48',
+    items: [
+      { name: '黑椒牛柳饭', qty: 1, price: 24, img: '/meal/d6.webp' },
+      { name: '鲜榨橙汁', qty: 1, price: 12, img: '/meal/d15.webp' },
+    ],
+    total: 36,
+    status: '已送达',
+    statusType: 'done',
+    address: '3 号科研楼 502 工位',
+    delivery: { name: '王立军', phone: '138****6621', eta: '12:30' },
+  },
+  {
+    id: 'MC20261012',
+    date: '2026-10-12 13:05',
+    items: [
+      { name: '关东煮套餐', qty: 2, price: 16, img: '/meal/d12.webp' },
+      { name: '蒜蓉西兰花', qty: 1, price: 8, img: '/meal/d17.webp' },
+    ],
+    total: 40,
+    status: '已送达',
+    statusType: 'done',
+    address: '3 号科研楼 502 工位',
+    delivery: { name: '李秀芳', phone: '139****2084', eta: '13:40' },
+    note: '关东煮套餐 x2 分开装',
+  },
+  {
+    id: 'MC20261010',
+    date: '2026-10-10 21:12',
+    items: [{ name: '小龙虾拌面', qty: 1, price: 28, img: '/meal/d10.webp' }],
+    total: 28,
+    status: '已取消',
+    statusType: 'cancel',
+    address: '3 号科研楼 502 工位',
+    note: '临时外出，已取消订单',
+  },
+]
+
 /** 配送与采购说明（展示用常量） */
 export const MEAL_NOTICE = {
   cutOff: '14:30',

@@ -16,6 +16,7 @@ import {
   FundViewOutlined,
   UserOutlined,
   RestOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons'
 
 export interface AppEntry {
@@ -43,4 +44,5 @@ export const apps: AppEntry[] = [
   { id: 'bigscreen', name: '数据大屏', desc: '员工籍贯分布可视化大屏（中国地图）', color: '#0891b2', icon: <FundViewOutlined /> },
   { id: 'persona', name: '人物画像', desc: '员工全息人物建模与多维画像分析', color: '#7c5cff', icon: <UserOutlined /> },
   { id: 'meal', name: '员工订餐', desc: '每日菜品、加班夜宵与行政统一采购（H5）', color: '#ff6b2c', icon: <RestOutlined /> },
+  { id: 'agile', name: '敏捷开发', desc: '迭代任务执行与敏捷研发管理', color: '#7c3aed', icon: <ThunderboltOutlined /> },
 ]

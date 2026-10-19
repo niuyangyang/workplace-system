@@ -19,6 +19,8 @@ import NoticeCenter from './pages/NoticeCenter'
 import Manual from './pages/Manual'
 import IntroSite from './pages/IntroSite'
 import MealOrdering from './pages/MealOrdering'
+import FloorPlan from './pages/FloorPlan'
+import AgileDev from './pages/AgileDev'
 
 export default function App() {
   return (
@@ -45,6 +47,8 @@ export default function App() {
       <Route path="/app/bigscreen3d" element={<Bigscreen3D />} />
       <Route path="/app/intro" element={<IntroSite />} />
       <Route path="/app/meal" element={<MealOrdering />} />
+      <Route path="/app/floorplan" element={<FloorPlan />} />
+      <Route path="/app/agile" element={<AgileDev />} />
       <Route path="/app/:id" element={<AppPlaceholder />} />
     </Routes>
   )

@@ -18,6 +18,7 @@ const HOME_APP_IDS = [
   'policy', // 制度前台
   'bigscreen', // 数据大屏
   'persona', // 人物画像
+  'agile', // 敏捷开发
 ]
 
 export default function AppGrid() {
