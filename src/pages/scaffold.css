@@ -1,0 +1,504 @@
+/* 脚手架页面：在 orgCenter.css 通用后台风格基础上补充少量专属样式 */
+
+/* 等宽字体（时间 / IP） */
+.scaf-mono {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12.5px;
+  color: #334155;
+}
+
+/* 控制面板：各模块操作成功率 */
+.scaf-rate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 2px;
+}
+
+.scaf-rate-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scaf-rate-name {
+  flex: 0 0 84px;
+  font-size: 13px;
+  color: #5b647a;
+}
+
+.scaf-rate-bar {
+  flex: 1 1 auto;
+  height: 8px;
+  border-radius: 6px;
+  background: #eef1f6;
+  overflow: hidden;
+}
+
+.scaf-rate-fill {
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #3b5bff, #6f8bff);
+  transition: width 0.4s ease;
+}
+
+.scaf-rate-val {
+  flex: 0 0 48px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3b5bff;
+}
+
+/* 系统配置表单 */
+.scaf-config-card {
+  max-width: 920px;
+}
+
+.scaf-config-form {
+  width: 100%;
+}
+
+.scaf-config-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 28px;
+}
+
+.scaf-config-grid .ant-form-item {
+  margin-bottom: 18px;
+}
+
+.scaf-config-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.scaf-color-input {
+  width: 64px;
+  height: 34px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+/* 系统配置：行内编辑列表 */
+.scaf-config-key {
+  font-weight: 600;
+  color: #334155;
+}
+
+.scaf-remark {
+  color: #5b647a;
+}
+
+.org-table-card .ant-table-row.scaf-editing-row > .ant-table-cell {
+  background: #f5f8ff;
+}
+
+/* 菜单管理 */
+
+/* 侧栏底部：当前角色切换 */
+.scaf-role-switcher {
+  padding: 12px 16px 10px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.scaf-role-label {
+  font-size: 12px;
+  color: #98a2b8;
+}
+
+.org-sider.collapsed .scaf-role-switcher {
+  display: none;
+}
+
+/* 复选框选中行不加背景色 */
+.org-table-card .ant-table-row-selected > .ant-table-cell {
+  background: transparent !important;
+}
+
+/* 姓名主显示：可点击链接 */
+.org-name-link {
+  color: #3b5bff;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.org-name-link:hover {
+  color: #2a49e0;
+  text-decoration: underline;
+}
+
+/* 列表工具栏按钮间距 */
+.org-action-row {
+  gap: 14px;
+}
+
+/* 顶栏按钮（白色底适配） */
+.scaf-header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid #dde3ee;
+  background: #fff;
+  color: #334155;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.scaf-header-btn:hover {
+  border-color: #3b5bff;
+  color: #3b5bff;
+  background: #f5f8ff;
+}
+
+.scaf-header-btn.is-impersonating {
+  border-color: #f59e0b;
+  color: #b45309;
+  background: #fffbeb;
+}
+
+.scaf-header-btn-danger {
+  border-color: #fecaca;
+  color: #ef4444;
+}
+
+.scaf-header-btn-danger:hover {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.scaf-header-imp-tag {
+  margin: 0;
+  font-size: 11px;
+  line-height: 16px;
+  padding: 0 5px;
+}
+
+.scaf-header-bell {
+  font-size: 18px;
+  color: #5b647a;
+  cursor: pointer;
+}
+
+/* 顶栏用户入口（hover 下拉，白色底） */
+.scaf-user-entry {
+  position: relative;
+  display: inline-flex;
+}
+
+.scaf-user-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.scaf-user-entry:hover .scaf-user-trigger {
+  background: #eef1f6;
+}
+
+.scaf-user-name {
+  font-size: 13px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.scaf-user-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 180px;
+  background: #fff;
+  border: 1px solid #eef1f6;
+  border-radius: 10px;
+  box-shadow: 0 18px 50px rgba(15, 23, 55, 0.18);
+  padding: 6px;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.22s ease;
+  z-index: 30;
+}
+
+.scaf-user-entry:hover .scaf-user-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scaf-user-menu::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: transparent;
+}
+
+.scaf-user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  line-height: 20px;
+  color: #334155;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.scaf-user-menu-item .anticon {
+  font-size: 13px;
+}
+
+.scaf-user-menu-item:hover {
+  background: #f5f8ff;
+}
+
+.scaf-user-menu-logout {
+  color: #ef4444;
+}
+
+/* 切换用户弹窗 */
+.scaf-picker-search {
+  margin-bottom: 12px;
+}
+
+/* 右上角用户面板：角色 / 代理切换 */
+.scaf-user-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #f0f2f7;
+}
+
+.scaf-user-panel-label {
+  font-size: 12px;
+  color: #98a2b8;
+}
+
+.scaf-impersonate-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+  padding: 4px 0;
+  flex-wrap: wrap;
+}
+
+/* 控制面板：欢迎页 */
+.scaf-welcome {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.scaf-welcome-avatar {
+  background: linear-gradient(135deg, #3b5bff, #6f8bff);
+  flex-shrink: 0;
+}
+
+.scaf-welcome-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.scaf-welcome-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2733;
+}
+
+.scaf-welcome-sub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #5b647a;
+}
+
+.scaf-welcome-weather {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-left: 20px;
+  border-left: 1px solid #eef1f6;
+}
+
+.scaf-welcome-cloud {
+  font-size: 28px;
+  color: #3b5bff;
+}
+
+.scaf-welcome-temp {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2733;
+}
+
+.scaf-welcome-city {
+  font-size: 12px;
+  color: #5b647a;
+}
+
+/* 快捷入口 */
+.scaf-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.scaf-quick-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.scaf-quick-item:hover {
+  background: #f5f8ff;
+}
+
+.scaf-quick-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.scaf-quick-label {
+  font-size: 13px;
+  color: #334155;
+}
+
+/* 待办事项 */
+.scaf-todo-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.scaf-todo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 1px solid #f0f2f7;
+}
+
+.scaf-todo-row:last-child {
+  border-bottom: none;
+}
+
+.scaf-todo-label {
+  flex: 1 1 auto;
+  font-size: 13.5px;
+  color: #334155;
+}
+
+/* 系统动态 */
+.scaf-dynamic-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.scaf-dynamic-time {
+  font-size: 12px;
+  color: #98a2b8;
+}
+
+@media (max-width: 992px) {
+  .scaf-quick-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .scaf-config-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scaf-welcome {
+    flex-wrap: wrap;
+  }
+
+  .scaf-quick-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* 密钥管理：一次性展示 */
+.scaf-secret-reveal {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.scaf-secret-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 12.5px;
+  line-height: 20px;
+}
+
+.scaf-secret-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2733;
+  word-break: break-all;
+}
+
+/* 对接日志：JSON 展示 */
+.scaf-json {
+  margin: 0;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid #e8edf5;
+  border-radius: 8px;
+  font-family: 'SFMono-Regular', Consolas, Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 20px;
+  color: #334155;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 320px;
+  overflow: auto;
+}

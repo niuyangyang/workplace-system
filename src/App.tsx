@@ -21,6 +21,7 @@ import IntroSite from './pages/IntroSite'
 import MealOrdering from './pages/MealOrdering'
 import FloorPlan from './pages/FloorPlan'
 import AgileDev from './pages/AgileDev'
+import Scaffold from './pages/Scaffold'
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
       <Route path="/app/meal" element={<MealOrdering />} />
       <Route path="/app/floorplan" element={<FloorPlan />} />
       <Route path="/app/agile" element={<AgileDev />} />
+      <Route path="/app/scaffold" element={<Scaffold />} />
       <Route path="/app/:id" element={<AppPlaceholder />} />
     </Routes>
   )

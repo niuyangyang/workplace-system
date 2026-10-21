@@ -19,6 +19,7 @@ const HOME_APP_IDS = [
   'bigscreen', // 数据大屏
   'persona', // 人物画像
   'agile', // 敏捷开发
+  'scaffold', // 脚手架
 ]
 
 export default function AppGrid() {

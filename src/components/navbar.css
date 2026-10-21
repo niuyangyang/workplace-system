@@ -274,3 +274,9 @@
 .site-header--solid {
   flex: 0 0 auto;
 }
+
+/* 用户下拉面板带自定义内容（角色/代理切换）时加宽 */
+.user-drawer.has-extra {
+  width: 300px;
+  padding: 10px;
+}

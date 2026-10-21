@@ -256,7 +256,7 @@ function toOrgRow(node: OrgNode, memberCountMap: Record<string, number>): OrgRow
   }
 }
 
-function OrgTreeView({ orgTree, setOrgTree }: { orgTree: OrgNode[]; setOrgTree: (t: OrgNode[] | ((prev: OrgNode[]) => OrgNode[])) => void }) {
+export function OrgTreeView({ orgTree, setOrgTree }: { orgTree: OrgNode[]; setOrgTree: (t: OrgNode[] | ((prev: OrgNode[]) => OrgNode[])) => void }) {
   const { message } = AntdApp.useApp()
   const [applied, setApplied] = useState<{ name: string; type: string; status: string }>({ name: '', type: '', status: '' })
   const [searchForm] = Form.useForm()

@@ -21,6 +21,7 @@ screenshots/
 .shots/
 .build_verify/
 .trash/
+design-previews/
 deploy/*.zip
 .workbuddy/
 
