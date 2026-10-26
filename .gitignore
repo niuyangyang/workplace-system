@@ -30,3 +30,7 @@ deploy/*.zip
 .idea/
 .DS_Store
 Thumbs.db
+
+# 临时验证产物
+_deploy_check.html
+_build.log
