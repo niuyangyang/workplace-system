@@ -29,6 +29,7 @@ export interface AppEntry {
 }
 
 export const apps: AppEntry[] = [
+  { id: 'bigscreen', name: '数据大屏', desc: '员工籍贯分布可视化大屏（中国地图）', color: '#0891b2', icon: <FundViewOutlined /> },
   { id: 'attendance', name: '考勤打卡', desc: '每日签到、请假与加班记录', color: '#3b5bff', icon: <ClockCircleOutlined /> },
   { id: 'approval', name: '审批中心', desc: '待办审批与流程跟踪', color: '#0ea5e9', icon: <FileProtectOutlined /> },
   { id: 'contacts', name: '通讯录', desc: '同事信息与组织架构', color: '#10b981', icon: <TeamOutlined /> },
@@ -42,7 +43,6 @@ export const apps: AppEntry[] = [
   { id: 'org', name: '人员组织', desc: '组织架构与人员管理', color: '#f43f5e', icon: <ApartmentOutlined /> },
   { id: 'system', name: '制度管理', desc: '制度起草、评审与统一管理', color: '#0d9488', icon: <FileDoneOutlined /> },
   { id: 'policy', name: '制度前台', desc: '面向全员的企业制度查询与公开门户', color: '#2563eb', icon: <BookOutlined /> },
-  { id: 'bigscreen', name: '数据大屏', desc: '员工籍贯分布可视化大屏（中国地图）', color: '#0891b2', icon: <FundViewOutlined /> },
   { id: 'persona', name: '人物画像', desc: '员工全息人物建模与多维画像分析', color: '#7c5cff', icon: <UserOutlined /> },
   { id: 'meal', name: '员工订餐', desc: '每日菜品、加班夜宵与行政统一采购（H5）', color: '#ff6b2c', icon: <RestOutlined /> },
   { id: 'agile', name: '敏捷开发', desc: '迭代任务执行与敏捷研发管理', color: '#7c3aed', icon: <ThunderboltOutlined /> },

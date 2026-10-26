@@ -10,13 +10,13 @@ import './appGrid.css'
 
 // 首页应用中心只展示以下应用（其余入口在使用手册 / 路由中仍可用）
 const HOME_APP_IDS = [
+  'bigscreen', // 数据大屏
   'meeting', // 会议室预订
   'meal', // 员工订餐
   'docs', // 企业文档中心
   'org', // 人员组织
   'system', // 制度管理
   'policy', // 制度前台
-  'bigscreen', // 数据大屏
   'persona', // 人物画像
   'agile', // 敏捷开发
   'scaffold', // 脚手架
