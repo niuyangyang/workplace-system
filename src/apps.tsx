@@ -9,10 +9,12 @@ import {
   ProjectOutlined,
   FolderOpenOutlined,
   LineChartOutlined,
+  MessageOutlined,
   CoffeeOutlined,
   ApartmentOutlined,
   FileDoneOutlined,
   BookOutlined,
+  SolutionOutlined,
   FundViewOutlined,
   UserOutlined,
   RestOutlined,
@@ -30,6 +32,8 @@ export interface AppEntry {
 
 export const apps: AppEntry[] = [
   { id: 'bigscreen', name: '数据大屏', desc: '员工籍贯分布可视化大屏（中国地图）', color: '#0891b2', icon: <FundViewOutlined /> },
+  { id: 'qa', name: '智能问答', desc: '基于知识库的智能问答助手，支持多轮会话', color: '#4d6bfe', icon: <MessageOutlined /> },
+  { id: 'worksummary', name: '工作总结', desc: 'PRD、权限矩阵、走查清单与开发文档归集', color: '#0ea5e9', icon: <SolutionOutlined /> },
   { id: 'attendance', name: '考勤打卡', desc: '每日签到、请假与加班记录', color: '#3b5bff', icon: <ClockCircleOutlined /> },
   { id: 'approval', name: '审批中心', desc: '待办审批与流程跟踪', color: '#0ea5e9', icon: <FileProtectOutlined /> },
   { id: 'contacts', name: '通讯录', desc: '同事信息与组织架构', color: '#10b981', icon: <TeamOutlined /> },

@@ -22,6 +22,8 @@ import MealOrdering from './pages/MealOrdering'
 import FloorPlan from './pages/FloorPlan'
 import AgileDev from './pages/AgileDev'
 import Scaffold from './pages/Scaffold'
+import SmartQA from './pages/SmartQA'
+import WorkSummary from './pages/WorkSummary'
 
 export default function App() {
   return (
@@ -51,6 +53,8 @@ export default function App() {
       <Route path="/app/floorplan" element={<FloorPlan />} />
       <Route path="/app/agile" element={<AgileDev />} />
       <Route path="/app/scaffold" element={<Scaffold />} />
+      <Route path="/app/qa" element={<SmartQA />} />
+      <Route path="/app/worksummary" element={<WorkSummary />} />
       <Route path="/app/:id" element={<AppPlaceholder />} />
     </Routes>
   )
