@@ -4,8 +4,12 @@
 
 ## 在线演示
 
-- 演示地址：<https://814f3140e54148928da83eeb71028418.app.workbuddy.host>
+- **长期演示地址（推荐）**：<https://niuyangyang.github.io/workplace-system/> —— GitHub Pages 托管，永久免费、不超时、不回收；源码 `main` 与 `gh-pages` 分支同步更新。
+  - 扫码打开：![演示地址二维码](demo-qr/演示地址二维码.png)
+- 备用地址（平台预览，可能失效）：<https://814f3140e54148928da83eeb71028418.app.workbuddy.host>
 - 建议入口：首页应用中心（各子系统卡片点击进入）
+
+> GitHub Pages 部署方式：改动源码后，先 `npm run build`，再把 `dist/` 内容（含 `.nojekyll`）推送到 `gh-pages` 分支即可。构建子路径版本需设 `VITE_BASE=/workplace-system/`。
 
 ## 功能模块
 
