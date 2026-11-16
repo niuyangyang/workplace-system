@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useMemo, useState, useEffect, useRef, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Layout, Menu, Breadcrumb, Avatar, Button, Space, Table, Tag, Input, Card, Badge, Modal } from 'antd'
@@ -881,7 +882,7 @@ export default function WorkSummary() {
             </Badge>
             <div className="scaf-user-entry">
               <div className="scaf-user-trigger">
-                <Avatar size={30} src="/avatar.webp" />
+                <Avatar size={30} src={withBase('/avatar.webp')} />
                 <span className="scaf-user-name">张明</span>
               </div>
               <div className="scaf-user-menu">

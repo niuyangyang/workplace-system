@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Avatar } from 'antd'
@@ -338,7 +339,7 @@ export default function SmartQA() {
           </button>
           <div className="qa-user">
             <div className="qa-user-trigger">
-              <Avatar size={30} src="/avatar.webp" />
+              <Avatar size={30} src={withBase('/avatar.webp')} />
               <span className="qa-user-name">张明</span>
             </div>
             <div className="qa-user-menu">

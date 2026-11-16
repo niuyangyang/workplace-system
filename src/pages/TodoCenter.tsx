@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useMemo } from 'react'
 import { Button, Card, Layout, Table, Tag, Typography } from 'antd'
 import Navbar from '../components/Navbar'
@@ -55,7 +56,7 @@ export default function TodoCenter() {
   return (
     <Layout className="mc-layout">
       {/* banner：本页相关提示，背景与首页一致 */}
-      <section className="hero" style={{ backgroundImage: 'url(/banner.webp)' }}>
+      <section className="hero" style={{ backgroundImage: `url(${withBase('/banner.webp')})` }}>
         <Navbar nav={<HomeNav />} />
         <Banner
           tag="TODO CENTER"

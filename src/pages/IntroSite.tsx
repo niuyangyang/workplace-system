@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import './introSite.css'
 
 /* ============ 作品介绍（项目 Showcase） ============
@@ -13,12 +14,12 @@ const NAV = [
 ]
 
 const SHOTS = [
-  { src: '/intro/portal.webp', title: '门户首页', desc: '待办、通知、手册一体化的员工前台门户' },
-  { src: '/intro/bigscreen.webp', title: '数据大屏', desc: '员工籍贯分布 · ECharts 离线中国地图' },
-  { src: '/intro/building3d.webp', title: '楼宇 3D', desc: '办公楼三维可视化、楼层平面与工位查询' },
-  { src: '/intro/persona.webp', title: '人物画像', desc: '员工全息人物建模与多维画像分析' },
-  { src: '/intro/bigscreen3d.webp', title: '3D 数据大屏', desc: '图表改用 ThreeUI 3D 组件重构' },
-  { src: '/intro/threeui.webp', title: '3D 视觉组件', desc: '基于 ThreeUI 的 WebGL 特效与可视化组件库' },
+  { src: withBase('/intro/portal.webp'), title: '门户首页', desc: '待办、通知、手册一体化的员工前台门户' },
+  { src: withBase('/intro/bigscreen.webp'), title: '数据大屏', desc: '员工籍贯分布 · ECharts 离线中国地图' },
+  { src: withBase('/intro/building3d.webp'), title: '楼宇 3D', desc: '办公楼三维可视化、楼层平面与工位查询' },
+  { src: withBase('/intro/persona.webp'), title: '人物画像', desc: '员工全息人物建模与多维画像分析' },
+  { src: withBase('/intro/bigscreen3d.webp'), title: '3D 数据大屏', desc: '图表改用 ThreeUI 3D 组件重构' },
+  { src: withBase('/intro/threeui.webp'), title: '3D 视觉组件', desc: '基于 ThreeUI 的 WebGL 特效与可视化组件库' },
 ]
 
 const AI_ITEMS = [

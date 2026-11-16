@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { type ReactNode } from 'react'
@@ -32,12 +33,12 @@ const DEVICE_ICON: Record<string, ReactNode> = {
 
 /* 会议室实景封面（AI 生成照片，存于 public/meeting/，按房间类型轮换） */
 const COVERS = [
-  'url(/meeting/room-1.webp)', // 报告厅
-  'url(/meeting/room-2.webp)', // 大会议室（长桌）
-  'url(/meeting/room-3.webp)', // 洽谈间（圆桌）
-  'url(/meeting/room-4.webp)', // 培训室
-  'url(/meeting/room-5.webp)', // 视频会议室
-  'url(/meeting/room-6.webp)', // 小讨论间
+  `url(${withBase('/meeting/room-1.webp')})`, // 报告厅
+  `url(${withBase('/meeting/room-2.webp')})`, // 大会议室（长桌）
+  `url(${withBase('/meeting/room-3.webp')})`, // 洽谈间（圆桌）
+  `url(${withBase('/meeting/room-4.webp')})`, // 培训室
+  `url(${withBase('/meeting/room-5.webp')})`, // 视频会议室
+  `url(${withBase('/meeting/room-6.webp')})`, // 小讨论间
 ]
 
 const DEVICES = ['投影', '视频会议', '白板', '音响', '茶水']

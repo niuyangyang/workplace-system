@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { Layout } from 'antd'
 import Navbar from '../components/Navbar'
 import HomeNav from '../components/HomeNav'
@@ -12,7 +13,7 @@ const { Content } = Layout
 export default function Home() {
   return (
     <Layout className="site-layout">
-      <section className="hero" style={{ backgroundImage: 'url(/banner.webp)' }}>
+      <section className="hero" style={{ backgroundImage: `url(${withBase('/banner.webp')})` }}>
         {/* 顶部导航：logo + 标题之后接 首页 / 待办事项 / 通知公告 */}
         <Navbar nav={<HomeNav />} />
         <Banner />

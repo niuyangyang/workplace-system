@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useMemo, useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Input, Card, Tag, Button, Typography, Empty, Divider, Pagination, Select } from 'antd'
@@ -288,7 +289,7 @@ export function PolicyPortalDetail() {
         versions={buildPolicyVersions(p)}
         onBack={() => {}}
         onCompareClick={() =>
-          window.open(`/app/policy/diff/${p.id}`, '_blank', 'noopener,noreferrer')
+          window.open(withBase(`/app/policy/diff/${p.id}`), '_blank', 'noopener,noreferrer')
         }
       />
     </div>

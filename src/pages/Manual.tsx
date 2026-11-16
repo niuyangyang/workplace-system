@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useEffect, useMemo, useState } from 'react'
 import { Card, Col, Collapse, Empty, Layout, Row, Tag } from 'antd'
 import {
@@ -470,12 +471,12 @@ export default function Manual() {
   }
 
   const openApp = (id: string) =>
-    window.open(`/app/${id}${id === 'org' ? '?entry=center' : ''}`, '_blank')
+    window.open(withBase(`/app/${id}${id === 'org' ? '?entry=center' : ''}`), '_blank')
 
   return (
     <Layout className="manual-layout">
       {/* banner：只保留搜索框 + 热门搜索（不放标题与说明，保持背景与导航一致） */}
-      <section className="hero" style={{ backgroundImage: 'url(/banner.webp)' }}>
+      <section className="hero" style={{ backgroundImage: `url(${withBase('/banner.webp')})` }}>
         <Navbar nav={<HomeNav />} />
         <div className="manual-hero">
           <span className="manual-search">
@@ -608,7 +609,7 @@ export default function Manual() {
                             <ul className="role-list">
                               {r.items.map((i) => (
                                 <li key={i.text}>
-                                  <a onClick={() => window.open(i.path, '_blank')}>{i.text}</a>
+                                  <a onClick={() => window.open(withBase(i.path), '_blank')}>{i.text}</a>
                                   <code className="manual-path">{i.path}</code>
                                 </li>
                               ))}

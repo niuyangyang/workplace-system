@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useMemo, useState } from 'react'
 import { Button, Card, Descriptions, Drawer, Layout, Table, Tag, Typography } from 'antd'
 import { DownloadOutlined, FileTextOutlined } from '@ant-design/icons'
@@ -75,7 +76,7 @@ export default function NoticeCenter() {
   return (
     <Layout className="mc-layout">
       {/* banner：本页相关提示，背景与首页一致 */}
-      <section className="hero" style={{ backgroundImage: 'url(/banner.webp)' }}>
+      <section className="hero" style={{ backgroundImage: `url(${withBase('/banner.webp')})` }}>
         <Navbar nav={<HomeNav />} />
         <Banner
           tag="NOTICE CENTER"

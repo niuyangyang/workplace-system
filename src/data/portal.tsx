@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 /* 门户演示数据（结构与 sjtu-admin 的 src/data/portal.tsx 对齐）
    - 待办：title 自带操作前缀（如「审批：」），time 为截止时间，type 为事项类型，system 为来源系统
    - 通知公告：title / date / unit（发布单位）/ source（系统来源）/ content
@@ -79,9 +80,9 @@ export const announcements: Announcement[] = [
     source: '制度管理',
     content: '各部门：\n\n《员工考勤管理办法》（2026 年修订版）已完成评审与法务审查，现正式发布，自 2026 年 10 月 1 日起施行，原办法同时废止。\n\n本次修订要点：\n1. 弹性上下班时间的申请范围扩大至全部职能与研发岗位；\n2. 出差与外勤打卡规则调整，支持移动端定位打卡；\n3. 请假类型的审批层级简化，3 天以内由直属上级审批。\n\n请各部门组织学习，执行中有疑问请联系制度管理部。\n\n制度管理部\n2026 年 9 月 18 日',
     attachments: [
-      { name: '员工考勤管理办法-2026修订版.pdf', size: '1.24 MB', url: '/attachments/员工考勤管理办法-2026修订版.pdf' },
-      { name: '考勤管理办法修订对照表.pdf', size: '386 KB', url: '/attachments/考勤管理办法修订对照表.pdf' },
-      { name: '请假与调休申请流程说明.pdf', size: '512 KB', url: '/attachments/请假与调休申请流程说明.pdf' },
+      { name: '员工考勤管理办法-2026修订版.pdf', size: '1.24 MB', url: withBase('/attachments/员工考勤管理办法-2026修订版.pdf') },
+      { name: '考勤管理办法修订对照表.pdf', size: '386 KB', url: withBase('/attachments/考勤管理办法修订对照表.pdf') },
+      { name: '请假与调休申请流程说明.pdf', size: '512 KB', url: withBase('/attachments/请假与调休申请流程说明.pdf') },
     ],
   },
   {
@@ -98,8 +99,8 @@ export const announcements: Announcement[] = [
     source: '评审管理',
     content: '各位评审专家：\n\n第 3 期制度评审会安排如下：\n\n时间：2026 年 9 月 20 日（周日）14:00 - 16:30\n地点：一号会议室（线上同步：会议号 8821 3345）\n议题：\n1. 《供应商准入制度》评审（14:00 - 15:10）\n2. 《员工手册》（2026 版）评审（15:20 - 16:30）\n\n请提前阅读评审材料并提交书面意见，会议材料见附件。\n\n评审管理\n2026 年 9 月 17 日',
     attachments: [
-      { name: '第3期评审会议材料.pdf', size: '2.06 MB', url: '/attachments/第3期评审会议材料.pdf' },
-      { name: '供应商准入制度-征求意见稿.pdf', size: '876 KB', url: '/attachments/供应商准入制度-征求意见稿.pdf' },
+      { name: '第3期评审会议材料.pdf', size: '2.06 MB', url: withBase('/attachments/第3期评审会议材料.pdf') },
+      { name: '供应商准入制度-征求意见稿.pdf', size: '876 KB', url: withBase('/attachments/供应商准入制度-征求意见稿.pdf') },
     ],
   },
   {

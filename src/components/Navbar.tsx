@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Layout, Badge, Avatar, Space, Typography } from 'antd'
@@ -52,7 +53,7 @@ export default function Navbar({ solid = false, breadcrumb, title = '职场综�
             onMouseLeave={() => setOpen(false)}
           >
             <Space size={10} align="center" className="user-trigger">
-              <Avatar size={36} src="/avatar.webp" className="user-avatar" />
+              <Avatar size={36} src={withBase('/avatar.webp')} className="user-avatar" />
               <Text strong className="user-name">
                 {userName}
               </Text>

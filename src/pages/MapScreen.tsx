@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { type CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as echarts from 'echarts'
 import { PlusOutlined, MinusOutlined, ReloadOutlined, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons'
@@ -963,7 +964,7 @@ export default function MapScreen() {
     let disposed = false
     ;(async () => {
       try {
-        const res = await fetch('/china-provinces.json', { cache: 'no-store' })
+        const res = await fetch(withBase('/china-provinces.json'), { cache: 'no-store' })
         // 注意：dev server 对未知路径会回退到 index.html，因此必须校验内容是否为合法 GeoJSON
         const txt = await res.text()
         let geo: any = null

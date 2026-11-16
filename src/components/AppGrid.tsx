@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { Card, Col, Row } from 'antd'
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { apps } from '../apps'
@@ -40,7 +41,7 @@ export default function AppGrid() {
               variant="borderless"
               className="subsystem-card"
               onClick={() =>
-                window.open(`/app/${app.id}${app.id === 'org' ? '?entry=center' : ''}`, '_blank')
+                window.open(withBase(`/app/${app.id}${app.id === 'org' ? '?entry=center' : ''}`), '_blank')
               }
             >
               <div className="subsystem-card-inner">

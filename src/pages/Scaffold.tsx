@@ -1,3 +1,4 @@
+import { withBase } from '../base'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import {
   Layout,
@@ -2967,7 +2968,7 @@ export default function Scaffold() {
             </Badge>
             <div className="scaf-user-entry">
               <div className="scaf-user-trigger">
-                <Avatar size={30} src="/avatar.webp" />
+                <Avatar size={30} src={withBase('/avatar.webp')} />
                 <span className="scaf-user-name">张明</span>
               </div>
               <div className="scaf-user-menu">
