@@ -15,7 +15,7 @@ import {
   opinionStatus,
   type OpinionCollect as OpinionItem,
   type OpinionStatus,
-} from './SystemMgmt'
+} from '../data/systemSeed'
 import './opinionCollect.css'
 
 const STATUSES: OpinionStatus[] = ['未开始', '进行中', '已结束']

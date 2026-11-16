@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar'
 import PortalNav from '../components/PortalNav'
 import { PORTAL_POLICIES } from './PolicyPortal'
 import { buildPolicyVersions } from './PolicyDetail'
-import { seedOpinions, opinionStatus, addOpinionFeedback } from './SystemMgmt'
+import { seedOpinions, opinionStatus, addOpinionFeedback } from '../data/systemSeed'
 import type { DocNode } from './DraftWizard'
 import './opinionSubmit.css'
 

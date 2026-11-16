@@ -20,7 +20,7 @@ import {
   draftCategoryColor,
   seedPolicies,
   type Policy,
-} from './SystemMgmt'
+} from '../data/systemSeed'
 import PolicyDetail, { buildPolicyVersions } from './PolicyDetail'
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer-continued'
 import './policyPortal.css'

@@ -41,6 +41,11 @@ export default defineConfig(({ mode }) => {
             if (/node_modules[\\/](three|@react-three)[\\/]/.test(id)) return 'vendor-three'
             if (/node_modules[\\/](antd|@ant-design|@rc-component)[\\/]/.test(id)) return 'vendor-antd'
             if (/node_modules[\\/]@wangeditor[\\/]/.test(id)) return 'vendor-editor'
+            // threeui（54MB 包，产物 ~1.85MB）只被懒加载页面使用：
+            // 必须显式指定独立 chunk —— 交给 Rollup 自动分块会让 build 卡死（实测 4 分钟无产出）；
+            // 独立 chunk 又不会进首屏（没有首屏模块引用它），体积可控。
+            if (/node_modules[\\/]@designcodeio[\\/]/.test(id)) return 'vendor-threeui'
+            if (/node_modules[\\/](framer-motion|motion|lucide-react|lottie-web)[\\/]/.test(id)) return 'vendor-threeui'
             return 'vendor'
           },
         },
